@@ -10,13 +10,12 @@ import {Routes, RouterModule} from '@angular/router';
 export const routerConfig: Routes = [
   { path: 'info', component: InfoComponent},
   { path: 'recommender', component: RecommenderComponent},
-  { path: 'content-video', component: ContentVideoComponent}
+  { path: 'content-video', component: ContentVideoComponent},
+  { path: '', redirectTo: '/info', pathMatch: 'full' } // path di default
 ];
 
 @NgModule({
   imports: [ RouterModule.forRoot(routerConfig) ], // inizializza il router e lo pone in ascolto di cambiamenti della browser location
-  exports: [
-    RouterModule
-  ]
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }
