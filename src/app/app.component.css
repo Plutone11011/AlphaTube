@@ -2,7 +2,6 @@ nav{
   background-color: darkgray;
 }
 
-li{
-  background-color: cadetblue;
-  margin-top: 5%;
+li a{
+  color: darkred;
 }

@@ -1,12 +1,14 @@
-<nav class="navbar navbar-fixed-top">
-    <a class="navbar-brand" href="#">AlphaTube</a>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="nav navbar-nav" routerLinkActive="active">
-        <li><a class="nav-link" routerLink="/info" href="">Info</a></li>
-        <li><a class="nav-link" routerLink="/content-video" href="">About Video</a></li>
-        <li><a class="nav-link" routerLink="/recommender" href="">Recommenders</a></li>
-      </ul>
+<nav class="navbar navbar-default">
+  <div class="container-fluid"><!--container che si espande su tutta la width disponibile -->
+    <div>
+      <a class="navbar-brand" href="#">AlphaTube</a>
     </div>
+    <ul class="nav navbar-nav"><!--allinea orizzontalmente link su navbar -->
+      <li><a routerLink="info">Info</a></li>
+      <li><a routerLink="content-video">About video</a></li>
+      <li><a routerLink="recommender">Recommenders</a></li>
+    </ul>
+  </div>
 </nav>
 
 <router-outlet></router-outlet><!-- indica dove deve essere mostrata routed view -->
