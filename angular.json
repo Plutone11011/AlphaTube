@@ -25,7 +25,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/styles/bootstrap-3.3.7-dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {

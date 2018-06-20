@@ -11,7 +11,7 @@ export const routerConfig: Routes = [
   { path: 'info', component: InfoComponent},
   { path: 'recommender', component: RecommenderComponent},
   { path: 'content-video', component: ContentVideoComponent},
-  { path: '', redirectTo: '/info', pathMatch: 'full' } // path di default
+  { path: '', redirectTo: '/', pathMatch: 'full' } // path di default
 ];
 
 @NgModule({
