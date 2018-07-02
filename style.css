@@ -1,15 +1,15 @@
 
-  nav{
-    background-color: darkgray;
+  .navbar-default{
+    background-color: darkgrey;
   }
 
-  .navbar-brand{
-    color: #122b40;
+  .navbar-default .navbar-brand{
+    color: #122B40;
     font-weight: bolder;
   }
 
-  li a{
-    color: red;
+  .navbar-default .navbar-nav > li > a{
+    color: darkred;
     font-style: oblique;
     font-weight: bold;
   }
