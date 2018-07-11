@@ -1,3 +1,6 @@
+  body{
+    padding-top: 70px ; /*crea spazio tra navbar e container sottostante, perché navbar ha posizione fixed*/
+  }
 
   .navbar-default{
     background-color: darkgrey;
@@ -14,4 +17,13 @@
     font-weight: bold;
   }
 
+  .listevideo{
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
 
+  .panel-body{
+    max-height:300px;
+    overflow-y:scroll;
+  }
