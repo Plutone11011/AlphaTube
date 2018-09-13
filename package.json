@@ -1,0 +1,23 @@
+{
+  "name": "alphatube",
+  "version": "1.0.0",
+  "description": "a youtube recommendation system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Plutone11011/AlphaTube.git"
+  },
+  "author": "Plutone11011",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Plutone11011/AlphaTube/issues"
+  },
+  "homepage": "https://github.com/Plutone11011/AlphaTube#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "rdfstore": "^0.9.17"
+  }
+}
