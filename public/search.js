@@ -8,18 +8,7 @@ $(document).ready(function(){
 	//possibile cercare video per titolo, nome canzone, nome artista, codice youtube
 	$('#search_bar').submit(function(e){
 		e.preventDefault();//previene il submit del form dopo aver cliccato submit button, non manda il form al server
-        var query = $('#search_bar input').val();
-        $.post("http://localhost:3000/?search=" + query,
-        	{
-        		q: query
-        	})
-        	.done((data)=>{
-        		console.log(data);
-        	})
-        	.fail((data)=>{
-        		console.log('stronzo');
-        	});
-        /*
+        var query = $('#search_bar input').val();  
         $.get(
         	'https://www.googleapis.com/youtube/v3/search',
         	{
@@ -48,6 +37,6 @@ $(document).ready(function(){
 					
 					});
 		});
-	*/
 	});
+	
 });
