@@ -1,17 +1,18 @@
 const express = require('express');
+const getArtistTitle = require('get-artist-title');
+var path = require('path') ; 
+var app = express(); //app object is express application
+var bodyParser = require('body-parser'); //to parse requests body
 
-var app = express();
+var routes = require('./routes/index');
+/*mounting middlewares*/
+app.use(bodyParser.json());
+app.use(express.static(__dirname));
+app.use(bodyParser.urlencoded({ extended: true })); // to parse application/x-www-form-urlencoded, which is default mime type
+app.use(express.static(path.join(__dirname,'public')));
 
-var SparqlParser = require('sparqljs').Parser;
-var parser = new SparqlParser();
-var parsedQuery = parser.parse(
-  'PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
-  'SELECT * { ?mickey foaf:name "Mickey Mouse"@en; foaf:knows ?other. }');
+//routes will handle requests matching this path
+app.use('/',routes);
 
-// Regenerate a SPARQL query from a JSON object
-var SparqlGenerator = require('sparqljs').Generator;
-var generator = new SparqlGenerator();
-parsedQuery.variables = ['?mickey'];
-var generatedQuery = generator.stringify(parsedQuery);
-
-console.log(parsedQuery.variables);
+app.listen(3000) ;
+console.log('listening');
