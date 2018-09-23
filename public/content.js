@@ -27,6 +27,25 @@ function setComments(id){
 
         });
 }
+/*
+function setContentBrano(videoId){
+    var obj = { titolo: 'ciao' } ;
+    $.ajax({
+        url: 'http://localhost:3000',
+        data: JSON.stringify(obj),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: (data)=>{
+            console.log('meh');
+            console.log(data);
+        },
+        error: (data)=>{
+            console.log('mah');
+            console.log(data);
+        }
+    })
+}
+*/
 
 function setContentBrano(videoId){
     $.get(
@@ -38,6 +57,19 @@ function setContentBrano(videoId){
             id: videoId
         }
         ).done((data)=>{
+            var obj = { titolo: data.items[0].snippet.title } ;
+            $.ajax({
+                url: 'http://localhost:3000',
+                data: obj,
+                dataType: 'json',
+                success: (data)=>{
+                    console.log(data);
+                },
+                error: (data)=>{
+                    console.log(data);
+                }
+            });
+            /*
             var url = "http://dbpedia.org/sparql";
             var result ; //query result
             //var offset = 0 ;
@@ -55,15 +87,13 @@ function setContentBrano(videoId){
                         "SELECT ?abstract ?music",
                         "WHERE {",
                         "?music a dbo:MusicalWork ;",
-                        "rdfs:label ?lab;", //@en perché ci sono diverse label a seconda della lingua
+                        "rdfs:label ?lab;", //@en cause there are different labels depending on language
                         "dbo:abstract ?abstract.",
                         "FILTER langMatches(lang(?abstract),'en')",
-                        "FILTER contains("+ titolo + ",?lab)}"].join(" "); //cioè il titolo del video deve contenere la label
+                        "FILTER contains("+ titolo + ",?lab)}"].join(" "); //video title must contain label
                         //"ORDER BY DESC(?music)",
                         //"OFFSET "+ offset].join(" ");
-                console.log(query);
                 var queryUrl = url+"?query=" + encodeURIComponent(query); //codifica caratteri speciali con la sintassi %AA
-                console.log(queryUrl);
                 $.ajax({
                     url: queryUrl,
                     beforeSend: function(xhr){
@@ -84,7 +114,7 @@ function setContentBrano(videoId){
                 });
             //    offset += 10000 ;
             //} while(!result);
-
+        */    
         });
 }
 

@@ -1,18 +1,55 @@
-const express = require('express');
+const express = require('express'); 
+const bodyParser = require('body-parser'); //to parse requests body
 const getArtistTitle = require('get-artist-title');
-var path = require('path') ; 
-var app = express(); //app object is express application
-var bodyParser = require('body-parser'); //to parse requests body
+// destructuring assignment syntax is a JavaScript expression that makes it possible to unpack values from arrays, 
+//or properties from objects, into distinct variables.
+const {Client} = require('virtuoso-sparql-client'); 
+const DbPediaClient = new Client('http://dbpedia.org/sparql');
+//var routes = require('./routes/index');
+var app = express();
 
-var routes = require('./routes/index');
+var path = __dirname + '/views/' ;
+app.use(express.static('public'));
 /*mounting middlewares*/
 app.use(bodyParser.json());
-app.use(express.static(__dirname));
-app.use(bodyParser.urlencoded({ extended: true })); // to parse application/x-www-form-urlencoded, which is default mime type
-app.use(express.static(path.join(__dirname,'public')));
+// to parse application/x-www-form-urlencoded, which is default mime type
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+app.get("/",function(req,res,next){
+	//console.log(req.query);
+	res.sendFile(path + "index.html");
+	next();
+});
+
+app.get("/",function(req,res,next){
+	if (req.query.titolo){
+		let [ artist, title ] = getArtistTitle(req.query.titolo);
+		title = title.replace(" ","_");//for dbpedia resource
+		const prefixes = {
+			dbo: "http://dbpedia.org/ontology/",
+			db: "http://dbpedia.org/resource/"
+		}
+		DbPediaClient.setOptions('application/sparql-results+json',prefixes);
+		DbPediaClient.query("SELECT ?abstract WHERE { db:"+title+
+		" dbo:abstract ?abstract. FILTER langMatches(lang(?abstract),'en') }").
+		then((data)=>{
+			console.log(data.results.bindings);
+			res.json({ abstract: data.results.bindings}) ;
+		})
+		.catch((error)=>{
+			console.log(error);
+		})
+	}
+})
+/*
+app.get('/',(req,res,next)=>{
+	console.log(req);
+	res.json({user: "Mario"});
+});
+*/
 
 //routes will handle requests matching this path
-app.use('/',routes);
+//app.use('/',routes);
 
 app.listen(3000) ;
 console.log('listening');
