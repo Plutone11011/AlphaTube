@@ -63,7 +63,8 @@ function setContentBrano(videoId){
                 data: obj,
                 dataType: 'json',
                 success: (data)=>{
-                    console.log(data);
+                    var dbpediaBrano = JSON.parse(data);
+                    console.log(dbpediaBrano);
                 },
                 error: (data)=>{
                     console.log(data);
