@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 // Add finally() to Promise.prototype
-promiseFinally.shim() ;
+//promiseFinally.shim() ;
 
 app.get("/",function(req,res,next){
 	//console.log(req.query);
