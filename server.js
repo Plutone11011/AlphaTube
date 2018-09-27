@@ -19,12 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Add finally() to Promise.prototype
 //promiseFinally.shim() ;
 
-app.get("/",function(req,res,next){
-	//console.log(req.query);
-	res.sendFile(path + "index.html");
-	next();
-});
-
 
 app.get("/",function(req,res,next){
 	if (req.query.titolo){
@@ -40,11 +34,21 @@ app.get("/",function(req,res,next){
 		" dbo:abstract ?abstract. FILTER langMatches(lang(?abstract),'en') }")
 		.then((data)=>{
 			response = data["results"]["bindings"][0]["abstract"]["value"] ;
+			return res.json({abstract: response}) ;
 		})
 		.catch((error)=>{
 			console.log(error);
 		});
 	}
+	else {
+		next();
+	}
+});
+
+
+app.get("/",function(req,res,next){
+	//console.log(req.query);
+	res.sendFile(path + "index.html");
 });
 /*
 app.get('/',(req,res,next)=>{

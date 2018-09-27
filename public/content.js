@@ -63,8 +63,7 @@ function setContentBrano(videoId){
                 data: obj,
                 dataType: 'json',
                 success: (data)=>{
-                    var dbpediaBrano = JSON.parse(data);
-                    console.log(dbpediaBrano);
+                    $("#wikipedia").html('<p>' + data.abstract + '</p>');
                 },
                 error: (data)=>{
                     console.log(data);
