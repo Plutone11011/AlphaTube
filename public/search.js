@@ -11,7 +11,7 @@ $(document).ready(function(){
         		key:'AIzaSyADhaxguT2HLfSM0ALnEpejHVvZw1vlbFU',
         		maxResults: maxResults,
         		q: query,
-				type:'video',//il tipo di risposta può essere video, canale, o playlist
+				type:'video',//response could be of type video, playlist, channel
 				videoCategoryId:'10'
 			}).done(function(data){
 				var counter ;
@@ -19,8 +19,9 @@ $(document).ready(function(){
 				setDescription(data.items[0].snippet.description);
 				setComments(data.items[0].id.videoId);
 				setContentBrano(data.items[0].id.videoId);
-				data.items.shift();//tolgo primo elemento perché voglio iterare sui restanti
-				//crea lista thumbnail degli altri 29 video
+				data.items.shift();//remove first element in order to iterate over the remaining ones
+				//create thumbnail list of the remaining 29 videos
+				//need to add logic to clean recommender area after search by id
 				$.each(data.items ,function(index, value){
 					$('.listevideo').append(thumbSearch);
 					counter = index + 1;
@@ -30,9 +31,9 @@ $(document).ready(function(){
 				});
 			});
 	}
-	//possibile cercare video per titolo, nome canzone, nome artista, codice youtube
+	//possible to search by title, artist, id, youtube title
 	$('#search_bar').submit(function(e){
-		e.preventDefault();//previene il submit del form dopo aver cliccato submit button, non manda il form al server
+		e.preventDefault();//prevents the form from being submitted to the server
         var query = $('#search_bar input').val();
         //being asynchronous, there's no guarantee the first get will be executed before the second
         $.get('https://www.googleapis.com/youtube/v3/videos',

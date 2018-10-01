@@ -27,25 +27,6 @@ function setComments(id){
 
         });
 }
-/*
-function setContentBrano(videoId){
-    var obj = { titolo: 'ciao' } ;
-    $.ajax({
-        url: 'http://localhost:3000',
-        data: JSON.stringify(obj),
-        dataType: 'json',
-        contentType: 'application/json',
-        success: (data)=>{
-            console.log('meh');
-            console.log(data);
-        },
-        error: (data)=>{
-            console.log('mah');
-            console.log(data);
-        }
-    })
-}
-*/
 
 function setContentBrano(videoId){
     $.get(
@@ -68,53 +49,7 @@ function setContentBrano(videoId){
                 error: (data)=>{
                     console.log(data);
                 }
-            });
-            /*
-            var url = "http://dbpedia.org/sparql";
-            var result ; //query result
-            //var offset = 0 ;
-            var titolo = "\"" + data.items[0].snippet.title + "\"" + "@en" ;
-
-            //do{
-                var query = ["PREFIX db: <http://dbpedia.org/resource/>",
-                        "PREFIX dbo: <http://dbpedia.org/ontology/>", 
-                        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>",
-                        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                        "PREFIX mo: <http://purl.org/ontology/mo/>", 
-                        "PREFIX dc: <http://purl.org/dc/elements/1.1/>",
-                        //"PREFIX foaf: <http://xmlns.com/foaf/0.1/>",
-                        //"PREFIX sg: <http://dbpedia.org/resource/song>",
-                        "SELECT ?abstract ?music",
-                        "WHERE {",
-                        "?music a dbo:MusicalWork ;",
-                        "rdfs:label ?lab;", //@en cause there are different labels depending on language
-                        "dbo:abstract ?abstract.",
-                        "FILTER langMatches(lang(?abstract),'en')",
-                        "FILTER contains("+ titolo + ",?lab)}"].join(" "); //video title must contain label
-                        //"ORDER BY DESC(?music)",
-                        //"OFFSET "+ offset].join(" ");
-                var queryUrl = url+"?query=" + encodeURIComponent(query); //codifica caratteri speciali con la sintassi %AA
-                $.ajax({
-                    url: queryUrl,
-                    beforeSend: function(xhr){
-                        xhr.setRequestHeader('Accept','application/sparql-results+json');
-                    },
-                    success: function(data){
-                        console.log(data);
-                        result = data.results.bindings;
-                        for ( var i in result ) {
-                            var res = result[i].abstract.value; //results è un oggetto che come chiave ha la variabile legata nella query
-                            console.log(res);
-                        }
-
-                    },
-                    error: function(data){
-                        console.log(data);
-                    }
-                });
-            //    offset += 10000 ;
-            //} while(!result);
-        */    
+            });  
         });
 }
 
