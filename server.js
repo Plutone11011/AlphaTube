@@ -24,8 +24,13 @@ app.get("/",function(req,res,next){
 	if (req.query.titolo){
 		var response ;
 		//if it's a feat song the module will return "feat ..." as part of the title
-		let [ artist, title ] = getArtistTitle(req.query.titolo);
-		//wikipedia urls for songs are of three types(with _ character in place of blank spaces:
+		var [ artist, title ] = getArtistTitle(req.query.titolo);
+		//this module returns the ft. part in the title
+		var indexOfFt = title.search(/ft\./);
+		if (indexOfFt != -1){ //which means that there's a featuring
+			title = title.slice(0,indexOfFt).trim();
+		}
+		//making assumptions: wikipedia urls for songs are of three types( _ character in place of blank spaces):
 		//1)song title 
 		//2)song title plus "song" string
 		//3)song title plus artist/band name plus "song" string 
@@ -33,12 +38,19 @@ app.get("/",function(req,res,next){
 		var res2 = title.replace(/\s/g,"_") + "_(song)" ;
 		var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
 		console.log(res1,res2,res3);
+
 		function getQuery(res){
-			return ("SELECT ?abstract WHERE { <http://dbpedia.org/resource/"+ res +
-			"> dbo:abstract ?abstract FILTER langMatches(lang(?abstract),'en') }");
+			let resource = "<http://dbpedia.org/resource/" + res + ">";
+			return ("SELECT ?abstract ?artist WHERE { " + resource +
+			" dbo:abstract ?abstract. {"+resource+" dbo:artist ?a.} UNION {"+resource+" dbo:musicalArtist ?a.}"+
+			"UNION {"+resource+" dbo:musicalBand ?a.} ?a dbo:abstract ?artist. ?a rdfs:label ?lab"+ 
+			" FILTER (langMatches(lang(?abstract),'en') && langMatches(lang(?artist),'en'))"+
+			" FILTER contains(?lab,'"+artist+"')}");
 		}
+
 		const prefixes = {
 			dbo: "http://dbpedia.org/ontology/",
+			rdfs: "http://www.w3.org/2000/01/rdf-schema#"
 		}
 		DbPediaClient.setOptions('application/sparql-results+json',prefixes);
 		DbPediaClient.query(getQuery(res3))
