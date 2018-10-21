@@ -38,15 +38,17 @@ function setContentBrano(videoId){
             id: videoId
         }
         ).done((data)=>{
-            var obj = { titolo: data.items[0].snippet.title } ;
+            var obj = { ytTitle: data.items[0].snippet.title } ;
             $.ajax({
                 url: 'http://localhost:3000',
                 data: obj,
                 dataType: 'json',
                 success: (data)=>{
-                    $("#wikipedia").html('<p>' + data.abstract + '</p>');
+                    $("#wikipedia").html('<p> <span>Song</span>: ' + data.abstract[0] + 
+                        '<br> <span>Artist</span>: '+ data.abstract[1] + '</p>');
+                    $("#wikipedia span").css("font-weight", "bold");
                 },
-                error: (data)=>{
+                error: (data)=>{ //during testing, gave 500 internal server error once, because of getArtistTitle
                     console.log(data);
                 }
             });  
