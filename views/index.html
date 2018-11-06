@@ -9,13 +9,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
-
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+  <!--<script type="text/javascript" src="iframe.js"></script>-->
   <script type="text/javascript" src="content.js"></script>
   <script type="text/javascript" src="search.js"></script>
 </head>
@@ -38,7 +38,7 @@
           <li><a href="#info">Info</a></li>
           <li><a href="#recommender">Recommenders</a></li>
         </ul>
-        <form id="search_bar" class="navbar-form navbar-right"><!--allinea a destra il form -->
+        <form id="search_bar" class="navbar-form navbar-right" autocomplete="off"><!--allinea a destra il form -->
           <div class="form-group">
             <span class="glyphicon glyphicon-search"></span>
             <input type="text" class="form-control" placeholder="Search" name="search"><!--usato su elementi form per renderli responsive e sfruttare la width della navbar -->
@@ -52,12 +52,52 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-4">  
-        <div class="embed-responsive embed-responsive-16by9"><!-- crea contenitore embedded responsive con il video che scala adattandosi al dispositivo-->
-          <iframe class="embed-responsive-item" src="//www.youtube.com/embed/PfYnvDL0Qcw"  id="player"  allowfullscreen></iframe>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe id="player" type="text/html" width="640" height="360"
+          src="http://www.youtube.com/embed/PfYnvDL0Qcw?enablejsapi=1&origin=http://localhost:3000"
+          frameborder="0"></iframe>
         </div>
-      </div>
-      <div class="col-lg-8">
-        <div class="col-lg-4">
+        <script>
+            // 2. This code loads the IFrame Player API code asynchronously.
+            var tag = document.createElement('script');
+
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[2];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            // 3. This function creates an <iframe> (and YouTube player)
+            //    after the API code downloads.
+            var player;
+            window.onYouTubeIframeAPIReady = function() {
+              console.log('youtube api ready');
+              player = new YT.Player('player', {    
+                events: {
+                  'onReady': onPlayerReady,
+                  'onStateChange': onPlayerStateChange
+                }
+              });
+            };
+
+            // 4. The API will call this function when the video player is ready.
+            function onPlayerReady(event) {
+              event.target.playVideo();
+            }
+
+            // 5. The API calls this function when the player's state changes.
+            //    The function indicates that when playing a video (state=1),
+            //    the player should play for six seconds and then stop.
+            function onPlayerStateChange(event) {
+              if (event.data == YT.PlayerState.PLAYING) {
+                setTimeout(stopVideo, 6000);
+              }
+            }
+            function stopVideo() {
+              player.stopVideo();
+            }
+          </script>
+        </div>
+        <div class="col-lg-8">
+          <div class="col-lg-4">
             <div class="panel panel-info">
               <div class="panel-heading">
                 <span class="glyphicon glyphicon-comment"></span> COMMENTI 
@@ -84,18 +124,26 @@
               </div>
             </div>
           </div>
-      </div>  
-    </div>
-  </div>  
-  
+        </div>  
+      </div>
+    </div>  
 
-  <div class="page-header"> <!-- a section divider-->
-    <h2>Recommender Search<small> Check out other correlated videos</small></h2>
-  </div>
-  <div class="container-fluid">
-    <div class="listevideo">
-      
+
+    <div class="page-header"> <!-- a section divider-->
+      <h2>Recommender Search<small> Check out correlated videos</small></h2>
     </div>
-  </div>
-</body>
-</html>
+    <div class="container-fluid">
+      <div id="recommenderSearch">
+
+      </div>
+    </div>
+    <div class="page-header"> <!-- a section divider-->
+      <h2>Recommender Random<small> Check out random videos</small></h2>
+    </div>
+    <div class="container-fluid">
+      <div id="recommenderRandom">
+
+      </div>
+    </div>
+  </body>
+  </html>
