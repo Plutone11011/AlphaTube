@@ -2,7 +2,6 @@
 
 $(document).ready(function(){
 
-	var thumbSearch = '<a href="" class="thumbnailSearch"><img src="" alt="Devi cercare qualcosa"></a>';
 
 	function searchVideos(query,maxResults){
 		$.get('https://www.googleapis.com/youtube/v3/search',
@@ -24,13 +23,7 @@ $(document).ready(function(){
 				data.items.shift();//remove first element in order to iterate over the remaining ones
 				//create thumbnail list of the remaining 29 videos
 				//need to add logic to clean recommender area after search by id
-				$.each(data.items ,function(index, value){
-					$('#recommenderSearch').append(thumbSearch);
-					counter = index + 1;
-					$('a:nth-child(' + counter.toString() + ') > img').attr('src',value.snippet.thumbnails.medium.url); //vedi search e snippet
-					//counter = parseInt(counter);
-					
-				});
+				createListOfThumbnails(data,"recommenderSearch");
 			});
 	}
 	//possible to search by title, artist, id, youtube title
@@ -74,13 +67,7 @@ $(document).ready(function(){
 		maxResults: 30
 	}).done((data)=>{
 		console.log(data);
-		$.each(data.items ,function(index, value){
-			$('#recommenderRandom').append(thumbSearch);
-			counter = index + 1;
-			$('a:nth-child(' + counter.toString() + ') > img').attr('src',value.snippet.thumbnails.medium.url); //vedi search e snippet
-			//counter = parseInt(counter);
-			
-		});
+		createListOfThumbnails(data,"recommenderRandom");
 	})
 	
 });
