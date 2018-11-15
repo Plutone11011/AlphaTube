@@ -19,10 +19,6 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "get-artist-title": "^1.1.1",
-    "gulp": "^3.9.1",
-    "promise.prototype.finally": "^3.1.0",
-    "rdfstore": "^0.9.17",
-    "virtuoso-sparql-client": "^0.2.2"
+    "request": "^2.88.0"
   }
 }
