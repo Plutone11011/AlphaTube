@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Alpha</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- width adjusts to the width of the device, initial-scale sets initial zoom-->
+  <meta http-equiv="content-type" content="text/html">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!--<script type="text/javascript" src="iframe.js"></script>-->
+  <script type="text/javascript" src="thumbnail.js"></script>
+  <script type="text/javascript" src="content.js"></script>
+  <script type="text/javascript" src="search.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid"><!--container che si espande su tutta la width disponibile -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar"><!--crea bottone quando navbar collassa -->
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span><!--tre linee orizzontali -->
+        </button>
+
+        <a class="navbar-brand" href="/">AlphaTube<span class="glyphicon glyphicon-music"></span></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav"><!--allinea orizzontalmente link su navbar -->
+          <li><a href="#menù">Menù</a></li>
+          <li><a href="#content">Contenuti</a></li><!--conviene fare un menù a tendina per ogni area contenuto e recommender -->
+          <li><a href="#info">Info</a></li>
+          <li><a href="#recommender">Recommenders</a></li>
+        </ul>
+        <form id="search_bar" class="navbar-form navbar-right" autocomplete="off"><!--allinea a destra il form -->
+          <div class="form-group">
+            <span class="glyphicon glyphicon-search"></span>
+            <input type="text" class="form-control" placeholder="Search" name="search"><!--usato su elementi form per renderli responsive e sfruttare la width della navbar -->
+          </div>
+          <button type="submit" class="btn btn-default btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-4">  
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe id="player" type="text/html" width="640" height="360"
+          src="http://www.youtube.com/embed/PfYnvDL0Qcw?enablejsapi=1&origin=http://localhost:1823"
+          frameborder="0"></iframe>
+        </div>
+        <script>
+            // 2. This code loads the IFrame Player API code asynchronously.
+            var tag = document.createElement('script');
+
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[2];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            // 3. This function creates an <iframe> (and YouTube player)
+            //    after the API code downloads.
+            var player;
+            window.onYouTubeIframeAPIReady = function() {
+              console.log('youtube api ready');
+              player = new YT.Player('player', {    
+                events: {
+                  'onReady': onPlayerReady,
+                  'onStateChange': onPlayerStateChange
+                }
+              });
+            };
+
+            // 4. The API will call this function when the video player is ready.
+            function onPlayerReady(event) {
+              event.target.playVideo();
+            }
+
+            // 5. The API calls this function when the player's state changes.
+            //    The function indicates that when playing a video (state=1),
+            //    the player should play for six seconds and then stop.
+            function onPlayerStateChange(event) {
+              if (event.data == YT.PlayerState.PLAYING) {
+                setTimeout(stopVideo, 6000);
+              }
+            }
+            function stopVideo() {
+              player.stopVideo();
+            }
+          </script>
+        </div>
+        <div class="col-lg-8">
+          <div class="col-lg-4">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <span class="glyphicon glyphicon-comment"></span> COMMENTI 
+              </div>
+              <div class="panel-body" id="commenti">
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <span class="fa fa-wikipedia-w"></span> WIKIPEDIA
+              </div>
+              <div class="panel-body" id="wikipedia">
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <span class="glyphicon glyphicon-info-sign"></span> DESCRIZIONE
+              </div>
+              <div class="panel-body" id="descrizione">
+              </div>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>  
+
+
+    <div class="page-header"> <!-- a section divider-->
+      <h2>Recommender Search<small> Check out correlated videos</small></h2>
+    </div>
+    <div class="container-fluid">
+      <div id="recommenderSearch">
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+      </div>
+    </div>
+    <div class="page-header"> <!-- a section divider-->
+      <h2>Recommender Random<small> Check out random videos</small></h2>
+    </div>
+    <div class="container-fluid">
+      <div id="recommenderRandom">
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+      </div>
+    </div>
+  </body>
+  </html>

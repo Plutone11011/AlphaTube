@@ -1,0 +1,29 @@
+  body{
+    padding-top: 70px ; /*crea spazio tra navbar e container sottostante, perché navbar ha posizione fixed*/
+  }
+
+  .navbar-default{
+    background-color: darkgrey;
+  }
+
+  .navbar-default .navbar-brand{
+    color: #122B40;
+    font-weight: bolder;
+  }
+
+  .navbar-default .navbar-nav > li > a{
+    color: darkred;
+    font-style: oblique;
+    font-weight: bold;
+  }
+
+  #recommenderSearch, #recommenderRandom{
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  .panel-body{
+    max-height:300px;
+    overflow-y:scroll;
+  }

@@ -1,3 +1,2 @@
 # AlphaTube
-
-Un sistema di raccomandazioni per YouTube.
+A recommendation system for music videos on YouTube
