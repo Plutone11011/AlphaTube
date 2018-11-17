@@ -179,8 +179,18 @@ function setRandom(){
 	})
 }
 
+//Controllo tra i recenti, se il video nel player è già stato visualizzato. In caso positivo lo tolgo.
+function removeIfRecent(){
+	$.each(recentVideos.items, function(index, value){
+        if(currentPlayerVideo.etag == value.etag){
+        	recentVideos.items.splice(index,1);
+        	return false;
+        }       
+    });
+}
 //Il video è stato in play per 15secondi, viene aggiunto ai Recent.
 function addToRecent(){
+	removeIfRecent();
 	recentVideos.items.unshift(currentPlayerVideo);
 }
 
