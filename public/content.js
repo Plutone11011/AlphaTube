@@ -179,12 +179,19 @@ function setRandom(){
 	})
 }
 
+//Il video è stato in play per 15secondi, viene aggiunto ai Recent.
+function addToRecent(){
+	recentVideos.items.unshift(currentPlayerVideo);
+}
+
 // Carica video nel player e setta i vari box.
 function setVideo(data){
+	//Se il video è rimasto in play per 15secondi, lo aggiungo ai video recenti.
+	if(player.getCurrentTime()>= 15){
+		addToRecent();
+	}
 	player.loadVideoById(data.id.videoId,0,'large');
 	currentPlayerVideo = data;
-	recentVideos.items.unshift(currentPlayerVideo)
-	console.log(recentVideos);
 	setRelated(data.id.videoId);
 	setRecent();
 	setDescription(data.snippet.description);

@@ -28,12 +28,11 @@ app.get("/search",function(req,res,next){
 				key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
 				part: "snippet",
 				id: req.query.q,
-				type: "video",
-				videoCategoryId: "10",
-				maxResults: 1
+				type: "video"
 			}
 		},(error,response,body)=>{
-			if(body["items"]){
+			let check = JSON.parse(body);
+			if(check.pageInfo.totalResults == 1){
 				res.json(body);//input is a video id	
 			}
 			else{

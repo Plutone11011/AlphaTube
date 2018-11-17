@@ -19,6 +19,14 @@ $(document).ready(function(){
 
 			});
 	});
+	//Per inizializzare currentPlayerVideo con l'oggetto di youtube del video iniziale.
+	$.get('/search',
+    	{
+        	q: 'PfYnvDL0Qcw'
+        }).done(function(data){
+            data = JSON.parse(data);
+            currentPlayerVideo = data.items[0];
+        });
 	setRandom();
 
 });
