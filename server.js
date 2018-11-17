@@ -71,6 +71,22 @@ app.get("/comments",(req,res,next)=>{
 	});
 });
 
+app.get("/related",(req,res,next)=>{
+	request({
+		url: "https://www.googleapis.com/youtube/v3/search",
+		qs: {
+			key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
+			part: "snippet",
+			relatedToVideoId: req.query.id,
+			type: "video",
+			videoCategoryId: "10",
+			maxResults: 30
+		}
+	}, (error,response,body)=>{
+		res.json(body);
+	});
+});
+
 app.get("/random",(req,res,next)=>{
 	request({
 		url: "https://www.googleapis.com/youtube/v3/search",
@@ -91,5 +107,5 @@ app.get("/random",(req,res,next)=>{
 //routes will handle requests matching this path
 //app.use('/',routes);
 
-app.listen(1823) ;//group number
+app.listen(1823, "0.0.0.0") ;//group number
 console.log('listening');

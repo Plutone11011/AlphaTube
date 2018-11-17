@@ -17,7 +17,7 @@
     font-weight: bold;
   }
 
-  #recommenderSearch, #recommenderRandom{
+  #recommenderRelated, #recommenderRecent, #recommenderSearch, #recommenderRandom{
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;

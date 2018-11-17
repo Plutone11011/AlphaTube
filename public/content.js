@@ -1,3 +1,7 @@
+//Oggetto di YT del video attualmente sul player
+let currentPlayerVideo = {};
+//Array di oggetti di YT che sono stati sul player
+let recentVideos = {items: []};
 //description is data.items[0].snippet.description
 function setDescription(description){
     $("#descrizione").html('<p>' + description + '</p>');
@@ -136,5 +140,56 @@ function setContentBrano(ytTitle){
                     }
             
             });*/
+}
+//Lancia una semplice query usando relatedToVideoId di YT.
+function setRelated(_id){
+	$.get('/related',{
+		id: _id,
+	}).done((data)=>{
+		data = JSON.parse(data);
+		console.log(data);
+		createListOfThumbnails(data,"thumbnailRelated");
+	})
+}
+
+//Riempe il div dei video recentemente visualizzati.
+function setRecent(){
+	createListOfThumbnails(recentVideos, "thumbnailRecent")
+}
+
+function randomDate(start, end) {
+		//Math.random() returns a float number between 0 and 1
+		//returns random Date between start and end
+    	return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+function setRandom(){
+	var data1 = randomDate(new Date(2005, 4, 25), new Date());
+	var data2 = new Date(data1);
+	data2.setMonth(data1.getMonth()+1);
+	$.get('/random',{
+		lessRecentDate: data1.toISOString(),
+		mostRecentDate: data2.toISOString(),
+		//videoCategoryId: '10',
+		//type:'video',
+		//maxResults: 30
+	}).done((data)=>{
+		data = JSON.parse(data);
+		createListOfThumbnails(data,"thumbnailRandom");
+	})
+}
+
+// Carica video nel player e setta i vari box.
+function setVideo(data){
+	player.loadVideoById(data.id.videoId,0,'large');
+	currentPlayerVideo = data;
+	recentVideos.items.unshift(currentPlayerVideo)
+	console.log(recentVideos);
+	setRelated(data.id.videoId);
+	setRecent();
+	setDescription(data.snippet.description);
+	setComments(data.id.videoId);
+	setContentBrano(data.snippet.title);
+
 }
 
