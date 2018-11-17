@@ -204,6 +204,7 @@ function setVideo(data){
 	currentPlayerVideo = data;
 	setRelated(data.id.videoId);
 	setRecent();
+	setRandom();
 	setDescription(data.snippet.description);
 	setComments(data.id.videoId);
 	setContentBrano(data.snippet.title);
