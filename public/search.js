@@ -28,5 +28,8 @@ $(document).ready(function(){
             currentPlayerVideo = data.items[0];
         });
 	setRandom();
-
+	$("span").on("click", ".contains-data", function() {
+		let data = $(this).data("video");
+		setVideo(data);
+	})
 });
