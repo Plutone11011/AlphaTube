@@ -1,7 +1,37 @@
-//Oggetto di YT del video attualmente sul player
-let currentPlayerVideo = {};
-//Array di oggetti di YT che sono stati sul player
-let recentVideos = {items: []};
+//namespace per non avere variabili globali.
+videoNamespace = function(){
+	//Oggetto di YT del video attualmente sul player
+	let currentPlayerVideo = {};
+	//Array di oggetti di YT che sono stati sul player
+	let recentVideos = {items: []};
+	//Controllo tra i recenti, se il video nel player è già stato visualizzato. In caso positivo lo tolgo.
+	function removeIfRecent(){
+		$.each(recentVideos.items, function(index, value){
+        	if(currentPlayerVideo.etag == value.etag){
+        		recentVideos.items.splice(index,1);
+        		return false;
+        	}       
+    	});
+	}
+
+	//Il video è stato in play per 15secondi, viene aggiunto ai Recent.
+	function addToRecent(){
+		removeIfRecent();
+		recentVideos.items.unshift(currentPlayerVideo);
+	}
+	function getRecentVideos(){
+		return recentVideos;
+	}
+	function setCurrentPlayerVideo(video){
+		currentPlayerVideo = video;
+	}
+	return{
+		addToRecent: addToRecent,
+		getRecentVideos: getRecentVideos,
+		setCurrentPlayerVideo: setCurrentPlayerVideo
+	}
+}();
+
 //description is data.items[0].snippet.description
 function setDescription(description){
     $("#descrizione").html('<p>' + description + '</p>');
@@ -147,14 +177,13 @@ function setRelated(_id){
 		id: _id,
 	}).done((data)=>{
 		data = JSON.parse(data);
-		console.log(data);
 		createListOfThumbnails(data,"thumbnailRelated");
 	})
 }
 
 //Riempe il div dei video recentemente visualizzati.
 function setRecent(){
-	createListOfThumbnails(recentVideos, "thumbnailRecent")
+	createListOfThumbnails(videoNamespace.getRecentVideos(), "thumbnailRecent")
 }
 
 function randomDate(start, end) {
@@ -179,29 +208,14 @@ function setRandom(){
 	})
 }
 
-//Controllo tra i recenti, se il video nel player è già stato visualizzato. In caso positivo lo tolgo.
-function removeIfRecent(){
-	$.each(recentVideos.items, function(index, value){
-        if(currentPlayerVideo.etag == value.etag){
-        	recentVideos.items.splice(index,1);
-        	return false;
-        }       
-    });
-}
-//Il video è stato in play per 15secondi, viene aggiunto ai Recent.
-function addToRecent(){
-	removeIfRecent();
-	recentVideos.items.unshift(currentPlayerVideo);
-}
-
 // Carica video nel player e setta i vari box.
 function setVideo(data){
 	//Se il video è rimasto in play per 15secondi, lo aggiungo ai video recenti.
 	if(player.getCurrentTime()>= 15){
-		addToRecent();
+		videoNamespace.addToRecent();
 	}
 	player.loadVideoById(data.id.videoId,0,'large');
-	currentPlayerVideo = data;
+	videoNamespace.setCurrentPlayerVideo(data);
 	setRelated(data.id.videoId);
 	setRecent();
 	setRandom();

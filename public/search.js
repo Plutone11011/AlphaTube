@@ -12,7 +12,6 @@ $(document).ready(function(){
         		q: query 
         	}).done(function(data){
 				data = JSON.parse(data);
-				console.log(data);
 				setVideo(data.items[0]);
 				data.items.shift();//remove first element in order to iterate over the remaining ones
 				createListOfThumbnails(data,"thumbnailSearch");
@@ -25,7 +24,7 @@ $(document).ready(function(){
         	q: 'PfYnvDL0Qcw'
         }).done(function(data){
             data = JSON.parse(data);
-            currentPlayerVideo = data.items[0];
+            videoNamespace.setCurrentPlayerVideo(data.items[0]);
         });
 	setRandom();
 	$("span").on("click", ".contains-data", function() {
