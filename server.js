@@ -106,5 +106,24 @@ app.get("/random",(req,res,next)=>{
 //routes will handle requests matching this path
 //app.use('/',routes);
 
+app.get("/similarity",(req,res,error)=>{
+	try{
+		var [artist, title] = getArtistTitle(req.query.titolo);
+		if (parseInt(req.query.recommender)){
+			next(); //need to pass artist, title
+		}
+		else{
+			res.send([artist,title]);
+		}
+	}catch(e){
+		res.send([null,null]);
+	}
+});
+
+app.get("/similarity",(req,res,error)=>{
+	console.log("heh");
+	res.json("ah stronzo");
+});
+
 app.listen(1823) ;//group number
 console.log('listening');

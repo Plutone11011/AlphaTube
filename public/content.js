@@ -1,37 +1,3 @@
-//namespace per non avere variabili globali.
-videoNamespace = function(){
-	//Oggetto di YT del video attualmente sul player
-	let currentPlayerVideo = {};
-	//Array di oggetti di YT che sono stati sul player
-	let recentVideos = {items: []};
-	//Controllo tra i recenti, se il video nel player è già stato visualizzato. In caso positivo lo tolgo.
-	function removeIfRecent(){
-		$.each(recentVideos.items, function(index, value){
-        	if(currentPlayerVideo.etag == value.etag){
-        		recentVideos.items.splice(index,1);
-        		return false;
-        	}       
-    	});
-	}
-
-	//Il video è stato in play per 15secondi, viene aggiunto ai Recent.
-	function addToRecent(){
-		removeIfRecent();
-		recentVideos.items.unshift(currentPlayerVideo);
-	}
-	function getRecentVideos(){
-		return recentVideos;
-	}
-	function setCurrentPlayerVideo(video){
-		currentPlayerVideo = video;
-	}
-	return{
-		addToRecent: addToRecent,
-		getRecentVideos: getRecentVideos,
-		setCurrentPlayerVideo: setCurrentPlayerVideo
-	}
-}();
-
 //description is data.items[0].snippet.description
 function setDescription(description){
     $("#descrizione").html('<p>' + description + '</p>');
@@ -58,32 +24,6 @@ function setComments(_id){
         })
 }
 
-function getArtistTitle(ytTitle){
-	//need to make some assumptions
-	//split string into two substrings representing the artist name and title of the song
-    var [artist, title] = ytTitle.split("-") ;
-    //artist = artist.trim();
-    //title = title.trim();
-	if (!artist || !title){
-		return [null, null] ; //there wasn't a "-" in ytTitle
- 	}
-	else {
-		//need to rule out other possible scenarios
-		//sometimes in the title substring there's the name of the artist who made a featuring
-		//or there's indication of explicit language, or official content
-		var ind = {
-			indexOfFt : title.search(/ft\./),
-			indexOfOfficial : title.search(/\(Official\)/),
-			indexOfExplicit :  title.search(/\(Explicit\)/)
-		};
-		for (var i in ind){
-			if (ind[i] != -1){
-				title = (title.slice(0,ind[i])).trim();
-			}
-		}
-		return [artist.trim(), title.trim()] ;
-	}
-}
 
 function fillWikiArea(song,artist){
     $("#wikipedia").html('<p> <span>Song</span>: ' + song + 
@@ -105,123 +45,59 @@ function getQuery(res, artist){
 
 function setContentBrano(ytTitle){
     
-    var [artist, title] = getArtistTitle(ytTitle);
-    if (artist && title){
+    $.get('/similarity',{titolo: ytTitle, recommender: 0}).done(function(_data){
 
-        var res1 = title.replace(/\s/g,"_");
-        var res2 = title.replace(/\s/g,"_") + "_(song)" ;
-        var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
+        if (_data[0] && _data[1]){
+            artist = _data[0];
+            title = _data[1];
+            var res1 = title.replace(/\s/g,"_");
+            var res2 = title.replace(/\s/g,"_") + "_(song)" ;
+            var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
 
-        var query = getQuery(res1, artist);
-        var url = "http://dbpedia.org/sparql" ;
-        var queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
+            var query = getQuery(res1, artist);
+            var url = "http://dbpedia.org/sparql" ;
+            var queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
 
-        $.get(queryUrl).done((data)=>{
-            if (data["results"]["bindings"].length){
-                artist_abstract = data["results"]["bindings"][0]["artist"]["value"] ;
-                song_abstract = data["results"]["bindings"][0]["abstract"]["value"] ;
-                fillWikiArea(song_abstract,artist_abstract);
-            }
-            else {
-                query = getQuery(res2, artist);
-                queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
-                $.get(queryUrl).done((data)=>{
-                    if (data["results"]["bindings"].length){
-                        artist_abstract = data["results"]["bindings"][0]["artist"]["value"] ;
-                        song_abstract = data["results"]["bindings"][0]["abstract"]["value"] ;
-                        fillWikiArea(song_abstract,artist_abstract);
-                    }
-                    else {
-                        query = getQuery(res3, artist);
-                        queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
-                        $.get(queryUrl).done((data)=>{
-                            if (data["results"]["bindings"].length){
-                                artist_abstract = data["results"]["bindings"][0]["artist"]["value"] ;
-                                song_abstract = data["results"]["bindings"][0]["abstract"]["value"] ;
-                                fillWikiArea(song_abstract,artist_abstract);
-                            }
-                            else {
-                                artist_abstract = "No content found for this artist" ;
-                                song_abstract = "No content found for this song" ;
-                                fillWikiArea(song_abstract,artist_abstract);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }   
-    else{
-        fillWikiArea("No content found for this song","No content found for this artist");
-    }
-            /*
-                var obj = { ytTitle: data.items[0].snippet.title } ;
-                $.ajax({
-                    url: 'http://localhost:3000',
-                    data: obj,
-                    dataType: 'json',
-                    success: (data)=>{
-                        $("#wikipedia").html('<p> <span>Song</span>: ' + data.abstract[0] + 
-                            '<br> <span>Artist</span>: '+ data.abstract[1] + '</p>');
-                        $("#wikipedia span").css("font-weight", "bold");
-                    },
-                    error: (data)=>{ //during testing, gave 500 internal server error once, because of getArtistTitle
-                        console.log(data);
-                    }
-            
-            });*/
-}
-//Lancia una semplice query usando relatedToVideoId di YT.
-function setRelated(_id){
-	$.get('/related',{
-		id: _id,
-	}).done((data)=>{
-		data = JSON.parse(data);
-		createListOfThumbnails(data,"thumbnailRelated");
-	})
+            $.get(queryUrl).done((data)=>{
+                if (data["results"]["bindings"].length){
+                    artist_abstract = data["results"]["bindings"][0]["artist"]["value"] ;
+                    song_abstract = data["results"]["bindings"][0]["abstract"]["value"] ;
+                    fillWikiArea(song_abstract,artist_abstract);
+                }
+                else {
+                    query = getQuery(res2, artist);
+                    queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
+                    $.get(queryUrl).done((data)=>{
+                        if (data["results"]["bindings"].length){
+                            artist_abstract = data["results"]["bindings"][0]["artist"]["value"] ;
+                            song_abstract = data["results"]["bindings"][0]["abstract"]["value"] ;
+                            fillWikiArea(song_abstract,artist_abstract);
+                        }
+                        else {
+                            query = getQuery(res3, artist);
+                            queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
+                            $.get(queryUrl).done((data)=>{
+                                if (data["results"]["bindings"].length){
+                                    artist_abstract = data["results"]["bindings"][0]["artist"]["value"] ;
+                                    song_abstract = data["results"]["bindings"][0]["abstract"]["value"] ;
+                                    fillWikiArea(song_abstract,artist_abstract);
+                                }
+                                else {
+                                    artist_abstract = "No content found for this artist" ;
+                                    song_abstract = "No content found for this song" ;
+                                    fillWikiArea(song_abstract,artist_abstract);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }   
+        else{
+            fillWikiArea("No content found for this song","No content found for this artist");
+        }
+    });
 }
 
-//Riempe il div dei video recentemente visualizzati.
-function setRecent(){
-	createListOfThumbnails(videoNamespace.getRecentVideos(), "thumbnailRecent")
-}
 
-function randomDate(start, end) {
-		//Math.random() returns a float number between 0 and 1
-		//returns random Date between start and end
-    	return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-}
-
-function setRandom(){
-	var data1 = randomDate(new Date(2005, 4, 25), new Date());
-	var data2 = new Date(data1);
-	data2.setMonth(data1.getMonth()+1);
-	$.get('/random',{
-		lessRecentDate: data1.toISOString(),
-		mostRecentDate: data2.toISOString(),
-		//videoCategoryId: '10',
-		//type:'video',
-		//maxResults: 30
-	}).done((data)=>{
-		data = JSON.parse(data);
-		createListOfThumbnails(data,"thumbnailRandom");
-	})
-}
-
-// Carica video nel player e setta i vari box.
-function setVideo(data){
-	//Se il video è rimasto in play per 15secondi, lo aggiungo ai video recenti.
-	if(player.getCurrentTime()>= 15){
-		videoNamespace.addToRecent();
-	}
-	player.loadVideoById(data.id.videoId,0,'large');
-	videoNamespace.setCurrentPlayerVideo(data);
-	setRelated(data.id.videoId);
-	setRecent();
-	setRandom();
-	setDescription(data.snippet.description);
-	setComments(data.id.videoId);
-	setContentBrano(data.snippet.title);
-
-}
 
