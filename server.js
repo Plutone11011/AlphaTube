@@ -1,6 +1,7 @@
 const express = require('express'); 
 const bodyParser = require('body-parser'); //to parse requests body
 const request = require('request'); //http client
+const getArtistTitle = require('get-artist-title');
 //var routes = require('./routes/index');
 var app = express();
 
@@ -19,7 +20,6 @@ app.get("/",function(req,res,next){
 });
 
 app.get("/search",function(req,res,next){
-	console.log(req.query);
 
 	request(
 		{
@@ -106,7 +106,9 @@ app.get("/random",(req,res,next)=>{
 //routes will handle requests matching this path
 //app.use('/',routes);
 
-app.get("/similarity",(req,res,error)=>{
+app.get("/similarity",(req,res,next)=>{
+	console.log(req.query.titolo);
+	console.log(req.query.recommender);
 	try{
 		var [artist, title] = getArtistTitle(req.query.titolo);
 		if (parseInt(req.query.recommender)){
@@ -115,12 +117,13 @@ app.get("/similarity",(req,res,error)=>{
 		else{
 			res.send([artist,title]);
 		}
-	}catch(e){
+	}catch(error){
+		console.log(error);
 		res.send([null,null]);
 	}
 });
 
-app.get("/similarity",(req,res,error)=>{
+app.get("/similarity",(req,res,next)=>{
 	console.log("heh");
 	res.json("ah stronzo");
 });

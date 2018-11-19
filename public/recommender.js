@@ -24,11 +24,15 @@ videoNamespace = function(){
 	}
 	function setCurrentPlayerVideo(video){
 		currentPlayerVideo = video;
-	}
+    }
+    function getCurrentPlayerVideo(){
+        return currentPlayerVideo ;
+    }
 	return{
 		addToRecent: addToRecent,
 		getRecentVideos: getRecentVideos,
-		setCurrentPlayerVideo: setCurrentPlayerVideo
+        setCurrentPlayerVideo: setCurrentPlayerVideo,
+        getCurrentPlayerVideo: getCurrentPlayerVideo
 	}
 }();
 
@@ -71,7 +75,7 @@ function setRandom(){
 
 function setSimilarity(){
     $.get('/similarity',{
-        titolo: currentPlayerVideo.snippet.title,
+        titolo: videoNamespace.getCurrentPlayerVideo().snippet.title,
         recommender: 1
     }).done((data)=>{
         console.log(data);
@@ -88,7 +92,8 @@ function setVideo(data){
 	videoNamespace.setCurrentPlayerVideo(data);
 	setRelated(data.id.videoId);
 	setRecent();
-	setRandom();
+    setRandom();
+    setSimilarity();
 	setDescription(data.snippet.description);
 	setComments(data.id.videoId);
 	setContentBrano(data.snippet.title);
