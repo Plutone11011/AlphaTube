@@ -166,5 +166,8 @@ $(document).ready(function(){
 		let data = $(this).data("video");
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
+		//focus sul player.
+		var iframe = $("#player")[0];
+		iframe.contentWindow.focus();
 	})
 });

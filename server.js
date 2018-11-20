@@ -34,7 +34,6 @@ app.get("/search", function(req,res,next){
 				type: "video"
 			}
 		},(error,response,body)=>{
-			console.log(body);
 			if(error || (response.statusCode != 200)){
 				next(new Error(error));
 				return;
@@ -61,10 +60,10 @@ app.get("/search", function(req,res,next){
 				type: "video",
 				videoEmbeddable: true,
 				videoSyndicated: true,
+				videoLicense: "creativeCommon",
 				videoCategoryId: "10"
 			}
 		}, (error,response,body)=>{
-			console.log(body);
 			if(error || (response.statusCode != 200)){
 				next(new Error(error));
 				return;
@@ -105,6 +104,7 @@ app.get("/related",(req,res,next)=>{
 			videoCategoryId: "10",
 			videoEmbeddable: true,
 			videoSyndicated: true,
+			videoLicense: "creativeCommon",
 			maxResults: 30
 		}
 	}, (error,response,body)=>{
@@ -126,10 +126,13 @@ app.get("/random",(req,res,next)=>{
 			type: "video",
 			videoCategoryId: "10",
 			maxResults: 30,
+			order: "viewCount",
 			publishedBefore: req.query.mostRecentDate,
 			publishedAfter: req.query.lessRecentDate,
 			videoEmbeddable: true,
-			videoSyndicated: true
+			videoSyndicated: true,
+			videoLicense: "creativeCommon",
+			safeSearch: "strict" //Mi è capitato uscissero dei porno (SU YOUTUBE WTF) :/
 		}
 	}, (error,response,body)=>{
 		if(error || (response.statusCode != 200)){
