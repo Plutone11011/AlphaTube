@@ -60,7 +60,6 @@ app.get("/search", function(req,res,next){
 				type: "video",
 				videoEmbeddable: true,
 				videoSyndicated: true,
-				videoLicense: "creativeCommon",
 				videoCategoryId: "10"
 			}
 		}, (error,response,body)=>{
@@ -104,7 +103,6 @@ app.get("/related",(req,res,next)=>{
 			videoCategoryId: "10",
 			videoEmbeddable: true,
 			videoSyndicated: true,
-			videoLicense: "creativeCommon",
 			maxResults: 30
 		}
 	}, (error,response,body)=>{
@@ -131,7 +129,6 @@ app.get("/random",(req,res,next)=>{
 			publishedAfter: req.query.lessRecentDate,
 			videoEmbeddable: true,
 			videoSyndicated: true,
-			videoLicense: "creativeCommon",
 			safeSearch: "strict" //Mi è capitato uscissero dei porno (SU YOUTUBE WTF) :/
 		}
 	}, (error,response,body)=>{
