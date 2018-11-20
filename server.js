@@ -30,6 +30,7 @@ app.get("/search", function(req,res,next){
 				type: "video"
 			}
 		},(error,response,body)=>{
+			console.log(body);
 			if(error || (response.statusCode != 200)){
 				next(new Error(error));
 				return;
@@ -54,9 +55,12 @@ app.get("/search", function(req,res,next){
 				maxResults: 30,
 				q: req.query.q,
 				type: "video",
+				videoEmbeddable: true,
+				videoSyndicated: true,
 				videoCategoryId: "10"
 			}
 		}, (error,response,body)=>{
+			console.log(body);
 			if(error || (response.statusCode != 200)){
 				next(new Error(error));
 				return;
@@ -95,6 +99,8 @@ app.get("/related",(req,res,next)=>{
 			relatedToVideoId: req.query.id,
 			type: "video",
 			videoCategoryId: "10",
+			videoEmbeddable: true,
+			videoSyndicated: true,
 			maxResults: 30
 		}
 	}, (error,response,body)=>{
@@ -117,7 +123,9 @@ app.get("/random",(req,res,next)=>{
 			videoCategoryId: "10",
 			maxResults: 30,
 			publishedBefore: req.query.mostRecentDate,
-			publishedAfter: req.query.lessRecentDate
+			publishedAfter: req.query.lessRecentDate,
+			videoEmbeddable: true,
+			videoSyndicated: true
 		}
 	}, (error,response,body)=>{
 		if(error || (response.statusCode != 200)){

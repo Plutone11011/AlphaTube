@@ -2,9 +2,14 @@
 videoNamespace = function(){
 	//Oggetto di YT del video attualmente sul player
 	let currentPlayerVideo = {};
+	//NB: Oggetti di youtube che provengono da query per Id sono diversi.
+	//'youtube#video' <-- query per Id, id si trova in data.items[i].id
+	//'youtube#searchResult' <-- query per 'parola', Id si trova in data.items[i].id.videoId
+	//setVideo effettua controllo prima di caricare qualunque video.
 	//Array di oggetti di YT che sono stati sul player
 	let recentVideos = {items: []};
-	//Controllo tra i recenti, se il video nel player è già stato visualizzato. In caso positivo lo tolgo.
+	//Controllo tra i recenti, se il video nel player è già stato visualizzato.
+	//In caso positivo lo tolgo.
 	function removeIfRecent(){
 		$.each(recentVideos.items, function(index, value){
         	if(currentPlayerVideo.etag == value.etag){
@@ -88,16 +93,26 @@ function setVideo(data){
 	if(player.getCurrentTime()>= 15){
 		videoNamespace.addToRecent();
 	}
-	player.loadVideoById(data.id.videoId,0,'large');
+	//Se il video da caricare arriva tramite query per id.
+	if(data.kind == 'youtube#video'){
+		player.loadVideoById(data.id,0,'large');
+		setComments(data.id);
+		setRelated(data.id);
+	}
+	//Se il video da caricare arriva tramite query search.
+	else if(data.kind == 'youtube#searchResult'){
+		player.loadVideoById(data.id.videoId,0,'large');
+		setComments(data.id.videoId);
+		setRelated(data.id.videoId);
+	}else{
+		//data.kind == Se esistono altri casi.
+	}
 	videoNamespace.setCurrentPlayerVideo(data);
-	setRelated(data.id.videoId);
+	setDescription(data.snippet.description);
+	setContentBrano(data.snippet.title);
 	setRecent();
     setRandom();
     setSimilarity();
-	setDescription(data.snippet.description);
-	setComments(data.id.videoId);
-	setContentBrano(data.snippet.title);
-
 }
 
 $(document).ready(function(){
@@ -111,9 +126,15 @@ $(document).ready(function(){
         	q: query
         }).done(function(data){
 			data = JSON.parse(data);
-			setVideo(data.items[0]);
-			data.items.shift();//remove first element in order to iterate over the remaining ones
-			createListOfThumbnails(data,"thumbnailSearch");
+			if(data.pageInfo.totalResults == 0){
+				alert('No video found for '+query);
+			}else{
+				setVideo(data.items[0]);
+				if(data.pageInfo.totalResults > 1){
+					data.items.shift();//remove first element in order to iterate over the remaining ones
+					createListOfThumbnails(data,"thumbnailSearch");
+				}
+			}
 		});
 	});
 	//Per inizializzare currentPlayerVideo con l'oggetto di youtube del video iniziale.
@@ -122,10 +143,18 @@ $(document).ready(function(){
 	}).done(function(data){
         data = JSON.parse(data);
         videoNamespace.setCurrentPlayerVideo(data.items[0]);
+        //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
+        setComments(data.items[0].id);
+        setDescription(data.items[0].snippet.description);
+		setContentBrano(data.items[0].snippet.title);
+		setRelated(data.items[0].id);
+		setRecent();
+    	setRandom();
+    	setSimilarity();
     });
-	setRandom();
 	$("span").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
+		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
 	})
 });
