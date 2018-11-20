@@ -17,7 +17,8 @@
     font-weight: bold;
   }
 
-  #recommenderRelated, #recommenderRecent, #recommenderSearch, #recommenderRandom{
+  #recommenderRelated, #recommenderRecent, #recommenderSearch, 
+  #recommenderRandom, #recommenderSimilarity{
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;

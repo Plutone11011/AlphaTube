@@ -2,9 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser'); //to parse requests body
 const request = require('request'); //http client
 const getArtistTitle = require('get-artist-title');
+var NB = require('nodebrainz');
+
+var nb = new NB({userAgent:'Alphatube ( http://localhost:1823 )'});
+
 //var routes = require('./routes/index');
 var app = express();
-var searchRouter = express.Router();
+//var searchRouter = express.Router();
 var path = __dirname + '/views/' ;
 app.use(express.static(__dirname + '/public'));
 /*mounting middlewares*/
@@ -141,25 +145,42 @@ app.get("/random",(req,res,next)=>{
 //app.use('/',routes);
 
 app.get("/similarity",(req,res,next)=>{
-	console.log(req.query.titolo);
-	console.log(req.query.recommender);
 	try{
 		var [artist, title] = getArtistTitle(req.query.titolo);
 		if (parseInt(req.query.recommender)){
-			next(); //need to pass artist, title
+			res.locals.artist = artist ; //need to pass artist, title to next middleware
+			res.locals.title = title ;
+			next(); 
 		}
 		else{
 			res.send([artist,title]);
 		}
 	}catch(error){
-		console.log(error);
 		res.send([null,null]);
 	}
 });
 
 app.get("/similarity",(req,res,next)=>{
-	console.log("heh");
-	res.json("ah stronzo");
+	console.log(res.locals);
+
+	request({
+		url: "https://www.googleapis.com/youtube/v3/search",
+		qs: {
+			key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
+			part: "snippet",
+			type: "video",
+			videoCategoryId: "10",
+			maxResults: 30,
+			q: res.locals.artist
+		}
+	}, (error,response,body)=>{
+		if(error || (response.statusCode != 200)){
+			next(new Error(error));
+			return;
+		}else{
+			res.json(body);
+		}
+	});
 });
 
 app.listen(1823) ;//group number
