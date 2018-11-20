@@ -78,7 +78,17 @@ function setSimilarity(){
         titolo: videoNamespace.getCurrentPlayerVideo().snippet.title,
         recommender: 1
     }).done((data)=>{
-        console.log(data);
+		console.log(data);
+		//elimino titoli duplicati nel caso in cui musicbrainz abbia ritornato versioni diverse della stessa canzone
+		/*var uniqueTitles = [];	
+		$.each(data, function(index, el){
+    		if($.inArray(el.title, uniqueTitles) === -1) {
+				uniqueTitles.push(el);//cerca elemento corrente nell'array dei titoli unici, se non c'è lo aggiunge
+			}
+		});
+		*/
+		data = JSON.parse(data) ;
+		createListOfThumbnails(data,"thumbnailSimilarity");
     });
 }
 
