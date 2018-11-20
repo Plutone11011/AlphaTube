@@ -144,24 +144,17 @@ app.get("/random",(req,res,next)=>{
 //routes will handle requests matching this path
 //app.use('/',routes);
 
-app.get("/similarity",(req,res,next)=>{
+//parsa titolo youtube e ritorna artista e titolo brano
+app.get("/artist_title",(req,res,next)=>{
 	try{
 		var [artist, title] = getArtistTitle(req.query.titolo);
-		if (parseInt(req.query.recommender)){
-			res.locals.artist = artist ; //need to pass artist, title to next middleware
-			res.locals.title = title ;
-			next(); 
-		}
-		else{
-			res.send([artist,title]);
-		}
+		res.send([artist,title]);
 	}catch(error){
 		res.send([null,null]);
 	}
 });
 
-app.get("/similarity",(req,res,next)=>{
-	console.log(res.locals);
+app.get("/similarity_genre",(req,res,next)=>{
 
 	request({
 		url: "https://www.googleapis.com/youtube/v3/search",
@@ -171,7 +164,7 @@ app.get("/similarity",(req,res,next)=>{
 			type: "video",
 			videoCategoryId: "10",
 			maxResults: 30,
-			q: res.locals.artist
+			q: req.query.genre
 		}
 	}, (error,response,body)=>{
 		if(error || (response.statusCode != 200)){

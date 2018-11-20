@@ -78,22 +78,27 @@ function setRandom(){
 	})
 }
 
-function setSimilarity(){
-    $.get('/similarity',{
-        titolo: videoNamespace.getCurrentPlayerVideo().snippet.title,
-        recommender: 1
+function setGenreSimilarity(){
+    $.get('/artist_title',{
+        titolo: videoNamespace.getCurrentPlayerVideo().snippet.title
     }).done((data)=>{
-		console.log(data);
-		//elimino titoli duplicati nel caso in cui musicbrainz abbia ritornato versioni diverse della stessa canzone
-		/*var uniqueTitles = [];	
-		$.each(data, function(index, el){
-    		if($.inArray(el.title, uniqueTitles) === -1) {
-				uniqueTitles.push(el);//cerca elemento corrente nell'array dei titoli unici, se non c'è lo aggiunge
-			}
-		});
-		*/
-		data = JSON.parse(data) ;
-		createListOfThumbnails(data,"thumbnailSimilarity");
+		if (data[0] && data[1]){
+			setContentBrano(data[0],data[1]);
+			$.get("/similarity_genre",{
+				genre: genereMusicale.getGenre()
+			}).done((data)=>{
+				data = JSON.parse(data) ;
+				//andrebbe anche controllato se nella lista ci sono video dello stesso artista
+				createListOfThumbnails(data,"thumbnailGenreSimilarity");
+			})
+		}
+		else{
+			fillWikiArea("No content found for this song","No content found for this artist");
+			genereMusicale.setGenre(null);
+			//forse notificare che non è possibile popolare recommender?
+			//o comunque ripulire area
+		}
+
     });
 }
 
@@ -119,10 +124,10 @@ function setVideo(data){
 	}
 	videoNamespace.setCurrentPlayerVideo(data);
 	setDescription(data.snippet.description);
-	setContentBrano(data.snippet.title);
+	//setContentBrano(data.snippet.title);
 	setRecent();
     setRandom();
-    setSimilarity();
+    setGenreSimilarity();
 }
 
 $(document).ready(function(){
@@ -156,11 +161,11 @@ $(document).ready(function(){
         //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
         setComments(data.items[0].id);
         setDescription(data.items[0].snippet.description);
-		setContentBrano(data.items[0].snippet.title);
+		//setContentBrano(data.items[0].snippet.title);
 		setRelated(data.items[0].id);
 		setRecent();
     	setRandom();
-    	setSimilarity();
+    	setGenreSimilarity();
     });
 	$("span").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
