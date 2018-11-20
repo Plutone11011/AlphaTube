@@ -4,9 +4,9 @@ const request = require('request'); //http client
 const getArtistTitle = require('get-artist-title');
 //var routes = require('./routes/index');
 var app = express();
-
+var searchRouter = express.Router();
 var path = __dirname + '/views/' ;
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 /*mounting middlewares*/
 app.use(bodyParser.json());
 // to parse application/x-www-form-urlencoded, which is default mime type
@@ -19,8 +19,7 @@ app.get("/",function(req,res,next){
 	res.sendFile(path + "index.html");
 });
 
-app.get("/search",function(req,res,next){
-
+app.get("/search", function(req,res,next){
 	request(
 		{
 			url: "https://www.googleapis.com/youtube/v3/videos",
@@ -31,29 +30,41 @@ app.get("/search",function(req,res,next){
 				type: "video"
 			}
 		},(error,response,body)=>{
-			let check = JSON.parse(body);
-			if(check.pageInfo.totalResults == 1){
-				res.json(body);//input is a video id	
+			if(error || (response.statusCode != 200)){
+				next(new Error(error));
+				return;
 			}
-			else{
-				//input is not a video id
-				request(
-					{
-						url: "https://www.googleapis.com/youtube/v3/search",
-						qs:{
-							key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
-							part: "snippet",
-							maxResults: 30,
-							q: req.query.q,
-							type: "video",
-							videoCategoryId: "10"
-						}
-					}, (error,response,body)=>{
-						res.json(body);
-					})
+			var check = JSON.parse(body);
+			if(check.pageInfo.totalResults != 1){
+				next(); //input is not videoId, next handler
+			}else{
+				res.json(body);
 			}
-		});
+		}
+	);
+});
 
+app.get("/search", function(req,res,next){
+	request(
+		{
+			url: "https://www.googleapis.com/youtube/v3/search",
+			qs:{
+				key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
+				part: "snippet",
+				maxResults: 30,
+				q: req.query.q,
+				type: "video",
+				videoCategoryId: "10"
+			}
+		}, (error,response,body)=>{
+			if(error || (response.statusCode != 200)){
+				next(new Error(error));
+				return;
+			}else{
+				res.json(body);
+			}
+		}
+	);
 });
 
 app.get("/comments",(req,res,next)=>{
@@ -66,7 +77,12 @@ app.get("/comments",(req,res,next)=>{
 			textFormat: "plaintext"
 		}
 	}, (error,response,body)=>{
-		res.json(body);
+		if(error || (response.statusCode != 200)){
+			next(new Error(error));
+			return;
+		}else{
+			res.json(body);
+		}
 	});
 });
 
@@ -82,7 +98,12 @@ app.get("/related",(req,res,next)=>{
 			maxResults: 30
 		}
 	}, (error,response,body)=>{
-		res.json(body);
+		if(error || (response.statusCode != 200)){
+			next(new Error(error));
+			return;
+		}else{
+			res.json(body);
+		}
 	});
 });
 
@@ -99,7 +120,12 @@ app.get("/random",(req,res,next)=>{
 			publishedAfter: req.query.lessRecentDate
 		}
 	}, (error,response,body)=>{
-		res.json(body);
+		if(error || (response.statusCode != 200)){
+			next(new Error(error));
+			return;
+		}else{
+			res.json(body);
+		}
 	});
 });
 
