@@ -40,7 +40,7 @@ videoNamespace = function(){
         getCurrentPlayerVideo: getCurrentPlayerVideo
 	}
 }();
-
+/*
 genereMusicale = function(){
     var genre ;
 
@@ -56,7 +56,7 @@ genereMusicale = function(){
         setGenre: setGenre
     }
 }();
-
+*/
 //Lancia una semplice query usando relatedToVideoId di YT.
 function setRelated(_id){
 	$.get('/related',{
@@ -101,8 +101,18 @@ function sparqlQueryforMusicGenre(res){
     " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }") ;
 }
 
+
 function setGenreSimilarity(){
 
+	function getGenreResults(bindings){
+		$.get("/similarity_genre",{
+			genre: bindings
+		}).done((data)=>{
+			data = JSON.parse(data);
+			//andrebbe anche controllato se nella lista ci sono video dello stesso artista
+			createListOfThumbnails(data,"thumbnailGenreSimilarity");
+		});
+	}
 
     $.get('/artist_title',{
         titolo: videoNamespace.getCurrentPlayerVideo().snippet.title
@@ -115,26 +125,17 @@ function setGenreSimilarity(){
             var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
 			$.get(buildQuery(res1,artist,sparqlQueryforMusicGenre)).done((data)=>{
 				if (data["results"]["bindings"].length){
-					/*
-					$.get("/similarity_genre",{
-						genre: genereMusicale.getGenre()
-					}).done((data)=>{
-						data = JSON.parse(data) ;
-						//andrebbe anche controllato se nella lista ci sono video dello stesso artista
-						createListOfThumbnails(data,"thumbnailGenreSimilarity");
-					})
-					console.log(data);
-					*/
+					getGenreResults(data["results"]["bindings"]);
 				}
 				else {
 					$.get(buildQuery(res2,artist,sparqlQueryforMusicGenre)).done((data)=>{
 						if (data["results"]["bindings"].length){
-							console.log(data);
+							getGenreResults(data["results"]["bindings"]);
 						}
 						else {
 							$.get(buildQuery(res3,artist,sparqlQueryforMusicGenre)).done((data)=>{
 								if (data["results"]["bindings"].length){
-									console.log(data);
+									getGenreResults(data["results"]["bindings"]);
 								}
 								else {
 									//notificare che area similarity vuota
@@ -144,15 +145,6 @@ function setGenreSimilarity(){
 					})
 				}
 			})
-			/*
-			$.get("/similarity_genre",{
-				genre: genereMusicale.getGenre()
-			}).done((data)=>{
-				data = JSON.parse(data) ;
-				//andrebbe anche controllato se nella lista ci sono video dello stesso artista
-				createListOfThumbnails(data,"thumbnailGenreSimilarity");
-			})
-			*/
 		}
 		else{
 			genereMusicale.setGenre(null);

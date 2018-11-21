@@ -152,6 +152,20 @@ app.get("/artist_title",(req,res,next)=>{
 });
 
 app.get("/similarity_genre",(req,res,next)=>{
+	var queryString = '' ;
+	for (var i = 0; i < req.query.genre.length; i++){
+		queryString = queryString + req.query.genre[i]["lab"]["value"] ;
+		if (i < req.query.genre.length - 1){
+			//non voglio aggiungere pipe alla fine
+			queryString = queryString + '|' ;
+		}
+	}
+	res.locals.q = queryString ;
+	console.log(res.locals.q);
+	next();
+});
+
+app.get("/similarity_genre",(req,res,next)=>{
 
 	request({
 		url: "https://www.googleapis.com/youtube/v3/search",
@@ -161,9 +175,10 @@ app.get("/similarity_genre",(req,res,next)=>{
 			type: "video",
 			videoCategoryId: "10",
 			maxResults: 30,
-			q: req.query.genre
+			q: encodeURIComponent(res.locals.q) 
 		}
 	}, (error,response,body)=>{
+		console.log(body);
 		if(error || (response.statusCode != 200)){
 			next(new Error(error));
 			return;
