@@ -2,9 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser'); //to parse requests body
 const request = require('request'); //http client
 const getArtistTitle = require('get-artist-title');
-var NB = require('nodebrainz');
-
-var nb = new NB({userAgent:'Alphatube ( http://localhost:1823 )'});
 
 //var routes = require('./routes/index');
 var app = express();
