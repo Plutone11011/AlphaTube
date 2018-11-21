@@ -88,7 +88,6 @@
 
             // 4. The API will call this function when the video player is ready.
             function onPlayerReady(event) {
-              videoNamespace.resetTimer();
               event.target.playVideo();
             }
 
@@ -103,9 +102,10 @@
                 videoNamespace.stopTimer();
               }
               if (event.data == YT.PlayerState.BUFFERING) {
-                videoNamespace.stopTimer();
+                videoNamespace.resetTimer();
               }
               if (event.data == YT.PlayerState.ENDED) {
+                videoNamespace.stopTimer();
                 //Do something with watchtime?
                 var watchTime = videoNamespace.getWatchTime();
                 videoNamespace.resetTimer();

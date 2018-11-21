@@ -15,7 +15,7 @@ videoNamespace = function(){
 		if(interval) {
 			clearInterval(interval);
 			interval = null;
-			console.log('Video paused, elapsedTime: ',elapsedTime);
+			console.log('Video paused, elapsedTime: ',Math.round(elapsedTime/100)/10);
 		}
 	}
 
