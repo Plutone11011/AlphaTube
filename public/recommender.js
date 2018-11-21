@@ -41,6 +41,22 @@ videoNamespace = function(){
 	}
 }();
 
+genereMusicale = function(){
+    var genre ;
+
+    function getGenre(){
+        return genre ;
+    }
+
+    function setGenre(g){
+        genre = g ;
+    }
+    return {
+        getGenre: getGenre,
+        setGenre: setGenre
+    }
+}();
+
 //Lancia una semplice query usando relatedToVideoId di YT.
 function setRelated(_id){
 	$.get('/related',{
@@ -78,12 +94,27 @@ function setRandom(){
 	})
 }
 
+function sparqlQueryforMusicGenre(res){
+	let resource = "<http://dbpedia.org/resource/" + res + ">";
+	return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
+    " SELECT ?lab WHERE { "+ resource + 
+    " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER (langMatches(lang(?lab),'en')") ;
+}
+
 function setGenreSimilarity(){
+
+
     $.get('/artist_title',{
         titolo: videoNamespace.getCurrentPlayerVideo().snippet.title
     }).done((data)=>{
-		if (data[0] && data[1]){
-			setContentBrano(data[0],data[1]);
+		artist = data[0];
+		title = data[1];
+		if (title && artist){
+			var res1 = title.replace(/\s/g,"_");
+            var res2 = title.replace(/\s/g,"_") + "_(song)" ;
+            var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
+			
+			/*
 			$.get("/similarity_genre",{
 				genre: genereMusicale.getGenre()
 			}).done((data)=>{
@@ -91,9 +122,9 @@ function setGenreSimilarity(){
 				//andrebbe anche controllato se nella lista ci sono video dello stesso artista
 				createListOfThumbnails(data,"thumbnailGenreSimilarity");
 			})
+			*/
 		}
 		else{
-			fillWikiArea("No content found for this song","No content found for this artist");
 			genereMusicale.setGenre(null);
 			//forse notificare che non è possibile popolare recommender?
 			//o comunque ripulire area
@@ -124,10 +155,10 @@ function setVideo(data){
 	}
 	videoNamespace.setCurrentPlayerVideo(data);
 	setDescription(data.snippet.description);
-	//setContentBrano(data.snippet.title);
+	setContentBrano(data.snippet.title);
 	setRecent();
     setRandom();
-    setGenreSimilarity();
+    //setGenreSimilarity();
 }
 
 $(document).ready(function(){
@@ -161,11 +192,11 @@ $(document).ready(function(){
         //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
         setComments(data.items[0].id);
         setDescription(data.items[0].snippet.description);
-		//setContentBrano(data.items[0].snippet.title);
+		setContentBrano(data.items[0].snippet.title);
 		setRelated(data.items[0].id);
 		setRecent();
     	setRandom();
-    	setGenreSimilarity();
+    	//setGenreSimilarity();
     });
 	$("span").on("click", ".contains-data", function() {
 		let data = $(this).data("video");

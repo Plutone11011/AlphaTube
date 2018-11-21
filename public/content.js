@@ -1,19 +1,3 @@
-var genereMusicale = (function(){
-    var genre ;
-
-    function getGenre(){
-        return genre ;
-    }
-
-    function setGenre(g){
-        genre = g ;
-    }
-    return {
-        getGenre: getGenre,
-        setGenre: setGenre
-    }
-})();
-
 //description is data.items[0].snippet.description
 function setDescription(description){
     $("#descrizione").html('<p>' + description + '</p>');
@@ -47,8 +31,8 @@ function fillWikiArea(song,artist){
     $("#wikipedia span").css("font-weight", "bold");
 }
 
-//builds sparql query with different resources
-function getQuery(res, artist){
+//ritorna query sparql
+function sparqlQueryforArtistTitle(res, artist){
     let resource = "<http://dbpedia.org/resource/" + res + ">";
     //returns sparql query to get artist and song abstract from dbpedia ontology
     return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
@@ -60,51 +44,58 @@ function getQuery(res, artist){
     " FILTER contains(?lab,'"+artist+"')}");
 }
 
-function setContentBrano(artist,title){
+//costruisce get query per dbpedia
+function buildQuery(DBPediaresource, artist, sparqlQuery){
+    var query = sparqlQuery(DBPediaresource, artist);
+    var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
+    return queryUrl ;
+}
+
+//ritorna i risultati della query a dbpedia
+function getResultsFromQuery(dbpediaData){
+    var artist_abstract = dbpediaData["results"]["bindings"][0]["artist"]["value"];
+    var song_abstract = dbpediaData["results"]["bindings"][0]["abstract"]["value"];
+    return [song_abstract,artist_abstract] ;
+}
+
+function setContentBrano(ytTitle){
     
-    console.log(title,artist);
-    function getResultsFromQuery(dbpediaData){
-        var artist_abstract = dbpediaData["results"]["bindings"][0]["artist"]["value"];
-        var song_abstract = dbpediaData["results"]["bindings"][0]["abstract"]["value"];
-        genereMusicale.setGenre(data["results"]["bindings"][0]["genre"]["value"]);
-        return [song_abstract,artist_abstract] ;
-    }
-    var res1 = title.replace(/\s/g,"_");
-    var res2 = title.replace(/\s/g,"_") + "_(song)" ;
-    var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
+    $.get("/artist_title",{ titolo: ytTitle}).done(function(data){
+        artist = data[0];
+        title = data[1];
+        console.log(artist,title);
+        if (artist && title){
+            var res1 = title.replace(/\s/g,"_");
+            var res2 = title.replace(/\s/g,"_") + "_(song)" ;
+            var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
 
-    var query = getQuery(res1, artist);
-    console.log(query);
-    var url = "http://dbpedia.org/sparql" ;
-    var queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
-
-    $.get(queryUrl).done((data)=>{
-        if (data["results"]["bindings"].length){
-            fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-        }
-        else {
-            query = getQuery(res2, artist);
-            queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
-            $.get(queryUrl).done((data)=>{
+            $.get(buildQuery(res1,artist,sparqlQueryforArtistTitle)).done((data)=>{
                 if (data["results"]["bindings"].length){
                     fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
                 }
                 else {
-                    query = getQuery(res3, artist);
-                    queryUrl = url+"?query="+ encodeURIComponent(query) +"&format=json" ;
-                    $.get(queryUrl).done((data)=>{
+                    $.get(buildQuery(res2,artist,sparqlQueryforArtistTitle)).done((data)=>{
                         if (data["results"]["bindings"].length){
                             fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
                         }
                         else {
-                            artist_abstract = "No content found for this artist" ;
-                            song_abstract = "No content found for this song" ;
-                            genereMusicale.setGenre(null);
-                            fillWikiArea(song_abstract,artist_abstract);
+                            $.get(buildQuery(res3,artist,sparqlQueryforArtistTitle)).done((data)=>{
+                                if (data["results"]["bindings"].length){
+                                    fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+                                }
+                                else {
+                                    artist_abstract = "No content found for this artist" ;
+                                    song_abstract = "No content found for this song" ;
+                                    fillWikiArea(song_abstract,artist_abstract);
+                                }
+                            });
                         }
                     });
                 }
             });
+        }
+        else {
+            fillWikiArea("No content found for this song","No content found for this artist");
         }
     });
 }
