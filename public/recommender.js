@@ -98,7 +98,7 @@ function sparqlQueryforMusicGenre(res){
 	let resource = "<http://dbpedia.org/resource/" + res + ">";
 	return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
     " SELECT ?lab WHERE { "+ resource + 
-    " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER (langMatches(lang(?lab),'en')") ;
+    " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }") ;
 }
 
 function setGenreSimilarity(){
@@ -113,7 +113,37 @@ function setGenreSimilarity(){
 			var res1 = title.replace(/\s/g,"_");
             var res2 = title.replace(/\s/g,"_") + "_(song)" ;
             var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
-			
+			$.get(buildQuery(res1,artist,sparqlQueryforMusicGenre)).done((data)=>{
+				if (data["results"]["bindings"].length){
+					/*
+					$.get("/similarity_genre",{
+						genre: genereMusicale.getGenre()
+					}).done((data)=>{
+						data = JSON.parse(data) ;
+						//andrebbe anche controllato se nella lista ci sono video dello stesso artista
+						createListOfThumbnails(data,"thumbnailGenreSimilarity");
+					})
+					console.log(data);
+					*/
+				}
+				else {
+					$.get(buildQuery(res2,artist,sparqlQueryforMusicGenre)).done((data)=>{
+						if (data["results"]["bindings"].length){
+							console.log(data);
+						}
+						else {
+							$.get(buildQuery(res3,artist,sparqlQueryforMusicGenre)).done((data)=>{
+								if (data["results"]["bindings"].length){
+									console.log(data);
+								}
+								else {
+									//notificare che area similarity vuota
+								}
+							})
+						}
+					})
+				}
+			})
 			/*
 			$.get("/similarity_genre",{
 				genre: genereMusicale.getGenre()
@@ -158,7 +188,7 @@ function setVideo(data){
 	setContentBrano(data.snippet.title);
 	setRecent();
     setRandom();
-    //setGenreSimilarity();
+    setGenreSimilarity();
 }
 
 $(document).ready(function(){
@@ -196,7 +226,7 @@ $(document).ready(function(){
 		setRelated(data.items[0].id);
 		setRecent();
     	setRandom();
-    	//setGenreSimilarity();
+    	setGenreSimilarity();
     });
 	$("span").on("click", ".contains-data", function() {
 		let data = $(this).data("video");

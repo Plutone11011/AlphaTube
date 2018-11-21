@@ -36,8 +36,8 @@ function sparqlQueryforArtistTitle(res, artist){
     let resource = "<http://dbpedia.org/resource/" + res + ">";
     //returns sparql query to get artist and song abstract from dbpedia ontology
     return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
-    " PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT distinct ?abstract ?genre ?artist WHERE { " + 
-    resource +" dbo:abstract ?abstract ; dbo:genre ?genre . {"+resource+" dbo:artist ?a.} UNION {"+
+    " PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT distinct ?abstract ?artist WHERE { " + 
+    resource +" dbo:abstract ?abstract . {"+resource+" dbo:artist ?a.} UNION {"+
     resource+" dbo:musicalArtist ?a.}"+
     "UNION {"+resource+" dbo:musicalBand ?a.} ?a dbo:abstract ?artist. ?a rdfs:label ?lab"+ 
     " FILTER (langMatches(lang(?abstract),'en') && langMatches(lang(?artist),'en'))"+
