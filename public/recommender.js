@@ -57,12 +57,31 @@ genereMusicale = function(){
     }
 }();
 */
+
+/* L'api di youtube fa schifo. Anche specificando type: "video", il furbone ritorna comunque
+dei channel con struttura items[i].id.channelId inveche che items[i].id.videoId
+Probabilmente per Marketing? Non lo so, non mi interessa.
+Questa funzione risolve i problemi creati da youtube.
+E' pesante da reiterare ad ogni nuova ricerca...
+Spostare sul server? WIP.
+*/
+function removeChannels(data){
+	var index = data.items.length - 1;
+	while (index >= 0){
+        if(data.items[index].id.kind == 'youtube#channel'){
+        	data.items.splice(index,1);
+        }
+        index--;  
+    }
+}
+
 //Lancia una semplice query usando relatedToVideoId di YT.
 function setRelated(_id){
 	$.get('/related',{
 		id: _id,
 	}).done((data)=>{
 		data = JSON.parse(data);
+		removeChannels(data);
 		createListOfThumbnails(data,"thumbnailRelated");
 	})
 }
@@ -90,6 +109,7 @@ function setRandom(){
 		//maxResults: 30
 	}).done((data)=>{
 		data = JSON.parse(data);
+		removeChannels(data);
 		createListOfThumbnails(data,"thumbnailRandom");
 	})
 }
@@ -110,6 +130,7 @@ function setGenreSimilarity(){
 		}).done((data)=>{
 			data = JSON.parse(data);
 			//andrebbe anche controllato se nella lista ci sono video dello stesso artista
+			//removeChannels(data); Forse serve?
 			createListOfThumbnails(data,"thumbnailGenreSimilarity");
 		});
 	}
@@ -197,6 +218,7 @@ $(document).ready(function(){
 			if(data.pageInfo.totalResults == 0){
 				alert('No video found for '+query);
 			}else{
+				removeChannels(data);
 				setVideo(data.items[0]);
 				if(data.pageInfo.totalResults > 1){
 					data.items.shift();//remove first element in order to iterate over the remaining ones
