@@ -1,13 +1,56 @@
 //namespace per non avere variabili globali.
 videoNamespace = function(){
+
+	//Timer per aggiungere video ai recent.
+	var startTime, elapsedTime, interval, added;
+
+	function startTimer(){
+		if(!interval){
+			startTime = Date.now();
+			interval = setInterval(updateTimer, 1);
+		}
+	}
+
+	function stopTimer(){
+		if(interval) {
+			clearInterval(interval);
+			interval = null;
+			console.log('Video paused, elapsedTime: ',elapsedTime);
+		}
+	}
+
+	function resetTimer(){
+		added = false;
+		stopTimer();
+		elapsedTime = 0;
+	}
+
+	function updateTimer(){
+		var now = Date.now();
+		var offset = now - startTime;
+		startTime = now;
+		elapsedTime = elapsedTime + offset;
+		if(elapsedTime >= 15000 && !added){
+			added = true;
+			addToRecent();
+			console.log('15 seconds elapsed, added to recent videos');
+		}
+	}
+
+	function getWatchTime(){
+		return elapsedTime();
+	}
+
 	//Oggetto di YT del video attualmente sul player
-	let currentPlayerVideo = {};
+	var currentPlayerVideo = {};
+
 	//NB: Oggetti di youtube che provengono da query per Id sono diversi.
 	//'youtube#video' <-- query per Id, id si trova in data.items[i].id
 	//'youtube#searchResult' <-- query per 'parola', Id si trova in data.items[i].id.videoId
 	//setVideo effettua controllo prima di caricare qualunque video.
 	//Array di oggetti di YT che sono stati sul player
-	let recentVideos = {items: []};
+	var recentVideos = {items: []};
+
 	//Controllo tra i recenti, se il video nel player è già stato visualizzato.
 	//In caso positivo lo tolgo.
 	function removeIfRecent(){
@@ -24,22 +67,32 @@ videoNamespace = function(){
 		removeIfRecent();
 		recentVideos.items.unshift(currentPlayerVideo);
 	}
+
 	function getRecentVideos(){
 		return recentVideos;
 	}
+
 	function setCurrentPlayerVideo(video){
 		currentPlayerVideo = video;
     }
+
     function getCurrentPlayerVideo(){
         return currentPlayerVideo ;
     }
+
 	return{
+		startTimer: startTimer,
+		stopTimer: stopTimer,
+		resetTimer: resetTimer,
+		getWatchTime: getWatchTime,
 		addToRecent: addToRecent,
 		getRecentVideos: getRecentVideos,
         setCurrentPlayerVideo: setCurrentPlayerVideo,
         getCurrentPlayerVideo: getCurrentPlayerVideo
 	}
 }();
+
+
 /*
 genereMusicale = function(){
     var genre ;
@@ -178,10 +231,6 @@ function setGenreSimilarity(){
 
 // Carica video nel player e setta i vari box.
 function setVideo(data){
-	//Se il video è rimasto in play per 15secondi, lo aggiungo ai video recenti.
-	if(player.getCurrentTime()>= 15){
-		videoNamespace.addToRecent();
-	}
 	//Se il video da caricare arriva tramite query per id.
 	if(data.kind == 'youtube#video'){
 		player.loadVideoById(data.id,0,'large');

@@ -88,6 +88,7 @@
 
             // 4. The API will call this function when the video player is ready.
             function onPlayerReady(event) {
+              videoNamespace.resetTimer();
               event.target.playVideo();
             }
 
@@ -96,6 +97,18 @@
             //    the player should play for six seconds and then stop.
             function onPlayerStateChange(event) {
               if (event.data == YT.PlayerState.PLAYING) {
+                videoNamespace.startTimer();
+              }
+              if (event.data == YT.PlayerState.PAUSED) {
+                videoNamespace.stopTimer();
+              }
+              if (event.data == YT.PlayerState.BUFFERING) {
+                videoNamespace.stopTimer();
+              }
+              if (event.data == YT.PlayerState.ENDED) {
+                //Do something with watchtime?
+                var watchTime = videoNamespace.getWatchTime();
+                videoNamespace.resetTimer();
               }
             }
             function stopVideo() {
