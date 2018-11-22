@@ -20,6 +20,30 @@ app.get("/",function(req,res,next){
 	res.sendFile(path + "index.html");
 });
 
+function searchVideo(query,res){
+	request(
+		{
+			url: "https://www.googleapis.com/youtube/v3/search",
+			qs:{
+				key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
+				part: "snippet",
+				maxResults: 30,
+				q: query,
+				type: "video",
+				videoEmbeddable: true,
+				videoCategoryId: "10"
+			}
+		}, (error,response,body)=>{
+			if(error || (response.statusCode != 200)){
+				next(new Error(error));
+				return;
+			}else{
+				res.json(body);
+			}
+		}
+	);
+}
+
 app.get("/search", function(req,res,next){
 	console.log(req.query.q);
 	request(
@@ -47,27 +71,7 @@ app.get("/search", function(req,res,next){
 });
 
 app.get("/search", function(req,res,next){
-	request(
-		{
-			url: "https://www.googleapis.com/youtube/v3/search",
-			qs:{
-				key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
-				part: "snippet",
-				maxResults: 30,
-				q: req.query.q,
-				type: "video",
-				videoEmbeddable: true,
-				videoCategoryId: "10"
-			}
-		}, (error,response,body)=>{
-			if(error || (response.statusCode != 200)){
-				next(new Error(error));
-				return;
-			}else{
-				res.json(body);
-			}
-		}
-	);
+	searchVideo(req.query.q,res);
 });
 
 app.get("/comments",(req,res,next)=>{
@@ -163,25 +167,7 @@ app.get("/similarity_genre",(req,res,next)=>{
 });
 
 app.get("/similarity_genre",(req,res,next)=>{
-	request({
-		url: "https://www.googleapis.com/youtube/v3/search",
-		qs: {
-			key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
-			part: "snippet",
-			type: "video",
-			videoCategoryId: "10",
-			maxResults: 30,
-			q: res.locals.q
-		}
-	}, (error,response,body)=>{
-		console.log(body);
-		if(error || (response.statusCode != 200)){
-			next(new Error(error));
-			return;
-		}else{
-			res.json(body);
-		}
-	});
+	searchVideo(res.locals.q,res);
 });
 
 app.get("/firstList", (req,res)=>{
