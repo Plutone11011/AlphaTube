@@ -58,7 +58,6 @@ function searchVideo(req,res,query){
 }
 
 app.get("/search", function(req,res,next){
-	console.log(req.query.q);
 	request(
 		{
 			url: "https://www.googleapis.com/youtube/v3/videos",
@@ -159,7 +158,9 @@ app.get("/random",(req,res,next)=>{
 //parsa titolo youtube e ritorna artista e titolo brano
 app.get("/artist_title",(req,res,next)=>{
 	try{
-		var [artist, title] = getArtistTitle(req.query.titolo);
+		var [artist, title] = getArtistTitle(req.query.video.snippet.title, {
+			defaultArtist: req.query.video.snippet.channelTitle,
+		});
 		res.send([artist,title]);
 	}catch(error){
 		res.send([null,null]);

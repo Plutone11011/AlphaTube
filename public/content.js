@@ -47,7 +47,7 @@ function sparqlQueryforArtistTitle(res, artist){
 //costruisce get query per dbpedia con sparql query differenti
 function buildQuery(DBPediaresource, artist, sparqlQuery){
     var query = sparqlQuery(DBPediaresource, artist);
-    console.log(query);
+    //console.log(query);
     var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
     return queryUrl ;
 }
@@ -65,9 +65,9 @@ function noContentFound(){
     fillWikiArea(song_abstract,artist_abstract);
 }
 
-function setContentBrano(ytTitle){
+function setContentBrano(video){
     
-    $.get("/artist_title",{ titolo: ytTitle}).done(function(data){
+    $.get("/artist_title",{ video: video}).done(function(data){
         artist = data[0];
         title = data[1];
         console.log(artist);

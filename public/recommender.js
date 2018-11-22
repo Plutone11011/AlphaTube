@@ -42,7 +42,8 @@ videoNamespace = (function(){
 	}
 
 	//Oggetto di YT del video attualmente sul player
-	var currentPlayerVideo = {};
+	var currentPlayerVideo = {}, currentPlayerArtist, currentPlayerSong;
+
 
 	//NB: Oggetti di youtube che provengono da query per Id sono diversi.
 	//'youtube#video' <-- query per Id, id si trova in data.items[i].id
@@ -68,13 +69,35 @@ videoNamespace = (function(){
 		recentVideos.items.unshift(currentPlayerVideo);
 	}
 
-	function getRecentVideos(){
-		return recentVideos;
+//Setta l'artista e la canzone del player. Attenzione all callback
+//e.g. se chiamo setArtistSimilarity prima della callback, muore.
+	function setCurrentPlayerArtist_Song(){
+		$.get('/artist_title',{
+        	video: videoNamespace.getCurrentPlayerVideo()
+    	}).done((data)=>{
+			currentPlayerArtist = data[0];
+			currentPlayerSong = data[1];
+			console.log('Artist:',currentPlayerArtist,'Song:',currentPlayerSong);
+			//Per ora qua, bisogna triggerare un evento per la callback.
+			setArtistSimilarity();
+		})
 	}
 
 	function setCurrentPlayerVideo(video){
 		currentPlayerVideo = video;
+		setCurrentPlayerArtist_Song();
     }
+
+	function getCurrentPlayerArtist(){
+		return currentPlayerArtist;
+	}
+	function getCurrentPlayerSong(){
+		return currentPlayerSong;
+	}
+
+	function getRecentVideos(){
+		return recentVideos;
+	}
 
     function getCurrentPlayerVideo(){
         return currentPlayerVideo ;
@@ -88,7 +111,9 @@ videoNamespace = (function(){
 		addToRecent: addToRecent,
 		getRecentVideos: getRecentVideos,
         setCurrentPlayerVideo: setCurrentPlayerVideo,
-        getCurrentPlayerVideo: getCurrentPlayerVideo
+        getCurrentPlayerVideo: getCurrentPlayerVideo,
+        getCurrentPlayerArtist: getCurrentPlayerArtist,
+        getCurrentPlayerSong: getCurrentPlayerSong
 	}
 })();
 
@@ -150,6 +175,18 @@ function removeChannels(data){
         }
         index--;  
     }
+}
+
+// Usato per ArtistSimilarity, rimuove la canzone sul player dalla lista ArtistSimilarity.
+function removeSameSong(data){
+	var index = data.items.length - 1;
+	var songOnPlayer = videoNamespace.getCurrentPlayerSong();
+	while(index >= 0){
+		if(data.items[index].snippet.title.includes(songOnPlayer)){
+			data.items.splice(index,1);
+		}
+		index--;
+	}
 }
 
 //Lancia una semplice query usando relatedToVideoId di YT.
@@ -229,6 +266,18 @@ function sparqlQueryforMusicGenre(res){
     " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }") ;
 }
 
+function setArtistSimilarity(){
+	if(videoNamespace.getCurrentPlayerArtist() != null){
+		$.get('/search',{
+			q: videoNamespace.getCurrentPlayerArtist()
+		}).done((data)=>{
+			data = JSON.parse(data);
+			removeSameSong(data);
+			removeChannels(data);
+			createListOfThumbnails(data,"thumbnailArtistSimilarity");
+		})
+	}
+}
 
 function setGenreSimilarity(){
 
@@ -244,7 +293,7 @@ function setGenreSimilarity(){
 	}
 
     $.get('/artist_title',{
-        titolo: videoNamespace.getCurrentPlayerVideo().snippet.title
+        video: videoNamespace.getCurrentPlayerVideo()
     }).done((data)=>{
 		artist = data[0];
 		title = data[1];
@@ -321,7 +370,7 @@ function setVideo(data){
 	}
 	videoNamespace.setCurrentPlayerVideo(data);
 	setDescription(data.snippet.description);
-	setContentBrano(data.snippet.title);
+	setContentBrano(data);
 	setRecent();
     setRandom();
     setGenreSimilarity();

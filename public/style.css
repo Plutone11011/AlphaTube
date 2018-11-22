@@ -18,7 +18,8 @@
   }
 
   #recommenderRelated, #recommenderRecent, #recommenderSearch, 
-  #recommenderRandom, #recommenderGenreSimilarity, #recommenderFirstList{
+  #recommenderRandom, #recommenderGenreSimilarity, #recommenderFirstList,
+  #recommenderArtistSimilarity{
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
