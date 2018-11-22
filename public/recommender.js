@@ -96,7 +96,9 @@ listaInizialeNamespace = function(){
 	var listaIniziale = {items: []};
 
 	function add(data){
-		listaIniziale.items = listaIniziale.items.concat(data);
+		console.log('data to add: ',data);
+		listaIniziale.items.push(...data);
+		console.log('lista dopo add: ',listaIniziale);
 	}
 
 	function get(){
@@ -157,6 +159,27 @@ function setRelated(_id){
 //Riempe il div dei video recentemente visualizzati.
 function setRecent(){
 	createListOfThumbnails(videoNamespace.getRecentVideos(), "thumbnailRecent")
+}
+
+//carica lista iniziale
+function setListaIniziale(){
+	$.get('/firstList').done(function(data){
+		data = JSON.parse(data);
+		//Quel cazzim di Youtube non accetta query con più di 50 id.
+		//Il JSON iniziale ne ha 118, si, 118.
+		//Lo splitto e faccio query sui sotto split.
+		var splitData = splitArray(data.map((data) => data.videoID),50);
+		splitData.forEach(function(value,index){
+			$.get('/search',{
+				q: value.join(',')
+			}).done(function(data){
+				data = JSON.parse(data);
+				listaInizialeNamespace.add(data.items);
+			})
+		})
+		//Per qualche motivo non stampa...
+		createListOfThumbnails(listaInizialeNamespace.get(),"thumbnailFirstList");
+	})
 }
 
 function randomDate(start, end) {
@@ -278,7 +301,7 @@ function setVideo(data){
 }
 
 $(document).ready(function(){
-
+	setListaIniziale();
 	//possible to search by title, artist, id, youtube title
 	$('#search_bar').submit(function(e){
 		e.preventDefault();//prevents the form from being submitted to the server
@@ -321,24 +344,5 @@ $(document).ready(function(){
 		//focus sul player. NON FUNZIONA!
 		var iframe = $("#player")[0];
 		iframe.contentWindow.focus();
-	})
-	$.get('/firstList').done(function(data){
-		data = JSON.parse(data);
-		//Quel cazzim di Youtube non accetta query con più di 50 id.
-		//Il JSON iniziale ne ha 118, si, 118.
-		//Lo splitto e faccio query sui sotto split.
-		var splitData = splitArray(data.map((data) => data.videoID),50);
-		console.log(splitData);
-		splitData.forEach(function(value,index){
-			$.get('/search',{
-				q: value.join(',')
-			}).done(function(data){
-				data = JSON.parse(data);
-				listaInizialeNamespace.add(data.items);
-			})
-		})
-		console.log(listaInizialeNamespace.get());
-		//Per qualche motivo non stampa...
-		createListOfThumbnails(listaInizialeNamespace.get(),"thumbnailFirstList");
 	})
 });
