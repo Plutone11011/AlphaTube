@@ -21,6 +21,7 @@ app.get("/",function(req,res,next){
 });
 
 app.get("/search", function(req,res,next){
+	console.log(req.query.q);
 	request(
 		{
 			url: "https://www.googleapis.com/youtube/v3/videos",
@@ -36,7 +37,7 @@ app.get("/search", function(req,res,next){
 				return;
 			}
 			var check = JSON.parse(body);
-			if(check.pageInfo.totalResults != 1){
+			if(check.pageInfo.totalResults == 0){
 				next(); //input is not videoId, next handler
 			}else{
 				res.json(body);
@@ -183,6 +184,17 @@ app.get("/similarity_genre",(req,res,next)=>{
 			res.json(body);
 		}
 	});
+});
+
+app.get("/firstList", (req,res)=>{
+	request('http://site1825.tw.cs.unibo.it/video.json', function (error,response,body) {
+		if(error || (response.statusCode != 200)){
+			next(new Error(error));
+			return;
+		}else{
+			res.json(body);
+		}
+	})
 });
 
 app.listen(1823) ;//group number

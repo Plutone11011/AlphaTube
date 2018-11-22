@@ -38,7 +38,7 @@ videoNamespace = function(){
 	}
 
 	function getWatchTime(){
-		return elapsedTime();
+		return elapsedTime;
 	}
 
 	//Oggetto di YT del video attualmente sul player
@@ -148,6 +148,15 @@ function randomDate(start, end) {
 		//Math.random() returns a float number between 0 and 1
 		//returns random Date between start and end
     	return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+// Splitta array, in size.
+function splitArray(array, size){
+	var groups = [],i;
+	for(i = 0; i < array.length; i += size){
+		groups.push(array.slice(i,i + size));
+	}
+	return groups;
 }
 
 function setRandom(){
@@ -295,8 +304,25 @@ $(document).ready(function(){
 		let data = $(this).data("video");
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
-		//focus sul player.
+		//focus sul player. NON FUNZIONA!
 		var iframe = $("#player")[0];
 		iframe.contentWindow.focus();
+	})
+	$.get('/firstList').done(function(data){
+		data = JSON.parse(data);
+		//Quel cazzim di Youtube non accetta query con più di 50 id.
+		//Il JSON iniziale ne ha 118, si, 118.
+		//Lo splitto e faccio query sui sotto split.
+		var splitData = splitArray(data.map((data) => data.videoID),50);
+		console.log(splitData);
+		$.each(splitData, function(index, value){
+			$.get('/search',{
+				q: value.join(',')
+			}).done(function(data){
+				data = JSON.parse(data);
+				createListOfThumbnails(data,"thumbnailFirstList"+index);
+				console.log(data);
+			})
+		})
 	})
 });

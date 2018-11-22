@@ -18,7 +18,7 @@
   }
 
   #recommenderRelated, #recommenderRecent, #recommenderSearch, 
-  #recommenderRandom, #recommenderGenreSimilarity{
+  #recommenderRandom, #recommenderGenreSimilarity, #recommenderFirstList{
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
