@@ -44,9 +44,10 @@ function sparqlQueryforArtistTitle(res, artist){
     " FILTER contains(?lab,'"+artist+"')}");
 }
 
-//costruisce get query per dbpedia
+//costruisce get query per dbpedia con sparql query differenti
 function buildQuery(DBPediaresource, artist, sparqlQuery){
     var query = sparqlQuery(DBPediaresource, artist);
+    console.log(query);
     var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
     return queryUrl ;
 }
@@ -58,44 +59,55 @@ function getResultsFromQuery(dbpediaData){
     return [song_abstract,artist_abstract] ;
 }
 
+function noContentFound(){
+    artist_abstract = "No content found for this artist" ;
+    song_abstract = "No content found for this song" ;
+    fillWikiArea(song_abstract,artist_abstract);
+}
+
 function setContentBrano(ytTitle){
     
     $.get("/artist_title",{ titolo: ytTitle}).done(function(data){
         artist = data[0];
         title = data[1];
-        console.log(artist,title);
+        console.log(artist);
+        console.log(title);
         if (artist && title){
             var res1 = title.replace(/\s/g,"_");
             var res2 = title.replace(/\s/g,"_") + "_(song)" ;
             var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
 
-            $.get(buildQuery(res1,artist,sparqlQueryforArtistTitle)).done((data)=>{
-                if (data["results"]["bindings"].length){
-                    fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-                }
-                else {
-                    $.get(buildQuery(res2,artist,sparqlQueryforArtistTitle)).done((data)=>{
-                        if (data["results"]["bindings"].length){
-                            fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-                        }
-                        else {
-                            $.get(buildQuery(res3,artist,sparqlQueryforArtistTitle)).done((data)=>{
-                                if (data["results"]["bindings"].length){
-                                    fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-                                }
-                                else {
-                                    artist_abstract = "No content found for this artist" ;
-                                    song_abstract = "No content found for this song" ;
-                                    fillWikiArea(song_abstract,artist_abstract);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+                $.get(buildQuery(res1,artist,sparqlQueryforArtistTitle)).done((data)=>{
+                    if (data["results"]["bindings"].length){
+                        fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+                    }
+                    else {
+                        $.get(buildQuery(res2,artist,sparqlQueryforArtistTitle)).done((data)=>{
+                            if (data["results"]["bindings"].length){
+                                fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+                            }
+                            else {
+                                $.get(buildQuery(res3,artist,sparqlQueryforArtistTitle)).done((data)=>{
+                                    if (data["results"]["bindings"].length){
+                                        fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+                                    }
+                                    else {
+                                        noContentFound();
+                                    }
+                                }).fail(()=>{
+                                    noContentFound();
+                                });
+                            }
+                        }).fail(()=>{
+                            noContentFound();
+                        });
+                    }
+                }).fail(()=>{
+                    noContentFound();
+                });
         }
         else {
-            fillWikiArea("No content found for this song","No content found for this artist");
+            noContentFound();
         }
     });
 }
