@@ -243,61 +243,20 @@ function setGenreSimilarity(){
 		});
 	}
 
+	function noThumbnailFound(){
+		$(".thumbnailGenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
+	}
+
     $.get('/artist_title',{
         titolo: videoNamespace.getCurrentPlayerVideo().snippet.title
     }).done((data)=>{
 		artist = data[0];
 		title = data[1];
-		if (title && artist){
-			var res1 = title.replace(/\s/g,"_");
-            var res2 = title.replace(/\s/g,"_") + "_(song)" ;
-            var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
-				
-			$.ajax({
-				url: buildQuery(res1,artist,sparqlQueryforMusicGenre),
-				success: function (data){
-					if (data["results"]["bindings"].length){
-						getGenreResults(data["results"]["bindings"]);
-					}
-					else{
-						$.ajax({
-							url: buildQuery(res2,artist,sparqlQueryforMusicGenre),
-							success: function(data){
-								if (data["results"]["bindings"].length){
-									getGenreResults(data["results"]["bindings"]);
-								}
-								else {
-									$.ajax({
-										url: buildQuery(res3,artist,sparqlQueryforMusicGenre),
-										success: function(data){
-											if (data["results"]["bindings"].length){
-												getGenreResults(data["results"]["bindings"]);
-											}
-											else {
-												//notificare 
-											}			
-										},
-										error: function(jqXHR, textStatus, errorThrown) {
-											console.log(jqXHR.responseText);
-										}  
-									});
-								}
-							},
-							error: function(jqXHR, textStatus, errorThrown) {
-								console.log(jqXHR.responseText);
-							} 
-						});
-					} 	
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR.responseText);
-				} 
-			});
+		if (title && artist){	
+			queriesToDBPedia(true,title,artist,sparqlQueryforMusicGenre,getGenreResults,noThumbnailFound);
 		}
 		else{
-			//genereMusicale.setGenre(null);
-			//forse notificare che non è possibile popolare recommender?
-			//o comunque ripulire area
+			noThumbnailFound();
 		}
 
     });
