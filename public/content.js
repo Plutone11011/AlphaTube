@@ -65,6 +65,55 @@ function noContentFound(){
     fillWikiArea(song_abstract,artist_abstract);
 }
 
+//funzione che esegue la query a dbpedia (sia proveniente dal recommender che per l'area content)
+function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,FillOrGet,noContent){
+
+    var res1 = title.replace(/\s/g,"_");
+    var res2 = title.replace(/\s/g,"_") + "_(song)" ;
+    var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
+
+    //controlla se queriesToDBPedia è stato chiamato nel recommender o nel content
+    //chiamando quindi il metodo con argomenti diversi
+    function checkCallingFunction(data){
+        if (isRecommender){
+            FillOrGet(data["results"]["bindings"]);
+        }
+        else{
+            FillOrGet(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+        }
+    }
+
+    $.get(buildQuery(res1,artist,sparqlQuery)).done((data)=>{
+        if (data["results"]["bindings"].length){
+            checkCallingFunction(data);
+        }
+        else {
+            $.get(buildQuery(res2,artist,sparqlQuery)).done((data)=>{
+                if (data["results"]["bindings"].length){
+                    checkCallingFunction(data);
+                }
+                else {
+                    $.get(buildQuery(res3,artist,sparqlQuery)).done((data)=>{
+                        if (data["results"]["bindings"].length){
+                            checkCallingFunction(data);
+                        }
+                        else {
+                            noContent();
+                        }
+                    }).fail(()=>{
+                        noContent();
+                    });
+                }
+            }).fail(()=>{
+                noContent();
+            });
+        }
+    }).fail(()=>{
+        noContent();
+    });
+
+}
+
 function setContentBrano(video){
     
     $.get("/artist_title",{ video: video}).done(function(data){
@@ -73,38 +122,7 @@ function setContentBrano(video){
         console.log(artist);
         console.log(title);
         if (artist && title){
-            var res1 = title.replace(/\s/g,"_");
-            var res2 = title.replace(/\s/g,"_") + "_(song)" ;
-            var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
-
-                $.get(buildQuery(res1,artist,sparqlQueryforArtistTitle)).done((data)=>{
-                    if (data["results"]["bindings"].length){
-                        fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-                    }
-                    else {
-                        $.get(buildQuery(res2,artist,sparqlQueryforArtistTitle)).done((data)=>{
-                            if (data["results"]["bindings"].length){
-                                fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-                            }
-                            else {
-                                $.get(buildQuery(res3,artist,sparqlQueryforArtistTitle)).done((data)=>{
-                                    if (data["results"]["bindings"].length){
-                                        fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-                                    }
-                                    else {
-                                        noContentFound();
-                                    }
-                                }).fail(()=>{
-                                    noContentFound();
-                                });
-                            }
-                        }).fail(()=>{
-                            noContentFound();
-                        });
-                    }
-                }).fail(()=>{
-                    noContentFound();
-                });
+            queriesToDBPedia(false,title,artist,sparqlQueryforArtistTitle,fillWikiArea,noContentFound);
         }
         else {
             noContentFound();
