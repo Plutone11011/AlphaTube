@@ -278,7 +278,7 @@ function setGenreSimilarity(){
 			})
 		}
 		else{
-			genereMusicale.setGenre(null);
+			//genereMusicale.setGenre(null);
 			//forse notificare che non è possibile popolare recommender?
 			//o comunque ripulire area
 		}
