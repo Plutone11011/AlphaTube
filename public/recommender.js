@@ -105,9 +105,18 @@ listaInizialeNamespace = function(){
 		return listaIniziale;
 	}
 
+	function done(){
+		if(listaIniziale.items.length >= 117){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	return{
 		add: add,
-		get: get
+		get: get,
+		done: done
 	}
 }();
 /*
@@ -175,10 +184,11 @@ function setListaIniziale(){
 			}).done(function(data){
 				data = JSON.parse(data);
 				listaInizialeNamespace.add(data.items);
+				if(listaInizialeNamespace.done()){
+					createListOfThumbnails(listaInizialeNamespace.get(),"thumbnailFirstList");
+				}
 			})
-		})
-		//Per qualche motivo non stampa...
-		createListOfThumbnails(listaInizialeNamespace.get(),"thumbnailFirstList");
+		})		
 	})
 }
 
