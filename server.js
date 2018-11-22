@@ -159,12 +159,10 @@ app.get("/similarity_genre",(req,res,next)=>{
 		}
 	}
 	res.locals.q = queryString ;
-	console.log(res.locals.q);
 	next();
 });
 
 app.get("/similarity_genre",(req,res,next)=>{
-
 	request({
 		url: "https://www.googleapis.com/youtube/v3/search",
 		qs: {
@@ -173,7 +171,7 @@ app.get("/similarity_genre",(req,res,next)=>{
 			type: "video",
 			videoCategoryId: "10",
 			maxResults: 30,
-			q: encodeURIComponent(res.locals.q) 
+			q: res.locals.q
 		}
 	}, (error,response,body)=>{
 		console.log(body);
