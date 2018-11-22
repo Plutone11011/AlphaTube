@@ -1,5 +1,5 @@
 //namespace per non avere variabili globali.
-videoNamespace = function(){
+videoNamespace = (function(){
 
 	//Timer per aggiungere video ai recent.
 	var startTime, elapsedTime, interval, added;
@@ -90,9 +90,9 @@ videoNamespace = function(){
         setCurrentPlayerVideo: setCurrentPlayerVideo,
         getCurrentPlayerVideo: getCurrentPlayerVideo
 	}
-}();
+})();
 
-listaInizialeNamespace = function(){
+listaInizialeNamespace = (function(){
 	var listaIniziale = {items: []};
 
 	function add(data){
@@ -118,7 +118,7 @@ listaInizialeNamespace = function(){
 		get: get,
 		done: done
 	}
-}();
+})();
 /*
 genereMusicale = function(){
     var genre ;
