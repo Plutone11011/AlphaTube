@@ -310,19 +310,22 @@ $(document).ready(function(){
 	})
 	$.get('/firstList').done(function(data){
 		data = JSON.parse(data);
+		var pezzaTemporanea = {items: []};
 		//Quel cazzim di Youtube non accetta query con più di 50 id.
 		//Il JSON iniziale ne ha 118, si, 118.
 		//Lo splitto e faccio query sui sotto split.
 		var splitData = splitArray(data.map((data) => data.videoID),50);
 		console.log(splitData);
-		$.each(splitData, function(index, value){
+		splitData.forEach(function(value,index){
 			$.get('/search',{
 				q: value.join(',')
 			}).done(function(data){
 				data = JSON.parse(data);
-				createListOfThumbnails(data,"thumbnailFirstList"+index);
-				console.log(data);
+				pezzaTemporanea.items = pezzaTemporanea.items.concat(data.items)
 			})
 		})
+		console.log(pezzaTemporanea);
+		//Per qualche motivo non stampa...
+		createListOfThumbnails(pezzaTemporanea,"thumbnailFirstList");
 	})
 });
