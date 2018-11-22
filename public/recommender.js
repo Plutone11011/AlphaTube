@@ -92,7 +92,22 @@ videoNamespace = function(){
 	}
 }();
 
+listaInizialeNamespace = function(){
+	var listaIniziale = {items: []};
 
+	function add(data){
+		listaIniziale.items = listaIniziale.items.concat(data);
+	}
+
+	function get(){
+		return listaIniziale;
+	}
+
+	return{
+		add: add,
+		get: get
+	}
+}();
 /*
 genereMusicale = function(){
     var genre ;
@@ -296,7 +311,6 @@ $(document).ready(function(){
         setDescription(data.items[0].snippet.description);
 		setContentBrano(data.items[0].snippet.title);
 		setRelated(data.items[0].id);
-		setRecent();
     	setRandom();
     	setGenreSimilarity();
     });
@@ -310,7 +324,6 @@ $(document).ready(function(){
 	})
 	$.get('/firstList').done(function(data){
 		data = JSON.parse(data);
-		var pezzaTemporanea = {items: []};
 		//Quel cazzim di Youtube non accetta query con più di 50 id.
 		//Il JSON iniziale ne ha 118, si, 118.
 		//Lo splitto e faccio query sui sotto split.
@@ -321,11 +334,11 @@ $(document).ready(function(){
 				q: value.join(',')
 			}).done(function(data){
 				data = JSON.parse(data);
-				pezzaTemporanea.items = pezzaTemporanea.items.concat(data.items)
+				listaInizialeNamespace.add(data.items);
 			})
 		})
-		console.log(pezzaTemporanea);
+		console.log(listaInizialeNamespace.get());
 		//Per qualche motivo non stampa...
-		createListOfThumbnails(pezzaTemporanea,"thumbnailFirstList");
+		createListOfThumbnails(listaInizialeNamespace.get(),"thumbnailFirstList");
 	})
 });

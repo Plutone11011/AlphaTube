@@ -3,7 +3,8 @@
 //places thumbnails in div with id attribute divId
 function createListOfThumbnails(data,linkClass){
     var counter;
-    $.each(data.items ,function(index, value){
+    console.log('recommender: ',linkClass,'data: ',data,'--> items: ',data.items);
+    $.each(data.items, function(index, value){
     	//Dinamically create thumbnail space.
     	/*
     	if($('#'+recommender+'> span').length != 0){
