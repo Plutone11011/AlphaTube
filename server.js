@@ -20,8 +20,20 @@ app.get("/",function(req,res,next){
 	res.sendFile(path + "index.html");
 });
 
+function setGenre(req,res,next){
+	var queryString = '' ;
+	for (var i = 0; i < req.query.genre.length; i++){
+		queryString = queryString + req.query.genre[i]["lab"]["value"] ;
+		if (i < req.query.genre.length - 1){
+			//non voglio aggiungere pipe alla fine
+			queryString = queryString + '|' ;
+		}
+	}
+	res.locals.q = queryString ;
+	next();
+}
+
 function searchVideo(req,res,query){
-	console.log('URL: ',req.originalUrl);
 	request(
 		{
 			url: "https://www.googleapis.com/youtube/v3/search",
@@ -154,20 +166,7 @@ app.get("/artist_title",(req,res,next)=>{
 	}
 });
 
-app.get("/similarity_genre",(req,res,next)=>{
-	var queryString = '' ;
-	for (var i = 0; i < req.query.genre.length; i++){
-		queryString = queryString + req.query.genre[i]["lab"]["value"] ;
-		if (i < req.query.genre.length - 1){
-			//non voglio aggiungere pipe alla fine
-			queryString = queryString + '|' ;
-		}
-	}
-	res.locals.q = queryString ;
-	next();
-});
-
-app.get("/similarity_genre",(req,res,next)=>{
+app.get("/similarity_genre",setGenre,(req,res,next)=>{
 	searchVideo(req,res,res.locals.q);
 });
 

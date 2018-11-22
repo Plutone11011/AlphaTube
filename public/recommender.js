@@ -96,9 +96,7 @@ listaInizialeNamespace = (function(){
 	var listaIniziale = {items: []};
 
 	function add(data){
-		console.log('data to add: ',data);
 		listaIniziale.items.push(...data);
-		console.log('lista dopo add: ',listaIniziale);
 	}
 
 	function get(){
