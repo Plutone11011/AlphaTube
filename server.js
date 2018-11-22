@@ -20,7 +20,8 @@ app.get("/",function(req,res,next){
 	res.sendFile(path + "index.html");
 });
 
-function searchVideo(query,res){
+function searchVideo(req,res,query){
+	console.log('URL: ',req.originalUrl);
 	request(
 		{
 			url: "https://www.googleapis.com/youtube/v3/search",
@@ -71,7 +72,7 @@ app.get("/search", function(req,res,next){
 });
 
 app.get("/search", function(req,res,next){
-	searchVideo(req.query.q,res);
+	searchVideo(req,res,req.query.q);
 });
 
 app.get("/comments",(req,res,next)=>{
@@ -167,7 +168,7 @@ app.get("/similarity_genre",(req,res,next)=>{
 });
 
 app.get("/similarity_genre",(req,res,next)=>{
-	searchVideo(res.locals.q,res);
+	searchVideo(req,res,res.locals.q);
 });
 
 app.get("/firstList", (req,res)=>{
