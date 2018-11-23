@@ -1,5 +1,5 @@
 //namespace per non avere variabili globali.
-videoNamespace = (function(){
+var videoNamespace = (function(){
 
 	//Timer per aggiungere video ai recent.
 	var startTime, elapsedTime, interval, added;
@@ -116,7 +116,7 @@ videoNamespace = (function(){
 	}
 })();
 
-listaInizialeNamespace = (function(){
+var listaInizialeNamespace = (function(){
 	var listaIniziale = {items: []};
 
 	function add(data){
@@ -141,23 +141,6 @@ listaInizialeNamespace = (function(){
 		done: done
 	}
 })();
-/*
-genereMusicale = function(){
-    var genre ;
-
-    function getGenre(){
-        return genre ;
-    }
-
-    function setGenre(g){
-        genre = g ;
-    }
-    return {
-        getGenre: getGenre,
-        setGenre: setGenre
-    }
-}();
-*/
 
 /* L'api di youtube fa schifo. Anche specificando type: "video", il furbone ritorna comunque
 dei channel con struttura items[i].id.channelId inveche che items[i].id.videoId
