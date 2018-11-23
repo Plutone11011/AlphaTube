@@ -1,6 +1,6 @@
-var timerNamespace = (function(){
-    //Timer per aggiungere video ai recent.
-	var startTime, elapsedTime, interval, added;
+var videoNamespace = (function(){
+
+    var startTime, elapsedTime, interval, added;
 
 	function startTimer(){
 		if(!interval){
@@ -38,17 +38,6 @@ var timerNamespace = (function(){
 	function getWatchTime(){
 		return elapsedTime;
     }
-    return {
-        startTimer: startTimer,
-        stopTimer: stopTimer,
-        resetTimer: resetTimer,
-        getWatchTime: getWatchTime
-    }
-
-})();
-
-var videoNamespace = (function(){
-
 
 	//Oggetto di YT del video attualmente sul player
     var currentPlayerVideo = {} ;
@@ -80,8 +69,8 @@ var videoNamespace = (function(){
 		recentVideos.items.unshift(currentPlayerVideo);
 	}
 
-//Setta l'artista e la canzone del player. Attenzione all callback
-//e.g. se chiamo setArtistSimilarity prima della callback, muore.
+    //Setta l'artista e la canzone del player. Attenzione all callback
+    //e.g. se chiamo setArtistSimilarity prima della callback, muore.
 	function setCurrentPlayerArtist_Song(){
 		$.get('/artist_title',{
         	video: videoNamespace.getCurrentPlayerVideo()
@@ -119,7 +108,11 @@ var videoNamespace = (function(){
         setCurrentPlayerVideo: setCurrentPlayerVideo,
         getCurrentPlayerVideo: getCurrentPlayerVideo,
         getCurrentPlayerArtist: getCurrentPlayerArtist,
-        getCurrentPlayerSong: getCurrentPlayerSong
+        getCurrentPlayerSong: getCurrentPlayerSong,
+        startTimer: startTimer,
+        stopTimer: stopTimer,
+        resetTimer: resetTimer,
+        getWatchTime: getWatchTime
 	}
 })();
 
