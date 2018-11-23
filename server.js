@@ -127,6 +127,28 @@ app.get("/related",(req,res,next)=>{
 	});
 });
 
+app.get("/channel",(req,res,next)=>{
+	request({
+		url: "https://www.googleapis.com/youtube/v3/search",
+		qs: {
+			key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
+			part: "snippet",
+			channelId: req.query.id,
+			type: "video",
+			videoCategoryId: "10",
+			videoEmbeddable: true,
+			maxResults: 30
+		}
+	}, (error,response,body)=>{
+		if(error || (response.statusCode != 200)){
+			next(new Error(error));
+			return;
+		}else{
+			res.json(body);
+		}
+	});
+});
+
 app.get("/random",(req,res,next)=>{
 	request({
 		url: "https://www.googleapis.com/youtube/v3/search",
@@ -160,6 +182,7 @@ app.get("/artist_title",(req,res,next)=>{
 	try{
 		var [artist, title] = getArtistTitle(req.query.video.snippet.title, {
 			defaultArtist: req.query.video.snippet.channelTitle,
+			defaultTitle: null
 		});
 		res.send([artist,title]);
 	}catch(error){

@@ -116,18 +116,16 @@ function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,FillOrGet,noCon
 
 function setContentBrano(video){
     
-    $.get("/artist_title",{ video: video}).done(function(data){
-        artist = data[0];
-        title = data[1];
-        console.log(artist);
-        console.log(title);
-        if (artist && title){
-            queriesToDBPedia(false,title,artist,sparqlQueryforArtistTitle,fillWikiArea,noContentFound);
-        }
-        else {
-            noContentFound();
-        }
-    });
+    artist = videoNamespace.getCurrentPlayerArtist();
+	title = videoNamespace.getCurrentPlayerSong();
+    console.log(artist);
+    console.log(title);
+    if (title){
+    	queriesToDBPedia(false,title,artist,sparqlQueryforArtistTitle,fillWikiArea,noContentFound);
+    }
+    else {
+        noContentFound();
+    }
 }
 
 

@@ -42,7 +42,7 @@ videoNamespace = (function(){
 	}
 
 	//Oggetto di YT del video attualmente sul player
-	var currentPlayerVideo = {}, currentPlayerArtist, currentPlayerSong;
+	var currentPlayerVideo = {}, currentPlayerArtist, currentPlayerSong
 
 
 	//NB: Oggetti di youtube che provengono da query per Id sono diversi.
@@ -78,8 +78,7 @@ videoNamespace = (function(){
 			currentPlayerArtist = data[0];
 			currentPlayerSong = data[1];
 			console.log('Artist:',currentPlayerArtist,'Song:',currentPlayerSong);
-			//Per ora qua, bisogna triggerare un evento per la callback.
-			setArtistSimilarity();
+			setGenreSimilarity();
 		})
 	}
 
@@ -190,9 +189,9 @@ function removeSameSong(data){
 }
 
 //Lancia una semplice query usando relatedToVideoId di YT.
-function setRelated(_id){
+function setRelated(id){
 	$.get('/related',{
-		id: _id,
+		id: id,
 	}).done((data)=>{
 		data = JSON.parse(data);
 		removeChannels(data);
@@ -266,17 +265,16 @@ function sparqlQueryforMusicGenre(res){
     " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }") ;
 }
 
+//Video dello stesso channel o ricerca per artista?
 function setArtistSimilarity(){
-	if(videoNamespace.getCurrentPlayerArtist() != null){
-		$.get('/search',{
-			q: videoNamespace.getCurrentPlayerArtist()
+	$.get('/channel',{
+		id: videoNamespace.getCurrentPlayerVideo().snippet.channelId
 		}).done((data)=>{
 			data = JSON.parse(data);
 			removeSameSong(data);
 			removeChannels(data);
 			createListOfThumbnails(data,"thumbnailArtistSimilarity");
 		})
-	}
 }
 
 function setGenreSimilarity(){
@@ -296,19 +294,14 @@ function setGenreSimilarity(){
 		$(".thumbnailGenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
 	}
 
-    $.get('/artist_title',{
-        video: videoNamespace.getCurrentPlayerVideo()
-    }).done((data)=>{
-		artist = data[0];
-		title = data[1];
-		if (title && artist){	
+	artist = videoNamespace.getCurrentPlayerArtist();
+	title = videoNamespace.getCurrentPlayerSong();
+	if (title){	
 			queriesToDBPedia(true,title,artist,sparqlQueryforMusicGenre,getGenreResults,noThumbnailFound);
-		}
-		else{
-			noThumbnailFound();
-		}
-
-    });
+	}
+	else{
+		noThumbnailFound();
+	}
 }
 
 // Carica video nel player e setta i vari box.
@@ -327,12 +320,12 @@ function setVideo(data){
 	}else{
 		//data.kind == Se esistono altri casi.
 	}
-	videoNamespace.setCurrentPlayerVideo(data);
+	videoNamespace.setCurrentPlayerVideo(data)
 	setDescription(data.snippet.description);
 	setContentBrano(data);
 	setRecent();
     setRandom();
-    setGenreSimilarity();
+ 	setArtistSimilarity()
 }
 
 $(document).ready(function(){
@@ -363,14 +356,14 @@ $(document).ready(function(){
 		q: 'PfYnvDL0Qcw'
 	}).done(function(data){
         data = JSON.parse(data);
-        videoNamespace.setCurrentPlayerVideo(data.items[0]);
+        videoNamespace.setCurrentPlayerVideo(data.items[0])
         //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
         setComments(data.items[0].id);
         setDescription(data.items[0].snippet.description);
 		setContentBrano(data.items[0].snippet.title);
 		setRelated(data.items[0].id);
     	setRandom();
-    	setGenreSimilarity();
+    	setArtistSimilarity();
     });
 	$("span").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
