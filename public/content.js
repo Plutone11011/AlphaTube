@@ -114,7 +114,12 @@ function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,FillOrGet,noCon
 
 }
 
+<<<<<<< HEAD
 function setContentBrano(){    
+=======
+function setContentBrano(){
+    
+>>>>>>> c80c93f4ffef6e191bf579f84bd67b6b1f7a2e25
     var artist = videoNamespace.getCurrentPlayerArtist();
 	var title = videoNamespace.getCurrentPlayerSong();
     console.log(artist);
