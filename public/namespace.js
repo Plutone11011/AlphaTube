@@ -49,6 +49,18 @@ var videoNamespace = (function(){
 		setCurrentPlayerArtist_Song();
     }
 
+    function getCurrentPlayerId(){
+    	if(currentPlayerVideo.kind == 'youtube#searchResult'){
+    		return currentPlayerVideo.id.videoId;
+    	}else if(currentPlayerVideo.kind == 'youtube#video'){
+    		return currentPlayerVideo.id;
+    	}
+    }
+
+    function getCurrentPlayerDescription(){
+    	return currentPlayerVideo.snippet.description;
+    }
+
 	function getCurrentPlayerArtist(){
 		return currentPlayerArtist;
 	}
@@ -61,16 +73,18 @@ var videoNamespace = (function(){
 	}
 
     function getCurrentPlayerVideo(){
-        return currentPlayerVideo ;
+        return currentPlayerVideo;
     }
 
 	return{
 		addToRecent: addToRecent,
+		setCurrentPlayerVideo: setCurrentPlayerVideo,
 		getRecentVideos: getRecentVideos,
-        setCurrentPlayerVideo: setCurrentPlayerVideo,
         getCurrentPlayerVideo: getCurrentPlayerVideo,
         getCurrentPlayerArtist: getCurrentPlayerArtist,
-        getCurrentPlayerSong: getCurrentPlayerSong
+        getCurrentPlayerSong: getCurrentPlayerSong,
+        getCurrentPlayerId: getCurrentPlayerId,
+        getCurrentPlayerDescription: getCurrentPlayerDescription
 	}
 })();
 

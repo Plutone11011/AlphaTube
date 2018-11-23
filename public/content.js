@@ -1,12 +1,12 @@
 //description is data.items[0].snippet.description
-function setDescription(description){
-    $("#descrizione").html('<p>' + description + '</p>');
+function setDescription(){
+    $("#descrizione").html('<p>' + videoNamespace.getCurrentPlayerDescription() + '</p>');
 }
 
 //id is data.items[0].id.videoId
-function setComments(_id){
+function setComments(){
         $.get("/comments",{
-            id: _id
+            id: videoNamespace.getCurrentPlayerId()
         }).done(function(data){
             data = JSON.parse(data);
             //topLevelComment: comment resource
@@ -114,10 +114,9 @@ function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,FillOrGet,noCon
 
 }
 
-function setContentBrano(video){
-    
-    artist = videoNamespace.getCurrentPlayerArtist();
-	title = videoNamespace.getCurrentPlayerSong();
+function setContentBrano(){    
+    var artist = videoNamespace.getCurrentPlayerArtist();
+	var title = videoNamespace.getCurrentPlayerSong();
     console.log(artist);
     console.log(title);
     if (title){

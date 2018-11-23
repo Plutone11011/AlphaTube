@@ -29,9 +29,9 @@ function removeSameSong(data){
 }
 
 //Lancia una semplice query usando relatedToVideoId di YT.
-function setRelated(id){
+function setRelated(){
 	$.get('/related',{
-		id: id,
+		id: videoNamespace.getCurrentPlayerId()
 	}).done((data)=>{
 		data = JSON.parse(data);
 		removeChannels(data);
@@ -146,26 +146,14 @@ function setGenreSimilarity(){
 
 // Carica video nel player e setta i vari box.
 function setVideo(data){
-	//Se il video da caricare arriva tramite query per id.
-	if(data.kind == 'youtube#video'){
-		player.loadVideoById(data.id,0,'large');
-		setComments(data.id);
-		setRelated(data.id);
-	}
-	//Se il video da caricare arriva tramite query search.
-	else if(data.kind == 'youtube#searchResult'){
-		player.loadVideoById(data.id.videoId,0,'large');
-		setComments(data.id.videoId);
-		setRelated(data.id.videoId);
-	}else{
-		//data.kind == Se esistono altri casi.
-	}
 	videoNamespace.setCurrentPlayerVideo(data)
-	setDescription(data.snippet.description);
-	setContentBrano(data);
+	player.loadVideoById(videoNamespace.getCurrentPlayerId(),0,'large');
+	setComments();
+	setRelated();
+	setDescription();
 	setRecent();
     setRandom();
- 	setArtistSimilarity()
+ 	setArtistSimilarity();
 }
 
 $(document).ready(function(){
@@ -198,10 +186,9 @@ $(document).ready(function(){
         data = JSON.parse(data);
         videoNamespace.setCurrentPlayerVideo(data.items[0])
         //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
-        setComments(data.items[0].id);
-        setDescription(data.items[0].snippet.description);
-		setContentBrano(data.items[0].snippet.title);
-		setRelated(data.items[0].id);
+        setComments();
+        setDescription();
+		setRelated();
     	setRandom();
     	setArtistSimilarity();
     });
@@ -210,7 +197,6 @@ $(document).ready(function(){
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
 		//focus sul player. NON FUNZIONA!
-		var iframe = $("#player")[0];
-		iframe.contentWindow.focus();
+		$(player.getIframe()).focus();
 	})
 });
