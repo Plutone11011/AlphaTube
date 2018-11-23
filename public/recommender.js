@@ -108,7 +108,7 @@ function sparqlQueryforMusicGenre(res){
 //Video dello stesso channel o ricerca per artista?
 function setArtistSimilarity(){
 	$.get('/channel',{
-		id: videoNamespace.getCurrentPlayerVideo().snippet.channelId
+		id: videoNamespace.getCurrentPlayerVideoChannelId()
 		}).done((data)=>{
 			data = JSON.parse(data);
 			removeSameSong(data);
@@ -186,15 +186,9 @@ $(document).ready(function(){
         data = JSON.parse(data);
         videoNamespace.setCurrentPlayerVideo(data.items[0])
         //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
-<<<<<<< HEAD
         setComments();
         setDescription();
 		setRelated();
-=======
-        setComments(data.items[0].id);
-        setDescription(data.items[0].snippet.description);
-		setRelated(data.items[0].id);
->>>>>>> c80c93f4ffef6e191bf579f84bd67b6b1f7a2e25
     	setRandom();
     	setArtistSimilarity();
     });

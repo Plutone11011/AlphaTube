@@ -37,7 +37,7 @@ var videoNamespace = (function(){
     	}).done((data)=>{
 			currentPlayerArtist = data[0];
 			currentPlayerSong = data[1];
-			console.log('Artist:',currentPlayerArtist,'Song:',currentPlayerSong);
+			//console.log('Artist:',currentPlayerArtist,'Song:',currentPlayerSong);
             setGenreSimilarity();
             setContentBrano();
 		})
@@ -63,8 +63,13 @@ var videoNamespace = (function(){
 	function getCurrentPlayerArtist(){
 		return currentPlayerArtist;
 	}
+
 	function getCurrentPlayerSong(){
 		return currentPlayerSong;
+	}
+
+	function getCurrentPlayerVideoChannelId(){
+		return currentPlayerVideo.snippet.channelId;
 	}
 
 	function getRecentVideos(){
@@ -83,7 +88,8 @@ var videoNamespace = (function(){
         getCurrentPlayerArtist: getCurrentPlayerArtist,
         getCurrentPlayerSong: getCurrentPlayerSong,
         getCurrentPlayerId: getCurrentPlayerId,
-        getCurrentPlayerDescription: getCurrentPlayerDescription
+        getCurrentPlayerDescription: getCurrentPlayerDescription,
+        getCurrentPlayerVideoChannelId: getCurrentPlayerVideoChannelId
 	}
 })();
 
