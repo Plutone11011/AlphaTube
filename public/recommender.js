@@ -162,7 +162,6 @@ function setVideo(data){
 	}
 	videoNamespace.setCurrentPlayerVideo(data)
 	setDescription(data.snippet.description);
-	setContentBrano(data);
 	setRecent();
     setRandom();
  	setArtistSimilarity()
@@ -200,7 +199,6 @@ $(document).ready(function(){
         //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
         setComments(data.items[0].id);
         setDescription(data.items[0].snippet.description);
-		setContentBrano(data.items[0].snippet.title);
 		setRelated(data.items[0].id);
     	setRandom();
     	setArtistSimilarity();

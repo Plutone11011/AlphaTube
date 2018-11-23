@@ -114,10 +114,10 @@ function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,FillOrGet,noCon
 
 }
 
-function setContentBrano(video){
+function setContentBrano(){
     
-    artist = videoNamespace.getCurrentPlayerArtist();
-	title = videoNamespace.getCurrentPlayerSong();
+    var artist = videoNamespace.getCurrentPlayerArtist();
+	var title = videoNamespace.getCurrentPlayerSong();
     console.log(artist);
     console.log(title);
     if (title){

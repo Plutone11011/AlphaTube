@@ -30,8 +30,7 @@ var videoNamespace = (function(){
 		recentVideos.items.unshift(currentPlayerVideo);
 	}
 
-    //Setta l'artista e la canzone del player. Attenzione all callback
-    //e.g. se chiamo setArtistSimilarity prima della callback, muore.
+    //Setta l'artista e la canzone del player.
 	function setCurrentPlayerArtist_Song(){
 		$.get('/artist_title',{
         	video: videoNamespace.getCurrentPlayerVideo()
