@@ -97,19 +97,19 @@
             //    the player should play for six seconds and then stop.
             function onPlayerStateChange(event) {
               if (event.data == YT.PlayerState.PLAYING) {
-                videoNamespace.startTimer();
+                timerNamespace.startTimer();
               }
               if (event.data == YT.PlayerState.PAUSED) {
-                videoNamespace.stopTimer();
+                timerNamespace.stopTimer();
               }
               if (event.data == YT.PlayerState.BUFFERING) {
-                videoNamespace.resetTimer();
+                timerNamespace.resetTimer();
               }
               if (event.data == YT.PlayerState.ENDED) {
-                videoNamespace.stopTimer();
+                timerNamespace.stopTimer();
                 //Do something with watchtime?
-                var watchTime = videoNamespace.getWatchTime();
-                videoNamespace.resetTimer();
+                var watchTime = timerNamespace.getWatchTime();
+                timerNamespace.resetTimer();
               }
             }
             function stopVideo() {

@@ -1,44 +1,5 @@
 var videoNamespace = (function(){
 
-    var startTime, elapsedTime, interval, added;
-
-	function startTimer(){
-		if(!interval){
-			startTime = Date.now();
-			interval = setInterval(updateTimer, 1);
-		}
-	}
-
-	function stopTimer(){
-		if(interval) {
-			clearInterval(interval);
-			interval = null;
-			console.log('Video paused, elapsedTime: ',Math.round(elapsedTime/100)/10);
-		}
-	}
-
-	function resetTimer(){
-		added = false;
-		stopTimer();
-		elapsedTime = 0;
-	}
-
-	function updateTimer(){
-		var now = Date.now();
-		var offset = now - startTime;
-		startTime = now;
-		elapsedTime = elapsedTime + offset;
-		if(elapsedTime >= 15000 && !added){
-			added = true;
-			addToRecent();
-			console.log('15 seconds elapsed, added to recent videos');
-		}
-	}
-
-	function getWatchTime(){
-		return elapsedTime;
-    }
-
 	//Oggetto di YT del video attualmente sul player
     var currentPlayerVideo = {} ;
     var currentPlayerArtist ;
@@ -78,7 +39,8 @@ var videoNamespace = (function(){
 			currentPlayerArtist = data[0];
 			currentPlayerSong = data[1];
 			console.log('Artist:',currentPlayerArtist,'Song:',currentPlayerSong);
-			setGenreSimilarity();
+            setGenreSimilarity();
+            setContentBrano();
 		})
 	}
 
@@ -108,13 +70,59 @@ var videoNamespace = (function(){
         setCurrentPlayerVideo: setCurrentPlayerVideo,
         getCurrentPlayerVideo: getCurrentPlayerVideo,
         getCurrentPlayerArtist: getCurrentPlayerArtist,
-        getCurrentPlayerSong: getCurrentPlayerSong,
+        getCurrentPlayerSong: getCurrentPlayerSong
+	}
+})();
+
+var timerNamespace = (function(){
+    var startTime, elapsedTime, interval, added;
+
+	function startTimer(){
+		if(!interval){
+			startTime = Date.now();
+			interval = setInterval(updateTimer, 1);
+		}
+	}
+
+	function stopTimer(){
+		if(interval) {
+			clearInterval(interval);
+			interval = null;
+			console.log('Video paused, elapsedTime: ',Math.round(elapsedTime/100)/10);
+		}
+	}
+
+	function resetTimer(){
+		added = false;
+		stopTimer();
+		elapsedTime = 0;
+	}
+
+	function updateTimer(){
+		var now = Date.now();
+		var offset = now - startTime;
+		startTime = now;
+		elapsedTime = elapsedTime + offset;
+		if(elapsedTime >= 15000 && !added){
+			added = true;
+			videoNamespace.addToRecent();
+			console.log('15 seconds elapsed, added to recent videos');
+		}
+	}
+
+	function getWatchTime(){
+		return elapsedTime;
+    }
+
+    return {
         startTimer: startTimer,
         stopTimer: stopTimer,
         resetTimer: resetTimer,
         getWatchTime: getWatchTime
-	}
+    }
 })();
+
+
 
 var listaInizialeNamespace = (function(){
 	var listaIniziale = {items: []};
