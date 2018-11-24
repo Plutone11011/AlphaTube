@@ -38,7 +38,7 @@ var objPopularity = (function(){
 	function initializeRelation(a,b,recommender){
 		createIdProperty(a);
 		if(!obj[a]["relations"].hasOwnProperty(b)){
-			obj[a]["relations"][b] = {"recommender": {}}
+			obj[a]["relations"][b] = {"relationCount": 0, "recommender": {}}
 			obj[a]["relations"][b]["recommender"][recommender] = 0;
 		}else if(!obj[a]["relations"][b]["recommender"].hasOwnProperty(recommender)){
 			obj[a]["relations"][b]["recommender"][recommender] = 0;
@@ -48,16 +48,22 @@ var objPopularity = (function(){
 	//aggiunge il tempo di visione di un video, creando la proprietà prima
 	function addtimeswatched(videoId,value){
 		createIdProperty(videoId);
-		obj[videoId]["timeswatched"] = value ;
+		obj[videoId]["timeswatched"] += value ;
 	}
 
-	function addRelation(a, b, recommender){
-		initializeRelation(a,b);
-		obj[a]["relations"][b]["recommender"][recommender] += 1; 
+	//Aggiunge relazione a~b e, di conseguenza, b~a
+	function addRelation(req, res, next){
+		initializeRelation(req.body.previous, req.body.clicked, req.body.recommender);
+		obj[req.body.previous]["relations"][req.body.clicked]["recommender"][req.body.recommender] += 1; 
+		obj[req.body.previous]["relations"][req.body.clicked]["relationCount"] += 1;
+		initializeRelation(req.body.clicked, req.body.previous, req.body.recommender);
+		obj[req.body.clicked]["relations"][req.body.previous] = obj[req.body.previous]["relations"][req.body.clicked];
+		next();
 	}
 	return {
 		getObj: getObj,
-		addtimeswatched: addtimeswatched
+		addtimeswatched: addtimeswatched,
+		addRelation: addRelation
 	}
 
 })();
@@ -250,8 +256,8 @@ app.post("/localPopularity",(req,res,next)=>{
 	//gestire update di json con un timeout
 });
 
-app.post("/relation", function(req,res,next){
-	
+app.post("/relation", objPopularity.addRelation, function(req,res,next){
+	res.send('POST successfull');
 })
 
 app.listen(8000) ;//group number
