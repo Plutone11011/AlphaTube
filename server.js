@@ -258,9 +258,11 @@ app.post("/localPopularity",(req,res,next)=>{
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
 	res.send('POST successfull');
+});
 
-app.post("/watchTime", function(req,res,next){
-
+app.post("/watchTime",function(req,res,next){
+	objPopularity.addtimeswatched(req.body.video,req.body.time);
+	res.send("POST successful");
 });
 
 app.listen(8000) ;//group number
