@@ -35,13 +35,13 @@ function setRelated(){
 	}).done((data)=>{
 		data = JSON.parse(data);
 		removeChannels(data);
-		createListOfThumbnails(data,"thumbnailRelated");
+		createListOfThumbnails(data,"Related");
 	})
 }
 
 //Riempe il div dei video recentemente visualizzati.
 function setRecent(){
-	createListOfThumbnails(videoNamespace.getRecentVideos(), "thumbnailRecent")
+	createListOfThumbnails(videoNamespace.getRecentVideos(), "Recent")
 }
 
 //carica lista iniziale
@@ -59,7 +59,7 @@ function setListaIniziale(){
 				data = JSON.parse(data);
 				listaInizialeNamespace.add(data.items);
 				if(listaInizialeNamespace.done()){
-					createListOfThumbnails(listaInizialeNamespace.get(),"thumbnailFirstList");
+					createListOfThumbnails(listaInizialeNamespace.get(),"FirstList");
 				}
 			})
 		})		
@@ -94,7 +94,7 @@ function setRandom(){
 	}).done((data)=>{
 		data = JSON.parse(data);
 		removeChannels(data);
-		createListOfThumbnails(data,"thumbnailRandom");
+		createListOfThumbnails(data,"Random");
 	})
 }
 
@@ -113,7 +113,7 @@ function setArtistSimilarity(){
 			data = JSON.parse(data);
 			removeSameSong(data);
 			removeChannels(data);
-			createListOfThumbnails(data,"thumbnailArtistSimilarity");
+			createListOfThumbnails(data,"ArtistSimilarity");
 		})
 }
 
@@ -126,12 +126,12 @@ function setGenreSimilarity(){
 			data = JSON.parse(data);
 			//andrebbe anche controllato se nella lista ci sono video dello stesso artista
 			//removeChannels(data); Forse serve?
-			createListOfThumbnails(data,"thumbnailGenreSimilarity");
+			createListOfThumbnails(data,"GenreSimilarity");
 		});
 	}
 
 	function noThumbnailFound(){
-		$(".thumbnailGenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
+		$(".GenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
 	}
 
 	artist = videoNamespace.getCurrentPlayerArtist();
@@ -183,10 +183,12 @@ $(document).ready(function(){
 				alert('No video found for '+query);
 			}else{
 				removeChannels(data);
-				setVideo(data.items[0]);
 				if(data.pageInfo.totalResults > 1){
-					data.items.shift();//remove first element in order to iterate over the remaining ones
-					createListOfThumbnails(data,"thumbnailSearch");
+					//data.items.shift();//remove first element in order to iterate over the remaining ones
+					createListOfThumbnails(data,"Search");
+				}else{
+					setVideo(data.items[0]);
+					videoNamespace.setCurrentPlayerRecommender("Search");
 				}
 			}
 		});
@@ -208,6 +210,8 @@ $(document).ready(function(){
 		let data = $(this).data("video");
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
+		//setto il campo recommender del video attuale.
+		videoNamespace.setCurrentPlayerRecommender($(this).parent().attr('class'));
 		//focus sul player. NON FUNZIONA!
 		$(player.getIframe()).focus();
 	})

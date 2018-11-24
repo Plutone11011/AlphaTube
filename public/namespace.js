@@ -1,10 +1,15 @@
 var videoNamespace = (function(){
 
 	//Oggetto di YT del video attualmente sul player
-    var currentPlayerVideo = {} ;
+    var currentPlayerVideo;
     var currentPlayerArtist ;
     var currentPlayerSong ;
 
+    //Il recommender da dove proviene.
+    var currentPlayerRecommender;
+
+    //Oggetto di YT dell'ultimo video visto per 15secondi.
+    var pastPlayerVideoId;
 
 	//NB: Oggetti di youtube che provengono da query per Id sono diversi.
 	//'youtube#video' <-- query per Id, id si trova in data.items[i].id
@@ -28,6 +33,9 @@ var videoNamespace = (function(){
 	function addToRecent(){
 		removeIfRecent();
 		recentVideos.items.unshift(currentPlayerVideo);
+		if(currentPlayerRecommender && pastPlayerVideo){
+			updateRelationships();
+		}
 	}
 
     //Setta l'artista e la canzone del player.
@@ -41,6 +49,23 @@ var videoNamespace = (function(){
             setGenreSimilarity();
             setContentBrano();
 		})
+	}
+
+	function updateRelationships(){
+		//post per aggiornare relazione tra past e current.
+		$.post("/relation",{
+			previous: pastPlayerVideo,
+			clicked: getCurrentPlayerId(),
+			recommender: currentPlayerRecommender
+		}).done((data)=>{
+			console.log('Relations Updated');
+			//Aggiorno past per prossima relation
+			pastPlayerVideo = getCurrentPlayerId();
+		})
+	}
+
+	function setCurrentPlayerRecommender(recommender){
+		currentPlayerRecommender = recommender;
 	}
 
 	function setCurrentPlayerVideo(video){
@@ -83,6 +108,7 @@ var videoNamespace = (function(){
 	return{
 		addToRecent: addToRecent,
 		setCurrentPlayerVideo: setCurrentPlayerVideo,
+		setCurrentPlayerRecommender: setCurrentPlayerRecommender,
 		getRecentVideos: getRecentVideos,
         getCurrentPlayerVideo: getCurrentPlayerVideo,
         getCurrentPlayerArtist: getCurrentPlayerArtist,
@@ -98,21 +124,18 @@ var timerNamespace = (function(){
 
 	function startTimer(){
 		if(!interval){
-            startTime = Date.now();
-            //chiama updateTimer ogni millisecondo
+			startTime = Date.now();
 			interval = setInterval(updateTimer, 1);
 		}
 	}
 
 	function stopTimer(){
 		if(interval) {
-            //stoppa la chiamata ogni millisecondo di updateTimer
 			clearInterval(interval);
 			interval = null;
 			console.log('Video paused, elapsedTime: ',Math.round(elapsedTime/100)/10);
 		}
 	}
-
 
 	function resetTimer(){
 		added = false;
@@ -120,14 +143,12 @@ var timerNamespace = (function(){
 		elapsedTime = 0;
 	}
 
-    //elapsedTime è il tempo di watch
 	function updateTimer(){
 		var now = Date.now();
 		var offset = now - startTime;
 		startTime = now;
-        elapsedTime = elapsedTime + offset;
-        //!added perché sennò aggiunge il video ai recenti ogni 15 ms
-		if(elapsedTime >= 15000 && !added){
+		elapsedTime = elapsedTime + offset;
+		if((elapsedTime >= 15000) && (!added)){
 			added = true;
 			videoNamespace.addToRecent();
 			console.log('15 seconds elapsed, added to recent videos');

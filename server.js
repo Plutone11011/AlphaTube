@@ -31,15 +31,22 @@ var objPopularity = (function(){
 	//crea la proprietà di un id se non esiste
 	function createIdProperty(videoId){
 		if (!obj.hasOwnProperty(videoId)){
-			obj[videoId] = {} ;
+			obj[videoId] = {"timesWatched": 0, "relations": {}} ;
 		}
 	}
+	function initializeRelation(a,b){
+		obj[a]["relations"][b] = {"recommender": {}}
+	}
+
 	//aggiunge il tempo di visione di un video, creando la proprietà prima
 	function addtimeswatched(videoId,value){
 		createIdProperty(videoId);
 		obj[videoId]["timeswatched"] = value ;
 	}
 
+	function addRelation(a, b, recommender){
+		obj[a]["relations"][b]["recommender"] = 
+	}
 	return {
 		getObj: getObj,
 		addtimeswatched: addtimeswatched
@@ -234,6 +241,10 @@ app.post("/localPopularity",(req,res,next)=>{
 	res.send(objPopularity.getObj());
 	//gestire update di json con un timeout
 });
+
+app.post("/relation", function(req,res,next){
+	
+})
 
 app.listen(8000) ;//group number
 console.log('listening');
