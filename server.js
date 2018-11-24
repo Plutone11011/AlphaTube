@@ -34,8 +34,15 @@ var objPopularity = (function(){
 			obj[videoId] = {"timesWatched": 0, "relations": {}} ;
 		}
 	}
-	function initializeRelation(a,b){
-		obj[a]["relations"][b] = {"recommender": {}}
+	//inizializza relazione
+	function initializeRelation(a,b,recommender){
+		createIdProperty(a);
+		if(!obj[a]["relations"].hasOwnProperty(b)){
+			obj[a]["relations"][b] = {"recommender": {}}
+			obj[a]["relations"][b]["recommender"][recommender] = 0;
+		}else if(!obj[a]["relations"][b]["recommender"].hasOwnProperty(recommender)){
+			obj[a]["relations"][b]["recommender"][recommender] = 0;
+		}
 	}
 
 	//aggiunge il tempo di visione di un video, creando la proprietà prima
@@ -45,7 +52,8 @@ var objPopularity = (function(){
 	}
 
 	function addRelation(a, b, recommender){
-		obj[a]["relations"][b]["recommender"] = 
+		initializeRelation(a,b);
+		obj[a]["relations"][b]["recommender"][recommender] += 1; 
 	}
 	return {
 		getObj: getObj,
