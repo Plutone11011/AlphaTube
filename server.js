@@ -48,7 +48,7 @@ var objPopularity = (function(){
 	//aggiunge il tempo di visione di un video, creando la proprietà prima
 	function addtimeswatched(videoId,value){
 		createIdProperty(videoId);
-		obj[videoId]["timeswatched"] += value ;
+		obj[videoId]["timesWatched"] += value ;
 	}
 
 	//Aggiunge relazione a~b e, di conseguenza, b~a
@@ -263,6 +263,7 @@ app.post("/relation", objPopularity.addRelation, function(req,res,next){
 
 app.post("/watchTime",function(req,res,next){
 	objPopularity.addtimeswatched(req.body.video,req.body.time);
+	console.log(objPopularity.getObj());
 	res.send("POST successful");
 });
 

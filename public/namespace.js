@@ -58,7 +58,7 @@ var videoNamespace = (function(){
 		console.log('gonna updateRelationships')
 		//post per aggiornare relazione tra past e current.
 		$.post("/relation",{
-			previous: pastPlayerVideo,
+			previous: pastPlayerVideoId,
 			clicked: getCurrentPlayerId(),
 			recommender: currentPlayerRecommender
 		}).done((data)=>{
