@@ -33,7 +33,7 @@ var videoNamespace = (function(){
 	function addToRecent(){
 		removeIfRecent();
 		recentVideos.items.unshift(currentPlayerVideo);
-		if(currentPlayerRecommender && pastPlayerVideo){
+		if(currentPlayerRecommender && pastPlayerVideoId){
 			updateRelationships();
 		}
 	}
@@ -60,7 +60,7 @@ var videoNamespace = (function(){
 		}).done((data)=>{
 			console.log('Relations Updated');
 			//Aggiorno past per prossima relation
-			pastPlayerVideo = getCurrentPlayerId();
+			pastPlayerVideoId = getCurrentPlayerId();
 		})
 	}
 
