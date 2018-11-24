@@ -144,6 +144,18 @@ function setGenreSimilarity(){
 	}
 }
 
+function setLocalPopularity(watchTime){
+	console.log(watchTime);
+	if (watchTime > 15000){
+		$.post("/localPopularity",{
+			video : videoNamespace.getCurrentPlayerId(),
+			timeswatched: watchTime
+		}).done((data)=>{
+			console.log(data);
+		});
+	}
+}
+
 // Carica video nel player e setta i vari box.
 function setVideo(data){
 	videoNamespace.setCurrentPlayerVideo(data)
@@ -153,7 +165,7 @@ function setVideo(data){
 	setDescription();
 	setRecent();
     setRandom();
- 	setArtistSimilarity();
+	setArtistSimilarity(); 
 }
 
 $(document).ready(function(){

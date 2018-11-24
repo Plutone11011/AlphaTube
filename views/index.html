@@ -101,14 +101,16 @@
               }
               if (event.data == YT.PlayerState.PAUSED) {
                 timerNamespace.stopTimer();
+                var watchTime = timerNamespace.getWatchTime();
+                setLocalPopularity(watchTime);
               }
               if (event.data == YT.PlayerState.BUFFERING) {
                 timerNamespace.resetTimer();
               }
               if (event.data == YT.PlayerState.ENDED) {
                 timerNamespace.stopTimer();
-                //Do something with watchtime?
                 var watchTime = timerNamespace.getWatchTime();
+                setLocalPopularity(watchTime);
                 timerNamespace.resetTimer();
               }
             }

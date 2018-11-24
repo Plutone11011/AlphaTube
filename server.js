@@ -20,6 +20,33 @@ app.get("/",function(req,res,next){
 	res.sendFile(path + "index.html");
 });
 
+var objPopularity = (function(){
+
+	var obj = {} ;
+
+	function getObj(){
+		return obj ;
+	}
+
+	//crea la proprietà di un id se non esiste
+	function createIdProperty(videoId){
+		if (!obj.hasOwnProperty(videoId)){
+			obj[videoId] = {} ;
+		}
+	}
+	//aggiunge il tempo di visione di un video, creando la proprietà prima
+	function addtimeswatched(videoId,value){
+		createIdProperty(videoId);
+		obj[videoId]["timeswatched"] = value ;
+	}
+
+	return {
+		getObj: getObj,
+		addtimeswatched: addtimeswatched
+	}
+
+})();
+
 function setGenre(req,res,next){
 	var queryString = '' ;
 	for (var i = 0; i < req.query.genre.length; i++){
@@ -200,6 +227,12 @@ app.get("/firstList", (req,res)=>{
 			res.json(body);
 		}
 	})
+});
+
+app.post("/localPopularity",(req,res,next)=>{
+	objPopularity.addtimeswatched(req.body.video,req.body.timeswatched);
+	res.send(objPopularity.getObj());
+	//gestire update di json con un timeout
 });
 
 app.listen(8000) ;//group number

@@ -98,18 +98,21 @@ var timerNamespace = (function(){
 
 	function startTimer(){
 		if(!interval){
-			startTime = Date.now();
+            startTime = Date.now();
+            //chiama updateTimer ogni millisecondo
 			interval = setInterval(updateTimer, 1);
 		}
 	}
 
 	function stopTimer(){
 		if(interval) {
+            //stoppa la chiamata ogni millisecondo di updateTimer
 			clearInterval(interval);
 			interval = null;
 			console.log('Video paused, elapsedTime: ',Math.round(elapsedTime/100)/10);
 		}
 	}
+
 
 	function resetTimer(){
 		added = false;
@@ -117,11 +120,13 @@ var timerNamespace = (function(){
 		elapsedTime = 0;
 	}
 
+    //elapsedTime è il tempo di watch
 	function updateTimer(){
 		var now = Date.now();
 		var offset = now - startTime;
 		startTime = now;
-		elapsedTime = elapsedTime + offset;
+        elapsedTime = elapsedTime + offset;
+        //!added perché sennò aggiunge il video ai recenti ogni 15 ms
 		if(elapsedTime >= 15000 && !added){
 			added = true;
 			videoNamespace.addToRecent();
