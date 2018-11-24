@@ -78,8 +78,9 @@ var videoNamespace = (function(){
 	}
 
 	function setCurrentPlayerVideo(video){
-		pastPlayerVideoId = getCurrentPlayerId();
-		currentPlayerVideo = video;
+		if(currentPlayerVideo){
+			pastPlayerVideoId = getCurrentPlayerId();
+		}currentPlayerVideo = video;
 		setCurrentPlayerArtist_Song();
     }
 
