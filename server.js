@@ -250,15 +250,25 @@ app.get("/firstList", (req,res)=>{
 	})
 });
 
+/*
 app.post("/localPopularity",(req,res,next)=>{
 	objPopularity.addtimeswatched(req.body.video,req.body.timeswatched);
 	res.send(objPopularity.getObj());
 	//gestire update di json con un timeout
 });
+<<<<<<< HEAD
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
 	res.send('POST successfull');
+=======
+*/
+app.post("/relation", function(req,res,next){
+	
 })
+
+app.post("/watchTime", function(req,res,next){
+
+});
 
 app.listen(8000) ;//group number
 console.log('listening');

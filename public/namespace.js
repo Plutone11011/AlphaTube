@@ -64,6 +64,16 @@ var videoNamespace = (function(){
 		})
 	}
 
+	function updateWatchTime(){
+		//post per aggiornare watchtime del video
+		$.post("/watchTime",{
+			video: getCurrentPlayerId(),
+			time: timerNamespace.getWatchTime()
+		}).done((data)=>{
+			console.log("watch time updated");
+		});
+	}
+
 	function setCurrentPlayerRecommender(recommender){
 		currentPlayerRecommender = recommender;
 	}
@@ -115,7 +125,8 @@ var videoNamespace = (function(){
         getCurrentPlayerSong: getCurrentPlayerSong,
         getCurrentPlayerId: getCurrentPlayerId,
         getCurrentPlayerDescription: getCurrentPlayerDescription,
-        getCurrentPlayerVideoChannelId: getCurrentPlayerVideoChannelId
+		getCurrentPlayerVideoChannelId: getCurrentPlayerVideoChannelId,
+		updateWatchTime: updateWatchTime
 	}
 })();
 

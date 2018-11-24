@@ -144,6 +144,7 @@ function setGenreSimilarity(){
 	}
 }
 
+/*
 function setLocalPopularity(watchTime){
 	console.log(watchTime);
 	if (watchTime > 15000){
@@ -155,9 +156,10 @@ function setLocalPopularity(watchTime){
 		});
 	}
 }
-
+*/
 // Carica video nel player e setta i vari box.
 function setVideo(data){
+	videoNamespace.updateWatchTime();
 	videoNamespace.setCurrentPlayerVideo(data)
 	player.loadVideoById(videoNamespace.getCurrentPlayerId(),0,'large');
 	setComments();
