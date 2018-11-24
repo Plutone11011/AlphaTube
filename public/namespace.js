@@ -65,6 +65,7 @@ var videoNamespace = (function(){
 
 	function updateWatchTime(){
 		//post per aggiornare watchtime del video
+		console.log(timerNamespace.getWatchTime());
 		$.post("/watchTime",{
 			video: getCurrentPlayerId(),
 			time: timerNamespace.getWatchTime()

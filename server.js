@@ -31,7 +31,7 @@ var objPopularity = (function(){
 	//crea la proprietà di un id se non esiste
 	function createIdProperty(videoId){
 		if (!obj.hasOwnProperty(videoId)){
-			obj[videoId] = {"timesWatched": 0, "relations": {}} ;
+			obj[videoId] = {"watchTime": 0, "relations": {}} ;
 		}
 	}
 	//inizializza relazione
@@ -48,7 +48,7 @@ var objPopularity = (function(){
 	//aggiunge il tempo di visione di un video, creando la proprietà prima
 	function addtimeswatched(videoId,value){
 		createIdProperty(videoId);
-		obj[videoId]["timesWatched"] += value ;
+		obj[videoId]["watchTime"] += Math.round(parseInt(value)/1000) ;
 	}
 
 	//Aggiunge relazione a~b e, di conseguenza, b~a
@@ -260,6 +260,7 @@ app.post("/relation", objPopularity.addRelation, function(req,res,next){
 });
 
 app.post("/watchTime",function(req,res,next){
+	console.log(req.body.time);
 	objPopularity.addtimeswatched(req.body.video,req.body.time);
 	console.log(objPopularity.getObj());
 	res.send("POST successful");
