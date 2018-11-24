@@ -36,9 +36,6 @@ var videoNamespace = (function(){
 		if(currentPlayerRecommender && pastPlayerVideoId){
 			updateRelationships();
 		}
-		//Aggiorno past per prossima relation
-		pastPlayerVideoId = getCurrentPlayerId();
-
 	}
 
     //Setta l'artista e la canzone del player.
@@ -81,6 +78,7 @@ var videoNamespace = (function(){
 	}
 
 	function setCurrentPlayerVideo(video){
+		pastPlayerVideoId = getCurrentPlayerId();
 		currentPlayerVideo = video;
 		setCurrentPlayerArtist_Song();
     }
