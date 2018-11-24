@@ -33,7 +33,7 @@ var videoNamespace = (function(){
 	function addToRecent(){
 		removeIfRecent();
 		recentVideos.items.unshift(currentPlayerVideo);
-		if(currentPlayerRecommender && pastPlayerVideoId){
+		if(currentPlayerRecommender && pastPlayerVideoId && (pastPlayerVideoId != getCurrentPlayerId())){
 			updateRelationships();
 		}
 	}
@@ -64,14 +64,16 @@ var videoNamespace = (function(){
 	}
 
 	function updateWatchTime(){
+		if(currentPlayerVideo){
 		//post per aggiornare watchtime del video
-		console.log(timerNamespace.getWatchTime());
-		$.post("/watchTime",{
-			video: getCurrentPlayerId(),
-			time: timerNamespace.getWatchTime()
-		}).done((data)=>{
-			console.log("watch time updated");
-		});
+			console.log(timerNamespace.getWatchTime());
+			$.post("/watchTime",{
+				video: getCurrentPlayerId(),
+				time: timerNamespace.getWatchTime()
+			}).done((data)=>{
+				console.log("watch time updated");
+			});
+		}
 	}
 
 	function setCurrentPlayerRecommender(recommender){
@@ -86,10 +88,12 @@ var videoNamespace = (function(){
     }
 
     function getCurrentPlayerId(){
-    	if(currentPlayerVideo.kind == 'youtube#searchResult'){
-    		return currentPlayerVideo.id.videoId;
-    	}else if(currentPlayerVideo.kind == 'youtube#video'){
-    		return currentPlayerVideo.id;
+    	if(currentPlayerVideo){
+    		if(currentPlayerVideo.kind == 'youtube#searchResult'){
+    			return currentPlayerVideo.id.videoId;
+    		}else if(currentPlayerVideo.kind == 'youtube#video'){
+    			return currentPlayerVideo.id;
+    		}
     	}
     }
 

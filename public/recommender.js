@@ -160,6 +160,7 @@ function setLocalPopularity(watchTime){
 // Carica video nel player e setta i vari box.
 function setVideo(data){
 	videoNamespace.updateWatchTime();
+	timerNamespace.resetTimer();
 	videoNamespace.setCurrentPlayerVideo(data)
 	player.loadVideoById(videoNamespace.getCurrentPlayerId(),0,'large');
 	setComments();
@@ -185,29 +186,15 @@ $(document).ready(function(){
 				alert('No video found for '+query);
 			}else{
 				removeChannels(data);
+				setVideo(data.items[0]);
+				videoNamespace.setCurrentPlayerRecommender("Search");
 				if(data.pageInfo.totalResults > 1){
-					//data.items.shift();//remove first element in order to iterate over the remaining ones
+					data.items.shift();//remove first element in order to iterate over the remaining ones
 					createListOfThumbnails(data,"Search");
-				}else{
-					setVideo(data.items[0]);
-					videoNamespace.setCurrentPlayerRecommender("Search");
 				}
 			}
 		});
 	});
-	//Per inizializzare currentPlayerVideo con l'oggetto di youtube del video iniziale.
-	$.get('/search',{
-		q: 'PfYnvDL0Qcw'
-	}).done(function(data){
-        data = JSON.parse(data);
-        videoNamespace.setCurrentPlayerVideo(data.items[0])
-        //Carico i contenuti del video iniziale senza ricaricare il video stesso con setVideo.
-        setComments();
-        setDescription();
-		setRelated();
-    	setRandom();
-    	setArtistSimilarity();
-    });
 	$("span").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
 		//un elemento contiene solo il suo oggetto del video.

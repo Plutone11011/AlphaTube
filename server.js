@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser'); //to parse requests body
 const request = require('request'); //http client
 const getArtistTitle = require('get-artist-title');
-
+const fs = require('fs');
 //var routes = require('./routes/index');
 var app = express();
 //var searchRouter = express.Router();
@@ -22,7 +22,7 @@ app.get("/",function(req,res,next){
 
 var objPopularity = (function(){
 
-	var obj = {} ;
+	var obj = {};
 
 	function getObj(){
 		return obj ;
@@ -51,7 +51,7 @@ var objPopularity = (function(){
 		obj[videoId]["watchTime"] += Math.round(parseInt(value)/1000) ;
 	}
 
-	//Aggiunge relazione a~b e, di conseguenza, b~a
+	//Aggiunge relazione a~b
 	function addRelation(req, res, next){
 		initializeRelation(req.body.previous, req.body.clicked, req.body.recommender);
 		obj[req.body.previous]["relations"][req.body.clicked]["recommender"][req.body.recommender] += 1; 
