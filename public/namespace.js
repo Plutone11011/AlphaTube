@@ -65,14 +65,16 @@ var videoNamespace = (function(){
 
 	function updateWatchTime(){
 		if(currentPlayerVideo){
-		//post per aggiornare watchtime del video
-			console.log(timerNamespace.getWatchTime());
-			$.post("/watchTime",{
-				video: getCurrentPlayerId(),
-				time: timerNamespace.getWatchTime()
-			}).done((data)=>{
-				console.log("watch time updated");
-			});
+			if (timerNamespace.getWatchTime() > 0) {
+				//post per aggiornare watchtime del video
+				console.log(timerNamespace.getWatchTime());
+				$.post("/watchTime",{
+					video: getCurrentPlayerId(),
+					time: timerNamespace.getWatchTime()
+				}).done((data)=>{
+					console.log("watch time updated");
+				});
+			}
 		}
 	}
 

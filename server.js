@@ -13,7 +13,6 @@ app.use(bodyParser.json());
 // to parse application/x-www-form-urlencoded, which is default mime type
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-
 app.get("/",function(req,res,next){
 	//console.log(req.query);
 	//probably need to render list of initial videos
@@ -21,11 +20,20 @@ app.get("/",function(req,res,next){
 });
 
 var objPopularity = (function(){
-
-	var obj = {};
+	var interval;
+	var obj = JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
 
 	function getObj(){
 		return obj ;
+	}
+
+	//salva obj su fs
+	function savePopularity(){
+		interval = setInterval(function() {
+			fs.writeFile('popularity.json', JSON.stringify(obj),'utf-8',function(){
+				console.log('Popularity saved');
+			});
+		}, 120000) //5minuti
 	}
 
 	//crea la proprietà di un id se non esiste
@@ -61,10 +69,14 @@ var objPopularity = (function(){
 	return {
 		getObj: getObj,
 		addtimeswatched: addtimeswatched,
-		addRelation: addRelation
+		addRelation: addRelation,
+		savePopularity: savePopularity
 	}
 
 })();
+
+//punto di partenza
+setTimeout(objPopularity.savePopularity, 30000);
 
 function setGenre(req,res,next){
 	var queryString = '' ;
@@ -255,7 +267,6 @@ app.post("/localPopularity",(req,res,next)=>{
 });
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
-	console.log('relation: ',JSON.stringify(objPopularity.getObj()));
 	res.send('POST successfull');
 });
 
@@ -265,6 +276,10 @@ app.post("/watchTime",function(req,res,next){
 	//console.log(objPopularity.getObj());
 	res.send("POST successful");
 });
+
+process.on('exit', () => {
+	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');
+})
 
 app.listen(8000) ;//group number
 console.log('listening');
