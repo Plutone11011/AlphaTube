@@ -31,7 +31,7 @@ var objPopularity = (function(){
 	//crea la proprietà di un id se non esiste
 	function createIdProperty(videoId){
 		if (!obj.hasOwnProperty(videoId)){
-			obj[videoId] = {"watchTime": 0, "relations": {}} ;
+			obj[videoId] = {"watchTime": 0, "relations": {}, "timesWatched": 0} ;
 		}
 	}
 	//inizializza relazione
@@ -81,7 +81,7 @@ function setGenre(req,res,next){
 	next();
 }
 
-function searchVideo(req,res,query){
+function searchVideo(res,query){
 	request(
 		{
 			url: "https://www.googleapis.com/youtube/v3/search",
@@ -131,7 +131,7 @@ app.get("/search", function(req,res,next){
 });
 
 app.get("/search", function(req,res,next){
-	searchVideo(req,res,req.query.q);
+	searchVideo(res,req.query.q);
 });
 
 app.get("/comments",(req,res,next)=>{
@@ -236,7 +236,7 @@ app.get("/artist_title",(req,res,next)=>{
 });
 
 app.get("/similarity_genre",setGenre,(req,res,next)=>{
-	searchVideo(req,res,res.locals.q);
+	searchVideo(res,res.locals.q);
 });
 
 app.get("/firstList", (req,res)=>{
@@ -262,9 +262,9 @@ app.post("/relation", objPopularity.addRelation, function(req,res,next){
 });
 
 app.post("/watchTime",function(req,res,next){
-	console.log(req.body.time);
+	//console.log(req.body.time);
 	objPopularity.addtimeswatched(req.body.video,req.body.time);
-	console.log(objPopularity.getObj());
+	//console.log(objPopularity.getObj());
 	res.send("POST successful");
 });
 
