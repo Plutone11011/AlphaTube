@@ -257,7 +257,7 @@ app.post("/localPopularity",(req,res,next)=>{
 });
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
-	console.log(objPopularity.getObj());
+	console.log('relation: ',JSON.stringify(objPopularity.getObj()));
 	res.send('POST successfull');
 });
 
