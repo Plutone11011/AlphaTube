@@ -58,7 +58,6 @@ var objPopularity = (function(){
 		obj[req.body.previous]["relations"][req.body.clicked]["relationCount"] += 1;
 		initializeRelation(req.body.clicked, req.body.previous, req.body.recommender);
 		obj[req.body.clicked]["relations"][req.body.previous] = obj[req.body.previous]["relations"][req.body.clicked];
-		console.log(obj);
 		next();
 	}
 	return {
@@ -258,6 +257,7 @@ app.post("/localPopularity",(req,res,next)=>{
 });
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
+	console.log(objPopularity.getObj());
 	res.send('POST successfull');
 });
 

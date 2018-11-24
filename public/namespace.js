@@ -36,6 +36,9 @@ var videoNamespace = (function(){
 		if(currentPlayerRecommender && pastPlayerVideoId){
 			updateRelationships();
 		}
+		//Aggiorno past per prossima relation
+		pastPlayerVideoId = getCurrentPlayerId();
+
 	}
 
     //Setta l'artista e la canzone del player.
@@ -52,6 +55,7 @@ var videoNamespace = (function(){
 	}
 
 	function updateRelationships(){
+		console.log('gonna updateRelationships')
 		//post per aggiornare relazione tra past e current.
 		$.post("/relation",{
 			previous: pastPlayerVideo,
@@ -59,8 +63,6 @@ var videoNamespace = (function(){
 			recommender: currentPlayerRecommender
 		}).done((data)=>{
 			console.log('Relations Updated');
-			//Aggiorno past per prossima relation
-			pastPlayerVideoId = getCurrentPlayerId();
 		})
 	}
 
