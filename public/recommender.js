@@ -144,19 +144,12 @@ function setGenreSimilarity(){
 	}
 }
 
-/*
-function setLocalPopularity(watchTime){
-	console.log(watchTime);
-	if (watchTime > 15000){
-		$.post("/localPopularity",{
-			video : videoNamespace.getCurrentPlayerId(),
-			timeswatched: watchTime
-		}).done((data)=>{
+
+function setLocalPopularity(){
+	$.get("/localPopularity").done((data)=>{
 			console.log(data);
 		});
-	}
 }
-*/
 // Carica video nel player e setta i vari box.
 function setVideo(data){
 	videoNamespace.updateWatchTime();
