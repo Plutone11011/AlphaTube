@@ -56,8 +56,6 @@ var objPopularity = (function(){
 		initializeRelation(req.body.previous, req.body.clicked, req.body.recommender);
 		obj[req.body.previous]["relations"][req.body.clicked]["recommender"][req.body.recommender] += 1; 
 		obj[req.body.previous]["relations"][req.body.clicked]["relationCount"] += 1;
-		initializeRelation(req.body.clicked, req.body.previous, req.body.recommender);
-		obj[req.body.clicked]["relations"][req.body.previous] = obj[req.body.previous]["relations"][req.body.clicked];
 		next();
 	}
 	return {
