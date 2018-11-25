@@ -22,8 +22,9 @@ $(document).ready(function(){
 			}
 		});
 	});
-	$("span").on("click", ".contains-data", function() {
+	$(".thumbnails").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
+		console.log("ho cliccato");
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
 		//setto il campo recommender del video attuale.

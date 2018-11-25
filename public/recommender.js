@@ -144,12 +144,12 @@ function setGenreSimilarity(){
 
 function setLocalPopularity(){
 	$.get("/localPopularity").done((data)=>{
-			console.log();
 			if (data.length){
 				$.get("/search",{
 					q: (data.map(a => Object.keys(a).toString())).join(',') 
 				}).done((data)=>{
-					//console.log(data);
+					console.log(data);
+					createListOfThumbnails(data,"LocalPopularity");
 				});
 			}
 			else{
