@@ -48,9 +48,6 @@ function setRecent(){
 function setListaIniziale(){
 	$.get('/firstList').done(function(data){
 		data = JSON.parse(data);
-		//Quel cazzim di Youtube non accetta query con più di 50 id.
-		//Il JSON iniziale ne ha 118, si, 118.
-		//Lo splitto e faccio query sui sotto split.
 		var splitData = splitArray(data.map((data) => data.videoID),50);
 		splitData.forEach(function(value,index){
 			$.get('/search',{
@@ -147,7 +144,17 @@ function setGenreSimilarity(){
 
 function setLocalPopularity(){
 	$.get("/localPopularity").done((data)=>{
-			console.log(data);
+			console.log();
+			if (data.length){
+				$.get("/search",{
+					q: (data.map(a => Object.keys(a).toString())).join(',') 
+				}).done((data)=>{
+					console.log(data);
+				});
+			}
+			else{
+				//non è stato ancora visualizzato nulla
+			}
 		});
 }
 // Carica video nel player e setta i vari box.
@@ -161,7 +168,8 @@ function setVideo(data){
 	setDescription();
 	setRecent();
     setRandom();
-	setArtistSimilarity(); 
+	setArtistSimilarity();
+	setLocalPopularity(); 
 }
 
 $(document).ready(function(){
