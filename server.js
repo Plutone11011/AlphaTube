@@ -1,10 +1,16 @@
 const express = require('express'); 
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser'); //to parse requests body
 const request = require('request'); //http client
+// Credo express gestisca già i cookie
+//const cookies = require('cookies');
 const getArtistTitle = require('get-artist-title');
 const fs = require('fs');
 //var routes = require('./routes/index');
 var app = express();
+//gesture req.cookies
+app.use(cookieParser());
+var keys = ['keyboard cat'];
 //var searchRouter = express.Router();
 var path = __dirname + '/views/' ;
 app.use(express.static(__dirname + '/public'));
@@ -16,6 +22,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/",function(req,res,next){
 	//console.log(req.query);
 	//probably need to render list of initial videos
+	//cookies
+	console.log('Last visit cookie', req.cookies.LastVisit)
+	res.cookie('LastVisit', new Date().toISOString(),{
+		maxAge: 2629800000 //1 mese 
+	})
 	res.sendFile(path + "index.html");
 });
 
@@ -33,7 +44,7 @@ var objPopularity = (function(){
 			fs.writeFile('popularity.json', JSON.stringify(obj),'utf-8',function(){
 				console.log('Popularity saved');
 			});
-		}, 120000) //5minuti
+		}, 60000) //ogni minuto
 	}
 
 	//crea la proprietà di un id se non esiste
