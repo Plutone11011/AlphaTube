@@ -3,14 +3,11 @@
 //places thumbnails in div with id attribute divId
 function createListOfThumbnails(data,linkClass){
     var counter;
-    //console.log('recommender: ',linkClass,'data: ',data,'--> items: ',data.items);
+    var thumbnailTemplate = "<span class="+linkClass+"><img src='' alt=''></span>" ;
+
+    $("#recommender"+linkClass).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
     $.each(data.items, function(index, value){
-    	//Dinamically create thumbnail space.
-    	/*
-    	if($('#'+recommender+'> span').length != 0){
-    		$('<span class="' + linkClass + '"</span>').appendTo('#recommenderRandom').append('<img src="' + value.snippet.thumbnails.medium.url + '" alt="">');
-        }
-        */
+        $(thumbnailTemplate).appendTo("#recommender"+linkClass);
         counter = index + 1;
         $('span.' + linkClass +':nth-child(' + counter.toString() + ') > img').attr('src',value.snippet.thumbnails.medium.url);
         $('span.' + linkClass +':nth-child(' + counter.toString() + ') > img').data("video",value);
