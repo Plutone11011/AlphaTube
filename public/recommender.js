@@ -149,7 +149,6 @@ function setAbsoluteLocalPopularity(){
 				q: (data.map(a => Object.keys(a).toString())).join(',') 
 			}).done((data)=>{
 				data = JSON.parse(data);
-				console.log(data);
 				createListOfThumbnails(data,"AbsoluteLocalPopularity");
 			});
 		}

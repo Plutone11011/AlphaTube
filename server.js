@@ -71,21 +71,30 @@ var objPopularity = (function(){
 	}
 
 	//aggiunge il tempo di visione di un video, creando la proprietà prima
-	function addtimeswatched(videoId,value){
+	function addWatchTime(videoId,value){
 		createIdProperty(videoId);
 		obj[videoId]["watchTime"] += Math.round(parseInt(value)/1000) ;
 	}
 
+	function addTimesWatched(videoId,date){
+		createIdProperty(videoId);
+		obj[videoId]["timesWatched"] += 1 ;
+		obj[videoId]["lastWatched"] = date ;
+	}
+
 	//Aggiunge relazione a~b
 	function addRelation(req, res, next){
+		console.log(req.body);
 		initializeRelation(req.body.previous, req.body.clicked, req.body.recommender);
 		obj[req.body.previous]["relations"][req.body.clicked]["recommender"][req.body.recommender] += 1; 
 		obj[req.body.previous]["relations"][req.body.clicked]["relationCount"] += 1;
+		obj[req.body.previous]["relations"][req.body.clicked]["lastSelected"] = req.body.lastSelected ;
 		next();
 	}
 	return {
 		getObj: getObj,
-		addtimeswatched: addtimeswatched,
+		addWatchTime: addWatchTime,
+		addTimesWatched: addTimesWatched,
 		addRelation: addRelation,
 		savePopularity: savePopularity
 	}
@@ -284,7 +293,6 @@ app.get("/localPopularity",(req,res,next)=>{
 		objId[id] = objPopularity.getObj()[id]["watchTime"] ;
 		arrayOfIdwatchTime.push(objId) ;
 	}
-	console.log(arrayOfIdwatchTime);
 	//ordina id per watchTime
 	arrayOfIdwatchTime.sort(function(a,b){
 		//descending order
@@ -324,16 +332,28 @@ app.get("/relativePopularity", (req,res,next)=>{
 })
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
-	res.send('POST successfull');
+	res.send('POST successful');
 });
 
 app.post("/watchTime",function(req,res,next){
 	//console.log(req.body.time);
-	objPopularity.addtimeswatched(req.body.video,req.body.time);
+	objPopularity.addWatchTime(req.body.video,req.body.time);
 	//console.log(objPopularity.getObj());
 	res.send("POST successful");
 });
 
+app.post("/timesWatched",function(req,res,next){
+	console.log(req.body);
+	objPopularity.addTimesWatched(req.body.id,req.body.lastWatched);
+	res.send("POST successful");
+});
+
+app.get("/globpop",function(req,res,next){
+	//può esserci una query e allora devo restituire le relazioni di un video, altrimenti assoluta
+	if (!req.query.id){
+
+	}
+});
 
 process.on('exit', () => {
 	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');

@@ -33,23 +33,29 @@ var videoNamespace = (function(){
 	function addToRecent(){
 		removeIfRecent();
 		recentVideos.items.unshift(currentPlayerVideo);
+		//fuori da if perché altrimenti non considera cliccato il primo video di un nuovo utente
+		updateTimesWatched();
 		if(currentPlayerRecommender && pastPlayerVideoId && (pastPlayerVideoId != getCurrentPlayerId())){
 			updateRelationships();
 		}
 	}
 
+	//relazione a ~ b se da sono passato a b attraverso un recommender e ho visto b per 15 sec
 	function updateRelationships(){
 		console.log('gonna updateRelationships')
 		//post per aggiornare relazione tra past e current.
+		date = new Date(Date.now());
 		$.post("/relation",{
 			previous: pastPlayerVideoId,
 			clicked: getCurrentPlayerId(),
-			recommender: currentPlayerRecommender
+			recommender: currentPlayerRecommender,
+			lastSelected: date
 		}).done((data)=>{
 			console.log('Relations Updated');
 		})
 	}
 
+	//tempo reale di visione del video
 	function updateWatchTime(){
 		if(currentPlayerVideo){
 			if (timerNamespace.getWatchTime() > 0) {
@@ -63,6 +69,17 @@ var videoNamespace = (function(){
 				});
 			}
 		}
+	}
+	
+	//volte/click in cui è stato visto
+	function updateTimesWatched(){
+		date = new Date(Date.now());
+		$.post("/timesWatched",{
+			id: getCurrentPlayerId,
+			lastWatched: date
+		}).done((data)=>{
+			console.log("timesWatched updated");
+		});	
 	}
 
 	function setCurrentPlayerRecommender(recommender){
@@ -149,6 +166,7 @@ var timerNamespace = (function(){
 	function startTimer(){
 		if(!interval){
 			startTime = Date.now();
+			//chiama updatetimer ogni secondo
 			interval = setInterval(updateTimer, 1);
 		}
 	}
