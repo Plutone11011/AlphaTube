@@ -10,10 +10,6 @@ const fs = require('fs');
 var app = express();
 //gesture req.cookies
 app.use(cookieParser());
-<<<<<<< Updated upstream
-=======
-//var keys = ['keyboard cat'];
->>>>>>> Stashed changes
 //var searchRouter = express.Router();
 var path = __dirname + '/views/' ;
 app.use(express.static(__dirname + '/public'));
@@ -298,7 +294,7 @@ app.get("/localPopularity",(req,res,next)=>{
 	if (arrayOfIdwatchTime.length > 30){
 		arrayOfIdwatchTime = arrayOfIdwatchTime.slice(0,30);
 	}
-	res.send(arrayOfIdwatchTime);
+	res.json(arrayOfIdwatchTime);
 });
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){

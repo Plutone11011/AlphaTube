@@ -19,7 +19,7 @@
 
   #recommenderRelated, #recommenderRecent, #recommenderSearch, 
   #recommenderRandom, #recommenderGenreSimilarity, #recommenderFirstList,
-  #recommenderArtistSimilarity{
+  #recommenderArtistSimilarity, #recommenderLocalPopularity{
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
