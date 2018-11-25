@@ -34,5 +34,5 @@ $(document).ready(function(){
 	})
 
 	//Save current settings if user is evil and leaves us.
-	$(window).unload(saveSessionCookie);
+	$(window).on("unload", saveSessionCookie);
 });

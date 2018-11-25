@@ -163,6 +163,7 @@ function saveSessionCookie(){
 	Cookies.set('lastVideo',videoNamespace.getCurrentPlayerVideo(),{
 		expires: 30
 	});
+	console.log(player.getCurrentTime())
 	Cookies.set('lastCurrentTime',player.getCurrentTime(),{
 		expires: 30
 	});
@@ -170,12 +171,11 @@ function saveSessionCookie(){
 
 // Carica video nel player e setta i vari box.
 function setVideo(data, startTime = 0){
-	
 	videoNamespace.updateWatchTime();
 	timerNamespace.resetTimer();
 	videoNamespace.setCurrentPlayerVideo(data)
 	player.loadVideoById(videoNamespace.getCurrentPlayerId(),startTime,'large');
-	saveSessionCookie();
+	//saveSessionCookie();
 	setComments();
 	setRelated();
 	setDescription();
