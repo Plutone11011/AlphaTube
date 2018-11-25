@@ -38,18 +38,6 @@ var videoNamespace = (function(){
 		}
 	}
 
-    //Setta l'artista e la canzone del player.
-	function setCurrentPlayerArtist_Song(){
-		$.get('/artist_title',{
-        	video: videoNamespace.getCurrentPlayerVideo()
-    	}).done((data)=>{
-			currentPlayerArtist = data[0];
-			currentPlayerSong = data[1];
-            setGenreSimilarity();
-            setContentBrano();
-		})
-	}
-
 	function updateRelationships(){
 		console.log('gonna updateRelationships')
 		//post per aggiornare relazione tra past e current.
@@ -87,6 +75,23 @@ var videoNamespace = (function(){
 		}currentPlayerVideo = video;
 		setCurrentPlayerArtist_Song();
     }
+
+    //Setta l'artista e la canzone del player.
+	function setCurrentPlayerArtist_Song(){
+		$.get('/artist_title',{
+        	video: videoNamespace.getCurrentPlayerVideo()
+    	}).done((data)=>{
+			currentPlayerArtist = data[0];
+			currentPlayerSong = data[1];
+            setGenreSimilarity();
+            setContentBrano();
+		})
+	}
+
+	//chiamato col cookie per ripristinare i video recenti
+	function setRecentVideos(videos){
+		recentVideos = videos;
+	}
 
     function getCurrentPlayerId(){
     	if(currentPlayerVideo){
@@ -126,6 +131,7 @@ var videoNamespace = (function(){
 		addToRecent: addToRecent,
 		setCurrentPlayerVideo: setCurrentPlayerVideo,
 		setCurrentPlayerRecommender: setCurrentPlayerRecommender,
+		setRecentVideos: setRecentVideos,
 		getRecentVideos: getRecentVideos,
         getCurrentPlayerVideo: getCurrentPlayerVideo,
         getCurrentPlayerArtist: getCurrentPlayerArtist,

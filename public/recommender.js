@@ -48,7 +48,7 @@ function setRecent(){
 function setListaIniziale(){
 	$.get('/firstList').done(function(data){
 		data = JSON.parse(data);
-		var splitData = splitArray(data.map((data) => data.videoID),50);
+		var splitData = splitArray(data.map(array => array.videoID),50);
 		splitData.forEach(function(value,index){
 			$.get('/search',{
 				q: value.join(',')
@@ -142,21 +142,40 @@ function setGenreSimilarity(){
 }
 
 
-function setLocalPopularity(){
+function setAbsoluteLocalPopularity(){
 	$.get("/localPopularity").done((data)=>{
-			if (data.length){
-				$.get("/search",{
-					q: (data.map(a => Object.keys(a).toString())).join(',') 
-				}).done((data)=>{
-					data = JSON.parse(data);
-					console.log(data);
-					createListOfThumbnails(data,"LocalPopularity");
-				});
-			}
-			else{
-				//non è stato ancora visualizzato nulla
-			}
-		});
+		if (data.length){
+			$.get("/search",{
+				q: (data.map(a => Object.keys(a).toString())).join(',') 
+			}).done((data)=>{
+				data = JSON.parse(data);
+				console.log(data);
+				createListOfThumbnails(data,"AbsoluteLocalPopularity");
+			});
+		}
+		else{
+			//non è stato ancora visualizzato nulla
+		}
+	});
+}
+
+function setRelativeLocalPopularity(){
+	$.get("/relativePopularity",{
+		id: videoNamespace.getCurrentPlayerId()
+	}).done((data1)=>{
+		if(data1.length){
+			console.log('Query to youtube for RelativeLocalPopularity', data)
+			$.get("/search",{
+				q: (data1.map(array => array.id)).join(',')
+			}).done((data2)=>{
+				data2 = JSON.parse(data2);
+				createListOfThumbnails(data2,"RelativeLocalPopularity");
+				//Do something with data1 prevalentReason
+			})
+		}else{
+			console.log('Nessuna relazione');
+		}
+	})
 }
 
 //Crea cookie.
@@ -165,6 +184,9 @@ function saveSessionCookie(){
 		expires: 30
 	});
 	Cookies.set('lastCurrentTime', Math.round(player.getCurrentTime()),{
+		expires: 30
+	});
+	Cookies.set('recentVideos', videoNamespace.getRecentVideos(),{
 		expires: 30
 	});
 }
@@ -179,12 +201,12 @@ function setVideo(data, startTime = 0){
 		startSeconds: startTime,
 		suggestedQuality: 'large'
 	});
-	//saveSessionCookie();
 	setComments();
 	setRelated();
 	setDescription();
 	setRecent();
     setRandom();
 	setArtistSimilarity();
-	setLocalPopularity(); 
+	setAbsoluteLocalPopularity(); 
+	setRelativeLocalPopularity();
 }

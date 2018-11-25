@@ -56,7 +56,7 @@ var objPopularity = (function(){
 	//crea la proprietà di un id se non esiste
 	function createIdProperty(videoId){
 		if (!obj.hasOwnProperty(videoId)){
-			obj[videoId] = {"watchTime": 0, "relations": {}, "timesWatched": 0} ;
+			obj[videoId] = {"watchTime": 0, "timesWatched": 0, "relations": {}} ;
 		}
 	}
 	//inizializza relazione
@@ -296,6 +296,32 @@ app.get("/localPopularity",(req,res,next)=>{
 	}
 	res.json(arrayOfIdwatchTime);
 });
+
+app.get("/relativePopularity", (req,res,next)=>{
+	console.log('Relations: ',objPopularity.getObj()[req.query.id]);
+	var relativeToId = [];
+	var prevalentReason;
+	var amountReason=0;
+	//se l'id esiste.
+	if(objPopularity.getObj()[req.query.id]){
+		//per ogni relazione
+		Object.keys(objPopularity.getObj()[req.query.id]["relations"]).forEach((key1, index)=>{
+			//per ogni recommender
+			Object.keys(objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"]).forEach((key2, index)=>{
+				//se è il motivo principale, cambia la prevalentReason.
+				if(objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"][key2] > amountReason){
+					amountReason = objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"][key2];
+					prevalentReason = key2;
+				}
+			})
+			//push relazione (key1/id) con prevalentReason.
+			relativeToId.push({"id": key1, "prevalentReason": prevalentReason})
+			//resent amountReason per prossimo id.
+			amountReason = 0;
+		})
+	}
+	res.send(relativeToId);
+})
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
 	res.send('POST successfull');

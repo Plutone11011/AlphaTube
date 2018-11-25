@@ -91,6 +91,9 @@
 
             // 4. The API will call this function when the video player is ready.
             function onPlayerReady(event) {
+              if(Cookies.get('recentVideos')){
+                videoNamespace.setRecentVideos(JSON.parse(Cookies.get('recentVideos')));
+              }
               if(Cookies.get('lastVideo')){
                 setVideo(JSON.parse(Cookies.get('lastVideo')), Cookies.get('lastCurrentTime'));
               }            
@@ -212,12 +215,20 @@
         </div>
     </div>
     <div class="page-header"> <!-- a section divider-->
-      <h2>Recommender Local Popularity<small> Check out our popular videos</small></h2>
+      <h2>Recommender Local Popularity<small> Check out our most viewed videos</small></h2>
     </div>
     <div class="container-fluid">
-      <div id="recommenderLocalPopularity" class="thumbnails">
+      <div id="recommenderAbsoluteLocalPopularity" class="thumbnails">
+
+      </div>
+    </div>
+    <div class="page-header"> <!-- a section divider-->
+      <h2>Recommender Local Popularity<small> Check out our related videos</small></h2>
+    </div>
+    <div class="container-fluid">
+      <div id="recommenderRelativeLocalPopularity" class="thumbnails">
         
-        </div>
+      </div>
     </div>
   </body>
   </html>
