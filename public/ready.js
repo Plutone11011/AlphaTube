@@ -31,4 +31,7 @@ $(document).ready(function(){
 		//focus sul player. NON FUNZIONA!
 		$(player.getIframe()).focus();
 	})
+
+	//Save current settings if user is evil and leaves us.
+	$(window).unload(saveSessionCookie);
 });
