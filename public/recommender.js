@@ -48,9 +48,6 @@ function setRecent(){
 function setListaIniziale(){
 	$.get('/firstList').done(function(data){
 		data = JSON.parse(data);
-		//Quel cazzim di Youtube non accetta query con più di 50 id.
-		//Il JSON iniziale ne ha 118, si, 118.
-		//Lo splitto e faccio query sui sotto split.
 		var splitData = splitArray(data.map((data) => data.videoID),50);
 		splitData.forEach(function(value,index){
 			$.get('/search',{
@@ -147,7 +144,17 @@ function setGenreSimilarity(){
 
 function setLocalPopularity(){
 	$.get("/localPopularity").done((data)=>{
-			console.log(data);
+			console.log();
+			if (data.length){
+				$.get("/search",{
+					q: (data.map(a => Object.keys(a).toString())).join(',') 
+				}).done((data)=>{
+					console.log(data);
+				});
+			}
+			else{
+				//non è stato ancora visualizzato nulla
+			}
 		});
 }
 // Carica video nel player e setta i vari box.
@@ -161,5 +168,41 @@ function setVideo(data){
 	setDescription();
 	setRecent();
     setRandom();
-	setArtistSimilarity(); 
+	setArtistSimilarity();
+	setLocalPopularity(); 
 }
+
+$(document).ready(function(){
+	setListaIniziale();
+	//possible to search by title, artist, id, youtube title
+	$('#search_bar').submit(function(e){
+		e.preventDefault();//prevents the form from being submitted to the server
+        var query = $('#search_bar input').val();
+        //being asynchronous, there's no guarantee the first get will be executed before the second
+        $.get('/search',{
+        	q: query
+        }).done(function(data){
+			data = JSON.parse(data);
+			if(data.pageInfo.totalResults == 0){
+				alert('No video found for '+query);
+			}else{
+				removeChannels(data);
+				setVideo(data.items[0]);
+				videoNamespace.setCurrentPlayerRecommender("Search");
+				if(data.pageInfo.totalResults > 1){
+					data.items.shift();//remove first element in order to iterate over the remaining ones
+					createListOfThumbnails(data,"Search");
+				}
+			}
+		});
+	});
+	$("span").on("click", ".contains-data", function() {
+		let data = $(this).data("video");
+		//un elemento contiene solo il suo oggetto del video.
+		setVideo(data);
+		//setto il campo recommender del video attuale.
+		videoNamespace.setCurrentPlayerRecommender($(this).parent().attr('class'));
+		//focus sul player. NON FUNZIONA!
+		$(player.getIframe()).focus();
+	})
+});

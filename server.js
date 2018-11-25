@@ -32,7 +32,8 @@ app.get("/",function(req,res,next){
 
 var objPopularity = (function(){
 	var interval;
-	var obj = JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
+	var obj = {} ; 
+	//JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
 
 	function getObj(){
 		return obj ;
@@ -87,7 +88,7 @@ var objPopularity = (function(){
 })();
 
 //punto di partenza
-setTimeout(objPopularity.savePopularity, 30000);
+//setTimeout(objPopularity.savePopularity, 30000);
 
 function setGenre(req,res,next){
 	var queryString = '' ;
@@ -260,7 +261,7 @@ app.get("/similarity_genre",setGenre,(req,res,next)=>{
 	searchVideo(res,res.locals.q);
 });
 
-app.get("/firstList", (req,res)=>{
+app.get("/firstList", (req,res,next)=>{
 	request('http://site1825.tw.cs.unibo.it/video.json', function (error,response,body) {
 		if(error || (response.statusCode != 200)){
 			next(new Error(error));
@@ -271,10 +272,23 @@ app.get("/firstList", (req,res)=>{
 	})
 });
 
-app.post("/localPopularity",(req,res,next)=>{
-	objPopularity.addtimeswatched(req.body.video,req.body.timeswatched);
-	res.send(objPopularity.getObj());
-	//gestire update di json con un timeout
+app.get("/localPopularity",(req,res,next)=>{
+	var arrayOfIdwatchTime = [] ; //array of objects
+	for (var id in objPopularity.getObj()){
+		var objId = new Object() ;
+		objId[id] = objPopularity.getObj()[id]["watchTime"] ;
+		arrayOfIdwatchTime.push(objId) ;
+	}
+	console.log(arrayOfIdwatchTime);
+	//ordina id per watchTime
+	arrayOfIdwatchTime.sort(function(a,b){
+		return (a[Object.keys(a).toString()] - b[Object.keys(b).toString()]) ;
+	});
+	//togli gli ultimi id se ci sono più di 30 elementi
+	if (arrayOfIdwatchTime.length > 30){
+		arrayOfIdwatchTime = arrayOfIdwatchTime.slice(0,30);
+	}
+	res.send(arrayOfIdwatchTime);
 });
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
@@ -287,10 +301,10 @@ app.post("/watchTime",function(req,res,next){
 	//console.log(objPopularity.getObj());
 	res.send("POST successful");
 });
-
+/*
 process.on('exit', () => {
 	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');
 })
-
+*/
 app.listen(8000) ;//group number
 console.log('listening');
