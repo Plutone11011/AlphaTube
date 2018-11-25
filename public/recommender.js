@@ -164,8 +164,7 @@ function saveSessionCookie(){
 	Cookies.set('lastVideo',videoNamespace.getCurrentPlayerVideo(),{
 		expires: 30
 	});
-	console.log(player.getCurrentTime())
-	Cookies.set('lastCurrentTime',player.getCurrentTime(),{
+	Cookies.set('lastCurrentTime', Math.round(player.getCurrentTime()),{
 		expires: 30
 	});
 }
@@ -175,7 +174,11 @@ function setVideo(data, startTime = 0){
 	videoNamespace.updateWatchTime();
 	timerNamespace.resetTimer();
 	videoNamespace.setCurrentPlayerVideo(data)
-	player.loadVideoById(videoNamespace.getCurrentPlayerId(),startTime,'large');
+	player.loadVideoById({
+		videoId: videoNamespace.getCurrentPlayerId(),
+		startSeconds: startTime,
+		suggestedQuality: 'large'
+	});
 	//saveSessionCookie();
 	setComments();
 	setRelated();

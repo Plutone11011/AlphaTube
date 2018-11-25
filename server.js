@@ -38,8 +38,7 @@ app.get("/",function(req,res,next){
 
 var objPopularity = (function(){
 	var interval;
-	var obj = {} ; 
-	JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
+	var obj = JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
 
 	function getObj(){
 		return obj ;
