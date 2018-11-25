@@ -306,7 +306,6 @@ app.get("/localPopularity",(req,res,next)=>{
 });
 
 app.get("/relativePopularity", (req,res,next)=>{
-	console.log('Relations: ',objPopularity.getObj()[req.query.id]);
 	var relativeToId = [];
 	var prevalentReason;
 	var amountReason=0;

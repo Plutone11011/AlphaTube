@@ -143,13 +143,14 @@ function setGenreSimilarity(){
 
 
 function setAbsoluteLocalPopularity(){
-	$.get("/localPopularity").done((data)=>{
-		if (data.length){
+	$.get("/localPopularity").done((data1)=>{
+		if (data1.length){
 			$.get("/search",{
-				q: (data.map(a => Object.keys(a).toString())).join(',') 
-			}).done((data)=>{
-				data = JSON.parse(data);
-				createListOfThumbnails(data,"AbsoluteLocalPopularity");
+				q: (data1.map(a => Object.keys(a).toString())).join(',') 
+			}).done((data2)=>{
+				data2 = JSON.parse(data2);
+				console.log(data2);
+				createListOfThumbnails(data2,"AbsoluteLocalPopularity");
 			});
 		}
 		else{
@@ -163,7 +164,6 @@ function setRelativeLocalPopularity(){
 		id: videoNamespace.getCurrentPlayerId()
 	}).done((data1)=>{
 		if(data1.length){
-			console.log('Query to youtube for RelativeLocalPopularity', data)
 			$.get("/search",{
 				q: (data1.map(array => array.id)).join(',')
 			}).done((data2)=>{
@@ -173,6 +173,8 @@ function setRelativeLocalPopularity(){
 			})
 		}else{
 			console.log('Nessuna relazione');
+			var emptyData = {items: []};
+			createListOfThumbnails(emptyData,"RelativeLocalPopularity");
 		}
 	})
 }
@@ -200,6 +202,7 @@ function setVideo(data, startTime = 0){
 		startSeconds: startTime,
 		suggestedQuality: 'large'
 	});
+
 	setComments();
 	setRelated();
 	setDescription();

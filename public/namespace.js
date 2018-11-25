@@ -38,6 +38,7 @@ var videoNamespace = (function(){
 		if(currentPlayerRecommender && pastPlayerVideoId && (pastPlayerVideoId != getCurrentPlayerId())){
 			updateRelationships();
 		}
+		saveSessionCookie();
 	}
 
 	//relazione a ~ b se da sono passato a b attraverso un recommender e ho visto b per 15 sec
@@ -70,7 +71,7 @@ var videoNamespace = (function(){
 			}
 		}
 	}
-	
+
 	//volte/click in cui è stato visto
 	function updateTimesWatched(){
 		date = new Date(Date.now());
