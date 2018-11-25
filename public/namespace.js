@@ -45,7 +45,6 @@ var videoNamespace = (function(){
     	}).done((data)=>{
 			currentPlayerArtist = data[0];
 			currentPlayerSong = data[1];
-			//console.log('Artist:',currentPlayerArtist,'Song:',currentPlayerSong);
             setGenreSimilarity();
             setContentBrano();
 		})

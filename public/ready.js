@@ -1,6 +1,5 @@
 $(document).ready(function(){
 	setListaIniziale();
-	console.log(Cookies.get('LastVisit'));
 	//possible to search by title, artist, id, youtube title
 	$('#search_bar').submit(function(e){
 		e.preventDefault();//prevents the form from being submitted to the server

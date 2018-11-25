@@ -10,7 +10,6 @@ const fs = require('fs');
 var app = express();
 //gesture req.cookies
 app.use(cookieParser());
-var keys = ['keyboard cat'];
 //var searchRouter = express.Router();
 var path = __dirname + '/views/' ;
 app.use(express.static(__dirname + '/public'));
@@ -20,20 +19,27 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 app.get("/",function(req,res,next){
-	//console.log(req.query);
-	//probably need to render list of initial videos
 	//cookies
-	console.log('Last visit cookie', req.cookies.LastVisit)
-	res.cookie('LastVisit', new Date().toISOString(),{
-		maxAge: 2629800000 //1 mese 
-	})
+	if(req.cookies.LastVisit){
+		res.cookie('LastVisit', new Date().toISOString(),{
+			maxAge: 2629800000 //1 mese 
+		})
+		console.log('Welcome back!')
+		//Do something
+	}else{
+		res.cookie('LastVisit', new Date().toISOString(),{
+			maxAge: 2629800000 //1 mese 
+		})
+		console.log('New visitor');
+		//Do something
+	}
 	res.sendFile(path + "index.html");
 });
 
 var objPopularity = (function(){
 	var interval;
 	var obj = {} ; 
-	//JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
+	JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
 
 	function getObj(){
 		return obj ;
@@ -88,7 +94,7 @@ var objPopularity = (function(){
 })();
 
 //punto di partenza
-//setTimeout(objPopularity.savePopularity, 30000);
+setTimeout(objPopularity.savePopularity, 30000);
 
 function setGenre(req,res,next){
 	var queryString = '' ;
@@ -301,10 +307,11 @@ app.post("/watchTime",function(req,res,next){
 	//console.log(objPopularity.getObj());
 	res.send("POST successful");
 });
-/*
+
+
 process.on('exit', () => {
 	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');
 })
-*/
+
 app.listen(8000) ;//group number
 console.log('listening');
