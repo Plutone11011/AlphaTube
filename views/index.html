@@ -91,10 +91,16 @@
 
             // 4. The API will call this function when the video player is ready.
             function onPlayerReady(event) {
-                videoNamespace.setRecentVideos(JSON.parse(Cookies.get('recentVideos')));
-              if(Cookies.get('lastVideo')){
-                setVideo(JSON.parse(Cookies.get('lastVideo')), Cookies.get('lastCurrentTime'));
-              }            
+              if(Cookies.get('recentVideos') != 'undefined'){
+                if(Cookies.get('recentVideos')){
+                  videoNamespace.setRecentVideos(JSON.parse(Cookies.get('recentVideos')));
+                }
+              }
+              if(Cookies.get('lastVideo') != 'undefined'){
+                if(Cookies.get('lastVideo')){
+                  setVideo(JSON.parse(Cookies.get('lastVideo')), Cookies.get('lastCurrentTime'));
+                } 
+              }           
             }
 
             // 5. The API calls this function when the player's state changes.
