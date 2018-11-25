@@ -38,8 +38,7 @@ app.get("/",function(req,res,next){
 
 var objPopularity = (function(){
 	var interval;
-	var obj = {} ; 
-	JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
+	var obj = JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
 
 	function getObj(){
 		return obj ;
@@ -288,7 +287,8 @@ app.get("/localPopularity",(req,res,next)=>{
 	console.log(arrayOfIdwatchTime);
 	//ordina id per watchTime
 	arrayOfIdwatchTime.sort(function(a,b){
-		return (a[Object.keys(a).toString()] - b[Object.keys(b).toString()]) ;
+		//descending order
+		return (b[Object.keys(b).toString()] - a[Object.keys(a).toString()]) ;
 	});
 	//togli gli ultimi id se ci sono più di 30 elementi
 	if (arrayOfIdwatchTime.length > 30){
