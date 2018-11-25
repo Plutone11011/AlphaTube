@@ -294,7 +294,7 @@ app.get("/localPopularity",(req,res,next)=>{
 	if (arrayOfIdwatchTime.length > 30){
 		arrayOfIdwatchTime = arrayOfIdwatchTime.slice(0,30);
 	}
-	res.send(arrayOfIdwatchTime);
+	res.json(arrayOfIdwatchTime);
 });
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
