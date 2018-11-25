@@ -33,6 +33,7 @@ var videoNamespace = (function(){
 	function addToRecent(){
 		removeIfRecent();
 		recentVideos.items.unshift(currentPlayerVideo);
+		updateTimesWatched();
 		if(currentPlayerRecommender && pastPlayerVideoId && (pastPlayerVideoId != getCurrentPlayerId())){
 			updateRelationships();
 		}
@@ -75,6 +76,14 @@ var videoNamespace = (function(){
 				});
 			}
 		}
+	}
+
+	function updateTimesWatched(){
+		$.post("/timesWatched",{
+			id: getCurrentPlayerId
+		}).done((data)=>{
+			console.log("timesWatched updated");
+		});	
 	}
 
 	function setCurrentPlayerRecommender(recommender){
