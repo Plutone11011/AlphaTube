@@ -76,16 +76,19 @@ var objPopularity = (function(){
 		obj[videoId]["watchTime"] += Math.round(parseInt(value)/1000) ;
 	}
 
-	function addTimesWatched(videoId){
+	function addTimesWatched(videoId,date){
 		createIdProperty(videoId);
 		obj[videoId]["timesWatched"] += 1 ;
+		obj[videoId]["lastWatched"] = date ;
 	}
 
 	//Aggiunge relazione a~b
 	function addRelation(req, res, next){
+		console.log(req.body);
 		initializeRelation(req.body.previous, req.body.clicked, req.body.recommender);
 		obj[req.body.previous]["relations"][req.body.clicked]["recommender"][req.body.recommender] += 1; 
 		obj[req.body.previous]["relations"][req.body.clicked]["relationCount"] += 1;
+		obj[req.body.previous]["relations"][req.body.clicked]["lastSelected"] = req.body.lastSelected ;
 		next();
 	}
 	return {
@@ -314,9 +317,16 @@ app.post("/watchTime",function(req,res,next){
 });
 
 app.post("/timesWatched",function(req,res,next){
-	objPopularity.addTimesWatched(req.body.id);
-	console.log(objPopularity.getObj());
+	console.log(req.body);
+	objPopularity.addTimesWatched(req.body.id,req.body.lastWatched);
 	res.send("POST successful");
+});
+
+app.get("/globpop",function(req,res,next){
+	//può esserci una query e allora devo restituire le relazioni di un video, altrimenti assoluta
+	if (!req.query.id){
+
+	}
 });
 
 process.on('exit', () => {
