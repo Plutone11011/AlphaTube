@@ -363,7 +363,6 @@ app.post("/timesWatched",function(req,res,next){
 	res.send("POST successful");
 });
 
-
 app.get("/globpop", setRelatedToId, setLocalPopularity, function(req,res,next){
 	if(req.query.id){
 		objPopularity.createIdProperty(req.query.id);
@@ -390,6 +389,7 @@ app.get("/globpop", setRelatedToId, setLocalPopularity, function(req,res,next){
 			"site": "site1823.tw.cs.unibo.it",
 			"recommended": mostWatchedVideos
 		}
+		
 	}
 	res.json(jsonFile);
 });
