@@ -56,14 +56,14 @@ var objPopularity = (function(){
 	//crea la proprietà di un id se non esiste
 	function createIdProperty(videoId){
 		if (!obj.hasOwnProperty(videoId)){
-			obj[videoId] = {"watchTime": 0, "timesWatched": 0, "relations": {}} ;
+			obj[videoId] = {"watchTime": 0, "timesWatched": 0, "lastWatched": "Never", "relations": {}} ;
 		}
 	}
 	//inizializza relazione
 	function initializeRelation(a,b,recommender){
 		createIdProperty(a);
 		if(!obj[a]["relations"].hasOwnProperty(b)){
-			obj[a]["relations"][b] = {"relationCount": 0, "recommender": {}}
+			obj[a]["relations"][b] = {"relationCount": 0, "lastSelected": "never", "recommender": {}}
 			obj[a]["relations"][b]["recommender"][recommender] = 0;
 		}else if(!obj[a]["relations"][b]["recommender"].hasOwnProperty(recommender)){
 			obj[a]["relations"][b]["recommender"][recommender] = 0;
@@ -93,6 +93,7 @@ var objPopularity = (function(){
 	}
 	return {
 		getObj: getObj,
+		createIdProperty: createIdProperty,
 		addWatchTime: addWatchTime,
 		addTimesWatched: addTimesWatched,
 		addRelation: addRelation,
@@ -114,6 +115,57 @@ function setGenre(req,res,next){
 		}
 	}
 	res.locals.q = queryString ;
+	next();
+}
+
+function setLocalPopularity(req,res,next){
+	var arrayOfIdwatchTime = [] ; //array of objects
+	for (var id in objPopularity.getObj()){
+		var objId = new Object() ;
+		objId[id] = objPopularity.getObj()[id]["watchTime"] ;
+		arrayOfIdwatchTime.push(objId) ;
+	}
+	//ordina id per watchTime
+	arrayOfIdwatchTime.sort(function(a,b){
+		//descending order
+		return (b[Object.keys(b).toString()] - a[Object.keys(a).toString()]) ;
+	});
+	//togli gli ultimi id se ci sono più di 30 elementi
+	if (arrayOfIdwatchTime.length > 30){
+		arrayOfIdwatchTime = arrayOfIdwatchTime.slice(0,30);
+	}
+	res.locals.arrayOfWatchTime = arrayOfIdwatchTime;
+	next();
+}
+
+function setRelatedToId(req,res,next){
+	var relativeToId = [];
+	var prevalentReason;
+	var amountReason=0;
+	//se l'id esiste.
+	if(objPopularity.getObj()[req.query.id]){
+		//per ogni relazione
+		Object.keys(objPopularity.getObj()[req.query.id]["relations"]).forEach((key1, index)=>{
+			//per ogni recommender
+			Object.keys(objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"]).forEach((key2, index)=>{
+				//se è il motivo principale, cambia la prevalentReason.
+				if(objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"][key2] > amountReason){
+					amountReason = objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"][key2];
+					prevalentReason = key2;
+				}
+			})
+			//push relazione (key1/id) con prevalentReason.
+			relativeToId.push({
+				"videoId": key1,
+				"timesWatched": objPopularity.getObj()[key1]["timesWatched"],
+				"prevalentReason": prevalentReason,
+				"lastSelected": objPopularity.getObj()[req.query.id]["relations"][key1]["lastSelected"]				
+				})
+			//resent amountReason per prossimo id.
+			amountReason = 0;
+		})
+	}
+	res.locals.relativeToId = relativeToId;
 	next();
 }
 
@@ -286,48 +338,12 @@ app.get("/firstList", (req,res,next)=>{
 	})
 });
 
-app.get("/localPopularity",(req,res,next)=>{
-	var arrayOfIdwatchTime = [] ; //array of objects
-	for (var id in objPopularity.getObj()){
-		var objId = new Object() ;
-		objId[id] = objPopularity.getObj()[id]["watchTime"] ;
-		arrayOfIdwatchTime.push(objId) ;
-	}
-	//ordina id per watchTime
-	arrayOfIdwatchTime.sort(function(a,b){
-		//descending order
-		return (b[Object.keys(b).toString()] - a[Object.keys(a).toString()]) ;
-	});
-	//togli gli ultimi id se ci sono più di 30 elementi
-	if (arrayOfIdwatchTime.length > 30){
-		arrayOfIdwatchTime = arrayOfIdwatchTime.slice(0,30);
-	}
-	res.json(arrayOfIdwatchTime);
+app.get("/localPopularity", setLocalPopularity, (req,res,next)=>{
+	res.json(res.locals.arrayOfWatchTime);
 });
 
-app.get("/relativePopularity", (req,res,next)=>{
-	var relativeToId = [];
-	var prevalentReason;
-	var amountReason=0;
-	//se l'id esiste.
-	if(objPopularity.getObj()[req.query.id]){
-		//per ogni relazione
-		Object.keys(objPopularity.getObj()[req.query.id]["relations"]).forEach((key1, index)=>{
-			//per ogni recommender
-			Object.keys(objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"]).forEach((key2, index)=>{
-				//se è il motivo principale, cambia la prevalentReason.
-				if(objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"][key2] > amountReason){
-					amountReason = objPopularity.getObj()[req.query.id]["relations"][key1]["recommender"][key2];
-					prevalentReason = key2;
-				}
-			})
-			//push relazione (key1/id) con prevalentReason.
-			relativeToId.push({"id": key1, "prevalentReason": prevalentReason})
-			//resent amountReason per prossimo id.
-			amountReason = 0;
-		})
-	}
-	res.send(relativeToId);
+app.get("/relativePopularity", setRelatedToId, (req,res,next)=>{
+	res.json(res.locals.relativeToId);
 })
 
 app.post("/relation", objPopularity.addRelation, function(req,res,next){
@@ -347,21 +363,41 @@ app.post("/timesWatched",function(req,res,next){
 	res.send("POST successful");
 });
 
-/*
-app.get("/globpop",function(req,res,next){
-	var jsonFile = {site: "site1823.tw.cs.unibo.it" } ;
-	//può esserci una query e allora devo restituire le relazioni di un video, altrimenti assoluta
-	if (!req.query.id){
-		//itero su ogni id e ritorno tutti i dati raccolti
-		for (var id in objPopularity.getObj()){
 
+app.get("/globpop", setRelatedToId, setLocalPopularity, function(req,res,next){
+	if(req.query.id){
+		objPopularity.createIdProperty(req.query.id);
+		var jsonFile = {
+			"site": "site1823.tw.cs.unibo.it",
+			"recommender": req.query.id,
+			"lastWatched": objPopularity.getObj()[req.query.id]["lastWatched"],
+			"recommended": res.locals.relativeToId
+		};
+	}else{
+		var mostWatchedVideos = [];
+		res.locals.arrayOfWatchTime.forEach(function(object){
+			for(var id in object){
+				mostWatchedVideos.push({
+					"videoId": id,
+					"timesWatched": objPopularity.getObj()[id]["timesWatched"],
+					"watchTime": object[id],
+					"prevalentReason": "LocalPopularity",
+					"lastSelected": objPopularity.getObj()[id]["lastWatched"]
+				})
+			}
+		})
+		var jsonFile = {
+			"site": "site1823.tw.cs.unibo.it",
+			"recommended": mostWatchedVideos
 		}
 	}
+	res.json(jsonFile);
 });
-*/
+
 process.on('exit', () => {
 	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');
 })
 
-app.listen(8000) ;//group number
-console.log('listening');
+var server = app.listen(8000, '0.0.0.0', function(){
+	console.log("started listening on http://%s:%s", server.address().address, server.address().port) 
+}) ;//group number
