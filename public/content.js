@@ -46,7 +46,6 @@ function sparqlQueryforArtistTitle(res, artist){
 //costruisce get query per dbpedia con sparql query differenti
 function buildQuery(DBPediaresource, artist, sparqlQuery){
     var query = sparqlQuery(DBPediaresource, artist);
-    console.log(query);
     //console.log(query);
     var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
     return queryUrl ;
@@ -117,8 +116,6 @@ function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,RecommenderOrCo
 function setContentBrano(){    
     var artist = videoNamespace.getCurrentPlayerArtist();
 	var title = videoNamespace.getCurrentPlayerSong();
-    console.log(artist);
-    console.log(title);
     if (title){
     	queriesToDBPedia(false,title,artist,sparqlQueryforArtistTitle,fillWikiArea,noContentFound);
     }

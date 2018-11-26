@@ -42,7 +42,6 @@ var videoNamespace = (function(){
 
 	//relazione a ~ b se da sono passato a b attraverso un recommender e ho visto b per 15 sec
 	function updateRelationships(){
-		console.log('gonna updateRelationships')
 		//post per aggiornare relazione tra past e current.
 		date = new Date(Date.now());
 		$.post("/relation",{
@@ -60,7 +59,6 @@ var videoNamespace = (function(){
 		if(currentPlayerVideo){
 			if (timerNamespace.getWatchTime() > 0) {
 				//post per aggiornare watchtime del video
-				console.log(timerNamespace.getWatchTime());
 				$.post("/watchTime",{
 					video: getCurrentPlayerId(),
 					time: timerNamespace.getWatchTime()

@@ -346,7 +346,6 @@ app.post("/timesWatched",function(req,res,next){
 	objPopularity.addTimesWatched(req.body.id,req.body.lastWatched);
 	res.send("POST successful");
 });
-
 /*
 app.get("/globpop",function(req,res,next){
 	var jsonFile = {site: "site1823.tw.cs.unibo.it" } ;
@@ -354,7 +353,7 @@ app.get("/globpop",function(req,res,next){
 	if (!req.query.id){
 		//itero su ogni id e ritorno tutti i dati raccolti
 		for (var id in objPopularity.getObj()){
-
+			
 		}
 	}
 });
