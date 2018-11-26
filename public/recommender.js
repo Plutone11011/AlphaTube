@@ -143,14 +143,14 @@ function setGenreSimilarity(){
 
 
 function setAbsoluteLocalPopularity(){
-	$.get("/localPopularity").done((data1)=>{
-		if (data1.length){
+	$.get("/localPopularity").done((data)=>{
+		if (data.length){
 			$.get("/search",{
-				q: (data1.map(a => Object.keys(a).toString())).join(',') 
-			}).done((data2)=>{
-				data2 = JSON.parse(data2);
-				console.log(data2);
-				createListOfThumbnails(data2,"AbsoluteLocalPopularity");
+				q: (data.map(a => Object.keys(a).toString())).join(',') 
+			}).done((data)=>{
+				data = JSON.parse(data);
+				console.log(data);
+				createListOfThumbnails(data,"AbsoluteLocalPopularity");
 			});
 		}
 		else{
@@ -162,13 +162,13 @@ function setAbsoluteLocalPopularity(){
 function setRelativeLocalPopularity(){
 	$.get("/relativePopularity",{
 		id: videoNamespace.getCurrentPlayerId()
-	}).done((data1)=>{
-		if(data1.length){
+	}).done((data)=>{
+		if(data.length){
 			$.get("/search",{
-				q: (data1.map(array => array.id)).join(',')
-			}).done((data2)=>{
-				data2 = JSON.parse(data2);
-				createListOfThumbnails(data2,"RelativeLocalPopularity");
+				q: (data.map(array => array.id)).join(',')
+			}).done((data)=>{
+				data = JSON.parse(data);
+				createListOfThumbnails(data,"RelativeLocalPopularity");
 				//Do something with data1 prevalentReason
 			})
 		}else{
@@ -180,16 +180,10 @@ function setRelativeLocalPopularity(){
 }
 
 //Crea cookie.
-function saveSessionCookie(){
-	Cookies.set('lastVideo',videoNamespace.getCurrentPlayerVideo(),{
-		expires: 30
-	});
-	Cookies.set('lastCurrentTime', Math.round(player.getCurrentTime()),{
-		expires: 30
-	});
-	Cookies.set('recentVideos', videoNamespace.getRecentVideos(),{
-		expires: 30
-	});
+function saveLocalStorage(){
+	localStorage.setItem("lastVideo", JSON.stringify(videoNamespace.getCurrentPlayerVideo()));
+	localStorage.setItem('lastCurrentTime', JSON.stringify(Math.round(player.getCurrentTime())));
+	localStorage.setItem('recentVideos', JSON.stringify(videoNamespace.getRecentVideos()));
 }
 
 // Carica video nel player e setta i vari box.
@@ -202,7 +196,6 @@ function setVideo(data, startTime = 0){
 		startSeconds: startTime,
 		suggestedQuality: 'large'
 	});
-
 	setComments();
 	setRelated();
 	setDescription();
