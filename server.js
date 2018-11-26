@@ -347,13 +347,18 @@ app.post("/timesWatched",function(req,res,next){
 	res.send("POST successful");
 });
 
+/*
 app.get("/globpop",function(req,res,next){
+	var jsonFile = {site: "site1823.tw.cs.unibo.it" } ;
 	//può esserci una query e allora devo restituire le relazioni di un video, altrimenti assoluta
 	if (!req.query.id){
+		//itero su ogni id e ritorno tutti i dati raccolti
+		for (var id in objPopularity.getObj()){
 
+		}
 	}
 });
-
+*/
 process.on('exit', () => {
 	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');
 })

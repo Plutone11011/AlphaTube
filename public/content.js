@@ -66,7 +66,7 @@ function noContentFound(){
 }
 
 //funzione che esegue la query a dbpedia (sia proveniente dal recommender che per l'area content)
-function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,FillOrGet,noContent){
+function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,RecommenderOrContent,noContent){
 
     var res1 = title.replace(/\s/g,"_");
     var res2 = title.replace(/\s/g,"_") + "_(song)" ;
@@ -76,10 +76,10 @@ function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,FillOrGet,noCon
     //chiamando quindi il metodo con argomenti diversi
     function checkCallingFunction(data){
         if (isRecommender){
-            FillOrGet(data["results"]["bindings"]);
+            RecommenderOrContent(data["results"]["bindings"]);
         }
         else{
-            FillOrGet(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+            RecommenderOrContent(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
         }
     }
 

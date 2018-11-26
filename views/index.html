@@ -92,11 +92,11 @@
             // 4. The API will call this function when the video player is ready.
             function onPlayerReady(event) {
               if(localStorage.getItem("recentVideos")){
-                console.log(localStorage.getItem("recentVideos"))
+                //console.log(localStorage.getItem("recentVideos"))
                 videoNamespace.setRecentVideos(JSON.parse(localStorage.getItem("recentVideos")));
               }
               if(localStorage.getItem("lastVideo") && (localStorage.getItem("lastVideo") != 'undefined')){
-                console.log(JSON.parse(localStorage.getItem("lastVideo")))
+                //console.log(JSON.parse(localStorage.getItem("lastVideo")))
                 setVideo(JSON.parse(localStorage.getItem("lastVideo")),localStorage.getItem("lastCurrentTime"));
               }
             }
