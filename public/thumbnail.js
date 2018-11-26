@@ -19,3 +19,14 @@ function createListOfThumbnails(data,linkClass){
         
     });
 }
+
+/*
+function createGrid(length){
+    var row = `<div class='row'>
+    <div class='col-sm-6 col-md-4'>col-sm-6 col-md-4</div>
+    <div class='col-sm-6 col-md-4'>col-sm-6 col-md-4</div>
+    <div class='col-sm-6 col-md-4'>col-sm-6 col-md-4</div></div>` ;
+
+
+}
+*/

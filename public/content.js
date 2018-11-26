@@ -26,27 +26,27 @@ function setComments(){
 
 
 function fillWikiArea(song,artist){
-    $("#wikipedia").html('<p> <span>Song</span>: ' + song + 
-        '<br> <span>Artist</span>: '+ artist + '</p>');
+    $("#wikipedia").html(`<p> <span>Song</span>: ${song} 
+        <br> <span>Artist</span>: ${artist}</p>`);
     $("#wikipedia span").css("font-weight", "bold");
 }
 
 //ritorna query sparql
 function sparqlQueryforArtistTitle(res, artist){
-    let resource = "<http://dbpedia.org/resource/" + res + ">";
+    let resource = `<http://dbpedia.org/resource/${res}>`;
     //returns sparql query to get artist and song abstract from dbpedia ontology
-    return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
-    " PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT distinct ?abstract ?artist WHERE { " + 
-    resource +" dbo:abstract ?abstract . {"+resource+" dbo:artist ?a.} UNION {"+
-    resource+" dbo:musicalArtist ?a.}"+
-    "UNION {"+resource+" dbo:musicalBand ?a.} ?a dbo:abstract ?artist. ?a rdfs:label ?lab"+ 
-    " FILTER (langMatches(lang(?abstract),'en') && langMatches(lang(?artist),'en'))"+
-    " FILTER contains(?lab,'"+artist+"')}");
+    return (`PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT distinct ?abstract ?artist WHERE {  
+    ${resource}  dbo:abstract ?abstract . {${resource} dbo:artist ?a.} UNION {
+    ${resource} dbo:musicalArtist ?a.} UNION {${resource} dbo:musicalBand ?a.} ?a dbo:abstract ?artist. ?a rdfs:label ?lab 
+    FILTER (langMatches(lang(?abstract),'en') && langMatches(lang(?artist),'en'))
+    FILTER contains(?lab,'${artist}')}`);
 }
 
 //costruisce get query per dbpedia con sparql query differenti
 function buildQuery(DBPediaresource, artist, sparqlQuery){
     var query = sparqlQuery(DBPediaresource, artist);
+    console.log(query);
     //console.log(query);
     var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
     return queryUrl ;

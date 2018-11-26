@@ -96,10 +96,10 @@ function setRandom(){
 }
 
 function sparqlQueryforMusicGenre(res){
-	let resource = "<http://dbpedia.org/resource/" + res + ">";
-	return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
-    " SELECT ?lab WHERE { "+ resource + 
-    " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }") ;
+	let resource = `<http://dbpedia.org/resource/${res}>`;
+	return (`PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+	SELECT ?lab WHERE { ${resource} dbo:genre ?genre. 
+	?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }`) ;
 }
 
 //Video dello stesso channel o ricerca per artista?
