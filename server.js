@@ -347,18 +347,33 @@ app.post("/timesWatched",function(req,res,next){
 	res.send("POST successful");
 });
 
-/*
+
 app.get("/globpop",function(req,res,next){
 	var jsonFile = {site: "site1823.tw.cs.unibo.it" } ;
 	//può esserci una query e allora devo restituire le relazioni di un video, altrimenti assoluta
 	if (!req.query.id){
-		//itero su ogni id e ritorno tutti i dati raccolti
+		//itero su ogni chiave id e ritorno tutti i dati raccolti
 		for (var id in objPopularity.getObj()){
-
+			jsonFile["recommender"] = id ;
+			jsonFile["lastWatched"] = objPopularity.getObj().id["lastWatched"] ;
+			jsonFile["recommended"] = [] ;
+			var objOfRecommended = {} ;
+			//per ogni id itero sugli id in relazione con lui, e creo array recommended dell'api
+			for (var relId in objPopularity.getObj()["relations"]){
+				objOfRecommended["videoId"] = relId ;
+				objOfRecommended["timesWatched"] = objPopularity.getObj()[relId]["timesWatched"];
+				objOfRecommended["lastSelected"] = objPopularity.getObj()[relId]["lastSelected"] ;
+				//prevalentReason, fatta in /relativePopularity, magari accorpabile in una funzione
+				jsonFile["recommended"].push(objOfRecommended);
+			}
 		}
+		
+	}
+	else {
+		//risposta più semplice, solo un id e non c'è bisogno di fare ciclo annidato
 	}
 });
-*/
+
 process.on('exit', () => {
 	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');
 })
