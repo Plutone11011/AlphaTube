@@ -96,10 +96,10 @@ function setRandom(){
 }
 
 function sparqlQueryforMusicGenre(res){
-	let resource = "<http://dbpedia.org/resource/" + res + ">";
-	return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
-    " SELECT ?lab WHERE { "+ resource + 
-    " dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }") ;
+	let resource = `<http://dbpedia.org/resource/${res}>`;
+	return (`PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+	SELECT ?lab WHERE { ${resource} 
+	dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }`) ;
 }
 
 //Video dello stesso channel o ricerca per artista?
@@ -114,8 +114,15 @@ function setArtistSimilarity(){
 		})
 }
 
-function setGenreSimilarity(){
 
+function setGenreSimilarity(){
+	
+	function noThumbnailFound(){
+		$(".GenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
+		var emptyData = {items: []};
+		createListOfThumbnails(emptyData,"GenreSimilarity");
+	}
+	
 	function getGenreResults(bindings){
 		$.get("/similarity_genre",{
 			genre: bindings
@@ -125,10 +132,6 @@ function setGenreSimilarity(){
 			//removeChannels(data); Forse serve?
 			createListOfThumbnails(data,"GenreSimilarity");
 		});
-	}
-
-	function noThumbnailFound(){
-		$(".GenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
 	}
 
 	artist = videoNamespace.getCurrentPlayerArtist();
