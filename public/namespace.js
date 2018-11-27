@@ -160,6 +160,7 @@ var videoNamespace = (function(){
         getCurrentPlayerId: getCurrentPlayerId,
         getCurrentPlayerDescription: getCurrentPlayerDescription,
 		getCurrentPlayerVideoChannelId: getCurrentPlayerVideoChannelId,
+		getCurrentPlayerTitle: getCurrentPlayerTitle,
 		updateWatchTime: updateWatchTime
 	}
 })();
@@ -218,8 +219,8 @@ var historyNamespace = (function(){
 
 	//Aggiunge il video alla history.
 	function addToHistory(){
-		var state = "?id="+videoNamespace.getCurrentPlayerId();
-		window.history.pushState(videoNamespace.getCurrentPlayerVideo(),null,state);
+		var state = "?v="+videoNamespace.getCurrentPlayerId();
+		window.history.pushState(videoNamespace.getCurrentPlayerVideo(),videoNamespace.getCurrentPlayerTitle(),state);
 	}
 
 	//True or false, dipende se è nella history.
