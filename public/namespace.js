@@ -213,7 +213,31 @@ var timerNamespace = (function(){
     }
 })();
 
+var historyNamespace = (function(){
+	var savedInHistory = false;
 
+	//Aggiunge il video alla history.
+	function addToHistory(){
+		var state = "?id="+videoNamespace.getCurrentPlayerId();
+		window.history.pushState(videoNamespace.getCurrentPlayerVideo(),null,state);
+	}
+
+	//True or false, dipende se è nella history.
+	function inHistory(){
+		return savedInHistory;
+	}
+
+	//Listener decide se già in history.
+	function setHistory(bool){
+		savedInHistory = bool;
+	}
+
+	return{
+		addToHistory, addToHistory,
+		inHistory: inHistory,
+		setHistory: setHistory
+	}
+})();
 
 var listaInizialeNamespace = (function(){
 	var listaIniziale = {items: []};

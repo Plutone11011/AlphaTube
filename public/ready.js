@@ -1,5 +1,14 @@
 $(document).ready(function(){
 	setListaIniziale();
+
+	//Back and forward listener.
+	window.addEventListener('popstate', function(event){
+		if(event.state != null){
+			historyNamespace.setHistory(true);
+			setVideo(event.state);
+		} return event.preventDefault();
+	})
+
 	//possible to search by title, artist, id, youtube title
 	$('#search_bar').submit(function(e){
 		e.preventDefault();//prevents the form from being submitted to the server

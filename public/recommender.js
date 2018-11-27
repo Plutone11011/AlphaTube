@@ -199,6 +199,10 @@ function setVideo(data, startTime = 0){
 		startSeconds: startTime,
 		suggestedQuality: 'large'
 	});
+	if(!(historyNamespace.inHistory())){
+		historyNamespace.addToHistory();
+	}
+	historyNamespace.setHistory(false);
 	setComments();
 	setRelated();
 	setDescription();
