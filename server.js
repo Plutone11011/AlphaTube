@@ -316,7 +316,7 @@ app.get("/random",(req,res,next)=>{
 //parsa titolo youtube e ritorna artista e titolo brano
 app.get("/artist_title",(req,res,next)=>{
 	try{
-		var [artist, title] = getArtistTitle(req.query.video.snippet.title);
+		var [artist, title] = getArtistTitle(req.query.title);
 		res.send([artist,title]);
 	}catch(error){
 		res.send([null,null]);
@@ -365,6 +365,7 @@ app.post("/timesWatched",function(req,res,next){
 
 app.get("/globpop", setRelatedToId, setLocalPopularity, function(req,res,next){
 	if(req.query.id){
+		//JSON come lo vuole vitali.
 		objPopularity.createIdProperty(req.query.id);
 		var jsonFile = {
 			"site": "site1823.tw.cs.unibo.it",
@@ -373,6 +374,7 @@ app.get("/globpop", setRelatedToId, setLocalPopularity, function(req,res,next){
 			"recommended": res.locals.relativeToId
 		};
 	}else{
+		//JSON simile a quello di vitali con local popularity.
 		var mostWatchedVideos = [];
 		res.locals.arrayOfWatchTime.forEach(function(object){
 			for(var id in object){
