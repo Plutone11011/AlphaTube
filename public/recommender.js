@@ -168,7 +168,7 @@ function setRelativeLocalPopularity(){
 	}).done((data)=>{
 		if(data.length){
 			$.get("/search",{
-				q: (data.map(array => array.id)).join(',')
+				q: (data.map(array => array.videoId)).join(',')
 			}).done((data)=>{
 				data = JSON.parse(data);
 				createListOfThumbnails(data,"RelativeLocalPopularity");
