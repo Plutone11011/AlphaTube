@@ -96,7 +96,7 @@ var videoNamespace = (function(){
     //Setta l'artista e la canzone del player.
 	function setCurrentPlayerArtist_Song(){
 		$.get('/artist_title',{
-        	title: getCurrentPlayerTitle();
+        	title: getCurrentPlayerTitle()
     	}).done((data)=>{
 			currentPlayerArtist = data[0];
 			currentPlayerSong = data[1];
