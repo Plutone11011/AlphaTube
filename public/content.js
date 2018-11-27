@@ -33,7 +33,7 @@ function fillWikiArea(song,artist){
 
 //ritorna query sparql
 function sparqlQueryforArtistTitle(res, artist){
-    let resource = "<http://dbpedia.org/resource/" + res + ">";
+    let resource = `<http://dbpedia.org/resource/${res}>`;
     //returns sparql query to get artist and song abstract from dbpedia ontology
     return ("PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+ 
     " PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT distinct ?abstract ?artist WHERE { " + 

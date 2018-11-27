@@ -38,8 +38,7 @@ app.get("/",function(req,res,next){
 
 var objPopularity = (function(){
 	var interval;
-	var obj = JSON.parse(fs.readFileSync('popularity.json', 'utf-8'));
-
+	var obj = JSON.parse(fs.readFileSync(__dirname + '/popularity.json', 'utf-8'));
 	function getObj(){
 		return obj ;
 	}
@@ -47,7 +46,7 @@ var objPopularity = (function(){
 	//salva obj su fs
 	function savePopularity(){
 		interval = setInterval(function() {
-			fs.writeFile('popularity.json', JSON.stringify(obj),'utf-8',function(){
+				fs.writeFile(__dirname + '/popularity.json', JSON.stringify(obj),'utf-8',function(){
 				console.log('Popularity saved');
 			});
 		}, 60000) //ogni minuto
@@ -59,6 +58,7 @@ var objPopularity = (function(){
 			obj[videoId] = {"watchTime": 0, "timesWatched": 0, "lastWatched": "Never", "relations": {}} ;
 		}
 	}
+
 	//inizializza relazione
 	function initializeRelation(a,b,recommender){
 		createIdProperty(a);
@@ -400,6 +400,6 @@ process.on('exit', () => {
 	fs.writeFileSync('popularity.json', JSON.stringify(objPopularity.getObj()), 'utf-8');
 })
 
-var server = app.listen(8000, '0.0.0.0', function(){
+var server = app.listen(8000, function(){
 	console.log("started listening on http://%s:%s", server.address().address, server.address().port) 
 }) ;//group number
