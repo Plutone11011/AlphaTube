@@ -210,7 +210,6 @@ function setVideo(data, startTime = 0){
 	setDescription();
 	setRecent();
     setRandom();
-	setArtistSimilarity();
 	setAbsoluteLocalPopularity(); 
 	setRelativeLocalPopularity();
 }

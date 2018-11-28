@@ -102,8 +102,9 @@ var videoNamespace = (function(){
     	}).done((data)=>{
 			currentPlayerArtist = data[0];
 			currentPlayerSong = data[1];
+			setContentBrano();
+			setArtistSimilarity();
             setGenreSimilarity();
-            setContentBrano();
 		})
 	}
 
