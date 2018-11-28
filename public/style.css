@@ -34,3 +34,10 @@
   .contains-data {
     cursor: pointer;
   }
+
+  iframe {
+    height: 300px;
+    width: 300px;
+    resize: both;
+    overflow: auto;
+  }

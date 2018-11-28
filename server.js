@@ -1,16 +1,15 @@
-const express = require('express'); 
-const cookieParser = require('cookie-parser');
+const express = require('express'); //express, what else?
+const cookieParser = require('cookie-parser'); //easy cookie handling
 const bodyParser = require('body-parser'); //to parse requests body
 const request = require('request'); //http client
-// Credo express gestisca già i cookie
-//const cookies = require('cookies');
-const getArtistTitle = require('get-artist-title');
-const fs = require('fs');
-//var routes = require('./routes/index');
+const getArtistTitle = require('get-artist-title');//checks youtube titles and tries to parse them, does a terrible job.
+const fs = require('fs');//Filesystem, handles rw files
+const helmet = require('helmet');//Protects from http headers vulnerabilities
 var app = express();
 //gesture req.cookies
 app.use(cookieParser());
-//var searchRouter = express.Router();
+//sets http headers
+app.use(helmet());
 var path = __dirname + '/views/' ;
 app.use(express.static(__dirname + '/public'));
 /*mounting middlewares*/
