@@ -8,7 +8,7 @@ function createListOfThumbnails(data,linkClass){
     createGrid(data.items.length,linkClass);
     $.each(data.items, function(index, value){
 
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).html(thumbnailTemplate);
+        //$(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).html(thumbnailTemplate);
         img = $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("figure") ;
         img.attr('style',`background-image:url(${value.snippet.thumbnails.medium.url});`);
         img.data("video",value);
@@ -35,14 +35,14 @@ function createGrid(numberOfVideos, linkClass){
         for (var i = 0; i < Math.trunc(numberOfVideos/4)+1; i++){
             //numero le righe per poterci accedere successivamente più facilmente
             row = `<div class='row' id='${linkClass}row${i}' >
-            <div class='col-md-3'></div>
-            <figure></figure>
-            <div class='col-md-3'></div>
-            <figure></figure>
-            <div class='col-md-3'></div>
-            <figure></figure>
-            <div class='col-md-3'></div>
-            <figure></figure>
+            <div class='col-md-3'><figure></figure></div>
+            
+            <div class='col-md-3'><figure></figure></div>
+            
+            <div class='col-md-3'><figure></figure></div>
+            
+            <div class='col-md-3'><figure></figure></div>
+            
             </div>`;
              $(`#recommender${linkClass}`).append(row);
         }
