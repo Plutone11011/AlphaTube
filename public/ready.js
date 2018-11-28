@@ -38,6 +38,20 @@ $(document).ready(function(){
 		videoNamespace.setCurrentPlayerRecommender($(this).parents(".thumbnails").attr('id'));
 	})
 
+	$('img').hover(function() {
+        $(this).addClass('transition');
+
+    }, function() {
+        $(this).removeClass('transition');
+    });
+	
+	$(".thumbnails").on('click', '#icon_right, #icon_left', function() {
+		if($(this).attr('id') == 'icon_right') {
+			$('..thumbnails').animate({scrollLeft: 1000}, 800);
+			} else {
+			$('.thumbnails').animate({scrollLeft: -1000}, 800);
+		}
+	});
 	//Save current settings if user is evil and leaves us.
 	$(window).on("unload", saveLocalStorage);
 });

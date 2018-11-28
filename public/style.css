@@ -21,11 +21,38 @@
   #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
   #RelativeLocalPopularity{
+    display: inline-block;
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
   }
-  
+
+  #icon_right {
+    right: 20; 
+    cursor: pointer;  
+    margin-top: -200px; 
+    position: fixed; 
+  }
+  #icon_left {
+      left: 20; 
+      cursor: pointer;  
+      margin-top: -200px; 
+      position: fixed; 
+  }
+  .transition { /*-webkit prefisso per safari, -o per opera, -moz mozilla*/
+    -webkit-transform: scale(1.2); /*ingrandisce del 20% le immagini durante hovering*/ 
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  img {
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -ms-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    cursor: pointer; 
+  }
   .grid {
     overflow: hidden;
     padding: 0.5em 0 0 0.5em;
