@@ -31,8 +31,8 @@ function removeSameSong(data){
 }
 
 //Scambia visibilità, col-lg-8 è il content.
-function toggleVisibility(search){
-	if(!(localStorage.getItem("lastVideo") && (localStorage.getItem("lastVideo") != 'undefined'))){
+function toggleVisibility(search, firstList){
+	if(firstList && localStorage.getItem('lastVideo') === null){
 		//Prima volta che visita
 		setListaIniziale();
 		//Nascondi TUTTO tranne la lista iniziale.
