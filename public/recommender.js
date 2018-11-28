@@ -36,35 +36,16 @@ function toggleVisibility(search){
 		//Prima volta che visita
 		setListaIniziale();
 		//Nascondi TUTTO tranne la lista iniziale.
-		$('.horizontal-recommender','.recommender-search','#player','.col-lg-8').css('visibility','hidden');
-		$('.recommender-lista-iniziale').css('visibility','visible');
-		emptyThumbnails(false,"Random");
-		emptyThumbnails(false,"Related");
-		emptyThumbnails(false,"Recent");
-		emptyThumbnails(false,"GenreSimilarity");
-		emptyThumbnails(false,"ArtistSimilarity");
-		emptyThumbnails(false,"AbsoluteLocalPopularity");
-		emptyThumbnails(false,"RelativeLocalPopularity");
-		emptyThumbnails(true,"Search");
+		$('.horizontal-recommender, .recommender-search, .player-content').toggle(false);
+		$('.recommender-lista-iniziale').toggle(true);
 	}else if(search){
 		//Nascondi TUTTO tranne il recommender Search.
-		$('.horizontal-recommender','.recommender-lista-iniziale','#player','.col-lg-8').css('visibility','hidden');
-		$('.recommender-search').css('visibility','visible');
-		emptyThumbnails(false,"Random");
-		emptyThumbnails(false,"Related");
-		emptyThumbnails(false,"Recent");
-		emptyThumbnails(false,"GenreSimilarity");
-		emptyThumbnails(false,"ArtistSimilarity");
-		emptyThumbnails(false,"AbsoluteLocalPopularity");
-		emptyThumbnails(false,"RelativeLocalPopularity");
-		emptyThumbnails(true,"FirstList");
+		$('.horizontal-recommender, .recommender-lista-iniziale, .player-content').toggle(false);
+		$('.recommender-search').toggle(true);
 	}else{
 		//Nascondi lista iniziale e recommender Search, rimetti TUTTO il resto visibile.
-		$('.grid-recommender').css('visibility','hidden');
-		$('.horizontal-recommender','#player','.col-lg-8').css('visibility','visible');
-		emptyThumbnails(true,"Search");
-		emptyThumbnails(true,"FirstList");
-
+		$('.grid-recommender').toggle(false);
+		$('.horizontal-recommender, .player-content').toggle(true);
 	}
 }
 

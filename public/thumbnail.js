@@ -36,9 +36,9 @@ function createFlexBoxOfThumbnails(data,linkClass){
 function emptyThumbnails(grid, linkClass){
 	if(grid){
 	var emptyData = {items: []};
-	createListOfThumbnails(emptyData,linkClass);
+	createFlexBoxOfThumbnails(emptyData,linkClass);
 	}else{
 	var emptyData = {items: []};
-	createFlexBoxOfThumbnails(emptyData,linkClass);
+	createListOfThumbnails(emptyData,linkClass);
 	}
 }
