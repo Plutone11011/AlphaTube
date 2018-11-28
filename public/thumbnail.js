@@ -1,29 +1,25 @@
 function createListOfThumbnails(data,linkClass){
-    var  counterRow = 0;
-    var counterCol = 1 ;
-    var thumbnailTemplate = "<img src='' alt=''>" ;
-    var img ;
+    //var  counterRow = 0;
+    //var counterCol = 1 ;
+    var thumbnailTemplate = "<li><div><img src='' alt=''></li></div>" ;
+    var img, counter ;
     //console.log(linkClass, data);
     $(`#recommender${linkClass}`).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
-    createGrid(data.items.length,linkClass);
+    //createGrid(data.items.length,linkClass);
     $.each(data.items, function(index, value){
 
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).children("figure").html(thumbnailTemplate);
-        img = $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("img") ;
+        counter = index + 1 ;
+        $(`#recommender${linkClass} > ul`).html(thumbnailTemplate);
+        img = $(`#recommender${linkClass} li:nth-child(${counter})`).find("img") ;
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data img-responsive");
 
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).children("figure").append("<figcaption></figcaption>");
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("figcaption").html(value.snippet.title);
-        counterCol += 1 ;
-        if (counterCol >= 5){
-            counterCol = 1 ;
-            counterRow += 1 ; //bisogna passare alle colonne della prossima riga
-        }
+        img.parent().append(value.snippet.title);
     });
 }
 
+/*
 //linkClass può essere Recent, Random, AbsoluteLocalPopularity, GenreSimilarity,
 // Related, Search, RelativeLocalPopularity, ArtistSimilarity
 function createGrid(numberOfVideos, linkClass){
@@ -47,3 +43,4 @@ function createGrid(numberOfVideos, linkClass){
         }
     }
 }
+*/

@@ -16,7 +16,7 @@
     font-style: oblique;
     font-weight: bold;
   }
-
+  /*
   #recommenderRelated, #recommenderRecent, #recommenderSearch, 
   #recommenderRandom, #recommenderGenreSimilarity, #recommenderFirstList,
   #recommenderArtistSimilarity, #recommenderAbsoluteLocalPopularity, 
@@ -25,18 +25,123 @@
     overflow-x: scroll;
     overflow-y: hidden;
   }
-  
-  figcaption {
-    text-align: center;
-    background-color: rgba(79, 44, 16, 0.6);
-    height: 1.2em;
-    width: 100%;
-    color: white;
-    font-family: 'Open Sans', sans;
+  */
+  .grid {
+    overflow: hidden;
+    padding: 0.5em 0 0 0.5em;
+    max-width: 56em;
+    margin: 0 auto 20px auto;
+    list-style: none;
   }
-
-  figure img {
-    vertical-align: top;
+  
+  .grid li {
+    padding: 0 0.5em 0.5em 0;
+  }
+  
+  .grid li img {
+    display: block;
+  }
+  
+  .grid h2 {
+    font-size: 100%;
+  }
+  
+  .grid li > div,
+  .grid li > h2 {
+    background: #808080;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+  }
+  
+  .grid li.title h2 {
+    padding: 1em;
+    width: 100%;
+  }
+  
+  .grid li a {
+    color: #fff;
+  }
+  
+  @media all and (min-width: 500px) {
+    .grid li {
+      float: left;
+      width: 33.3333333%;
+    }
+    .grid li.title {
+      width: 100%;
+    }
+  }
+  
+  @media all and (min-width: 60em) {
+    .grid li {
+      width: 25%;
+    }
+    .grid li.title {
+      width: 25%;
+      clear: left;
+    }
+    .grid li.title h2 {
+      padding: 7em 2em;
+    }
+  }
+  
+  
+  /* for flexbox */
+  
+  @supports(display: flex) {
+    @media all and (min-width: 500px) {
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .grid li {
+        display: flex;
+        flex-direction: column;
+      }
+      /* the original pattern and therefore our fallback styles uses padding on the li and then puts the background color on the inner element. We can't therefor make it stretch just by way of the default alignment of the flex item. By setting the li to a flex column we can then make the inner grow to the height of the external container.  */
+      .grid li > * {
+        flex: 1;
+      }
+    }
+  }
+  
+  
+  /* for grid */
+  
+  @supports(display: grid) {
+  
+   
+    @media all and (min-width: 500px) {
+      .grid {
+        display: grid;
+      grid-gap: 15px;
+      padding-right: 10px;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid li {
+        padding: 0;
+      display: block;
+      background: #808080;
+        float: none;
+        width: auto;
+      }
+      .grid li.title {
+        width: auto;
+        grid-column: 1 / 4;
+      }
+    }
+    @media all and (min-width: 60em) {
+      .grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .grid li {
+        width: auto;
+      }
+      .grid li.title {
+        grid-column: 1 / 2;
+      }
+    }
   }
 
   .panel-body{
