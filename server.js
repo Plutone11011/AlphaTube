@@ -7,7 +7,7 @@ const fs = require('fs');//Filesystem, handles rw files
 const helmet = require('helmet');//Protects from http headers vulnerabilities
 var app = express();
 //gesture req.cookies
-app.use(cookieParser());
+app.use(cookieParser("wearenumberone"));
 //sets http headers
 app.use(helmet());
 var path = __dirname + '/views/' ;
@@ -19,17 +19,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/",function(req,res,next){
 	//cookies
-	if(req.cookies.LastVisit){
+	if(req.signedCookies.LastVisit){
 		res.cookie('LastVisit', new Date().toISOString(),{
-			maxAge: 2629800000 //1 mese 
+			maxAge: 2629800000, //1 mese
+			httpOnly: true, //only accessible by the server
+			signed: true //signed with secret (value passed to cookieParser, e.g. wearenumberone)
 		})
-		console.log('Welcome back!')
+		console.log("Welcome back! We haven't seen you since ", req.signedCookies.LastVisit)
 		//Do something
 	}else{
 		res.cookie('LastVisit', new Date().toISOString(),{
-			maxAge: 2629800000 //1 mese 
+			maxAge: 2629800000 ,//1 mese
+			httpOnly: true, //only accessible by the server
+			signed: true //signed with secret (value passed to cookieParser, e.g. wearenumberone)
 		})
-		console.log('New visitor');
+		console.log('New visitor!');
 		//Do something
 	}
 	res.sendFile(path + "index.html");
@@ -62,7 +66,7 @@ var objPopularity = (function(){
 	function initializeRelation(a,b,recommender){
 		createIdProperty(a);
 		if(!obj[a]["relations"].hasOwnProperty(b)){
-			obj[a]["relations"][b] = {"relationCount": 0, "lastSelected": "never", "recommender": {}}
+			obj[a]["relations"][b] = {"relationCount": 0, "lastSelected": "never", "source": "", "recommender": {}}
 			obj[a]["relations"][b]["recommender"][recommender] = 0;
 		}else if(!obj[a]["relations"][b]["recommender"].hasOwnProperty(recommender)){
 			obj[a]["relations"][b]["recommender"][recommender] = 0;
@@ -87,7 +91,8 @@ var objPopularity = (function(){
 		initializeRelation(req.body.previous, req.body.clicked, req.body.recommender);
 		obj[req.body.previous]["relations"][req.body.clicked]["recommender"][req.body.recommender] += 1; 
 		obj[req.body.previous]["relations"][req.body.clicked]["relationCount"] += 1;
-		obj[req.body.previous]["relations"][req.body.clicked]["lastSelected"] = req.body.lastSelected ;
+		obj[req.body.previous]["relations"][req.body.clicked]["lastSelected"] = req.body.lastSelected;
+		obj[req.body.previous]["relations"][req.body.clicked]["source"] = "site1823";
 		next();
 	}
 	return {

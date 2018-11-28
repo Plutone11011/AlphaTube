@@ -5,8 +5,9 @@ $(document).ready(function(){
 	window.addEventListener('popstate', function(event){
 		if(event.state != null){
 			historyNamespace.setHistory(true);
+			window.scrollTo({top: 0, behavior: 'smooth'});
 			setVideo(event.state);
-		} return event.preventDefault();
+		} //return event.preventDefault(); //sembra non fare nulla...
 	})
 
 	//possible to search by title, artist, id, youtube title
