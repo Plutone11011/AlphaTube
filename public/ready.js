@@ -32,14 +32,14 @@ $(document).ready(function(){
 			}
 		});
 	});
-	$(".thumbnails").on("click", ".contains-data", function() {
+	$(".container-fluid").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
 		console.log("ho cliccato");
 		window.scrollTo({top: 0, behavior: 'smooth'});
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
 		//setto il campo recommender del video attuale.
-		videoNamespace.setCurrentPlayerRecommender($(this).parent().attr('class'));
+		videoNamespace.setCurrentPlayerRecommender($(this).parents(".container-fluid").attr('id'));
 	})
 
 	//Save current settings if user is evil and leaves us.
