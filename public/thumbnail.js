@@ -1,16 +1,16 @@
 function createListOfThumbnails(data,linkClass){
     //var  counterRow = 0;
     //var counterCol = 1 ;
-    var thumbnailTemplate = "<li><div><img src='' alt=''></li></div>" ;
+    var thumbnailTemplate = "<li><div><img src='' alt=''></div></li>" ;
     var img, counter ;
     //console.log(linkClass, data);
-    $(`#recommender${linkClass}`).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
+    $(`#recommender${linkClass} > ul`).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
     //createGrid(data.items.length,linkClass);
     $.each(data.items, function(index, value){
 
         counter = index + 1 ;
-        $(`#recommender${linkClass} > ul`).html(thumbnailTemplate);
-        img = $(`#recommender${linkClass} li:nth-child(${counter})`).find("img") ;
+        $(`#recommender${linkClass} > ul`).append(thumbnailTemplate);
+        img = $(`#recommender${linkClass} > ul > li:nth-child(${counter})`).find("img") ;
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data img-responsive");
