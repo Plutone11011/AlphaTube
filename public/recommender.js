@@ -30,16 +30,41 @@ function removeSameSong(data){
 	}
 }
 
+//Scambia visibilità, col-lg-8 è il content.
 function toggleVisibility(search){
 	if(!(localStorage.getItem("lastVideo") && (localStorage.getItem("lastVideo") != 'undefined'))){
 		//Prima volta che visita
-		setListaIniziale()
+		setListaIniziale();
 		//Nascondi TUTTO tranne la lista iniziale.
-		$()
+		$('.horizontal-recommender','.recommender-search','#player','.col-lg-8').css('visibility','hidden');
+		$('.recommender-lista-iniziale').css('visibility','visible');
+		emptyThumbnails(false,"Random");
+		emptyThumbnails(false,"Related");
+		emptyThumbnails(false,"Recent");
+		emptyThumbnails(false,"GenreSimilarity");
+		emptyThumbnails(false,"ArtistSimilarity");
+		emptyThumbnails(false,"AbsoluteLocalPopularity");
+		emptyThumbnails(false,"RelativeLocalPopularity");
+		emptyThumbnails(true,"Search");
 	}else if(search){
-		//Nascondi TUTTO tranne il recommender Search
+		//Nascondi TUTTO tranne il recommender Search.
+		$('.horizontal-recommender','.recommender-lista-iniziale','#player','.col-lg-8').css('visibility','hidden');
+		$('.recommender-search').css('visibility','visible');
+		emptyThumbnails(false,"Random");
+		emptyThumbnails(false,"Related");
+		emptyThumbnails(false,"Recent");
+		emptyThumbnails(false,"GenreSimilarity");
+		emptyThumbnails(false,"ArtistSimilarity");
+		emptyThumbnails(false,"AbsoluteLocalPopularity");
+		emptyThumbnails(false,"RelativeLocalPopularity");
+		emptyThumbnails(true,"FirstList");
 	}else{
-		//Nascondi lista iniziale e recommender Search, rimetti tutto il resto visibile.
+		//Nascondi lista iniziale e recommender Search, rimetti TUTTO il resto visibile.
+		$('.grid-recommender').css('visibility','hidden');
+		$('.horizontal-recommender','#player','.col-lg-8').css('visibility','visible');
+		emptyThumbnails(true,"Search");
+		emptyThumbnails(true,"FirstList");
+
 	}
 }
 
@@ -191,8 +216,7 @@ function setRelativeLocalPopularity(){
 			})
 		}else{
 			console.log('Nessuna relazione');
-			var emptyData = {items: []};
-			createListOfThumbnails(emptyData,"RelativeLocalPopularity");
+			emptyThumbnails(false,"RelativeLocalPopularity");
 		}
 	})
 }

@@ -32,3 +32,13 @@ function createFlexBoxOfThumbnails(data,linkClass){
         img.parent().append(value.snippet.title);
     });
 }
+
+function emptyThumbnails(grid, linkClass){
+	if(grid){
+	var emptyData = {items: []};
+	createListOfThumbnails(emptyData,linkClass);
+	}else{
+	var emptyData = {items: []};
+	createFlexBoxOfThumbnails(emptyData,linkClass);
+	}
+}

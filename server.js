@@ -386,7 +386,7 @@ app.get("/globpop", setRelatedToId, setLocalPopularity, function(req,res,next){
 					"videoId": id,
 					"timesWatched": objPopularity.getObj()[id]["timesWatched"],
 					"watchTime": object[id],
-					"prevalentReason": "LocalPopularity",
+					"prevalentReason": "AbsoluteLocalPopularity",
 					"lastSelected": objPopularity.getObj()[id]["lastWatched"]
 				})
 			}
