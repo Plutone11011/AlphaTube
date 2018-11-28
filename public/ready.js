@@ -32,15 +32,6 @@ $(document).ready(function(){
 			}
 		});
 	});
-	$(".grid").on("click", ".contains-data", function() {
-		let data = $(this).data("video");
-		console.log("ho cliccato");
-		window.scrollTo({top: 0, behavior: 'smooth'});
-		//un elemento contiene solo il suo oggetto del video.
-		setVideo(data);
-		//setto il campo recommender del video attuale.
-		videoNamespace.setCurrentPlayerRecommender($(this).parents(".recommenders").attr('id'));
-	})
 	$(".thumbnails").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
 		console.log("ho cliccato");
@@ -48,8 +39,8 @@ $(document).ready(function(){
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
 		//setto il campo recommender del video attuale.
-		videoNamespace.setCurrentPlayerRecommender($(this).parent().attr('class'));
-})
+		videoNamespace.setCurrentPlayerRecommender($(this).parents(".thumbnails").attr('id'));
+	})
 
 	//Save current settings if user is evil and leaves us.
 	$(window).on("unload", saveLocalStorage);

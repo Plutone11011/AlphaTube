@@ -30,6 +30,19 @@ function removeSameSong(data){
 	}
 }
 
+function toggleVisibility(search){
+	if(!(localStorage.getItem("lastVideo") && (localStorage.getItem("lastVideo") != 'undefined'))){
+		//Prima volta che visita
+		setListaIniziale()
+		//Nascondi TUTTO tranne la lista iniziale.
+		$()
+	}else if(search){
+		//Nascondi TUTTO tranne il recommender Search
+	}else{
+		//Nascondi lista iniziale e recommender Search, rimetti tutto il resto visibile.
+	}
+}
+
 //Lancia una semplice query usando relatedToVideoId di YT.
 function setRelated(){
 	$.get('/related',{
@@ -184,7 +197,7 @@ function setRelativeLocalPopularity(){
 	})
 }
 
-//Crea cookie.
+//Crea local storage
 function saveLocalStorage(){
 	localStorage.setItem("lastVideo", JSON.stringify(videoNamespace.getCurrentPlayerVideo()));
 	localStorage.setItem('lastCurrentTime', JSON.stringify(Math.round(player.getCurrentTime())));
@@ -210,7 +223,6 @@ function setVideo(data, startTime = 0){
 	setDescription();
 	setRecent();
     setRandom();
-	setArtistSimilarity();
 	setAbsoluteLocalPopularity(); 
 	setRelativeLocalPopularity();
 }

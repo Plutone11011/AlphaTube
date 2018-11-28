@@ -17,10 +17,10 @@
     font-weight: bold;
   }
   
-  #recommenderRelated, #recommenderRecent,
-  #recommenderRandom, #recommenderGenreSimilarity,
-  #recommenderArtistSimilarity, #recommenderAbsoluteLocalPopularity, 
-  #recommenderRelativeLocalPopularity{
+  #Related, #Recent,
+  #Random, #GenreSimilarity,
+  #ArtistSimilarity, #AbsoluteLocalPopularity, 
+  #RelativeLocalPopularity{
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
