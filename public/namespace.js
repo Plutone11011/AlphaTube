@@ -35,7 +35,9 @@ var videoNamespace = (function(){
 		recentVideos.items.unshift(currentPlayerVideo);
 		//fuori da if perché altrimenti non considera cliccato il primo video di un nuovo utente
 		updateTimesWatched();
-		if(currentPlayerRecommender && pastPlayerVideoId && (pastPlayerVideoId != getCurrentPlayerId())){
+		if(currentPlayerRecommender &&
+			pastPlayerVideoId != getCurrentPlayerId())
+		{
 			updateRelationships();
 		}
 	}

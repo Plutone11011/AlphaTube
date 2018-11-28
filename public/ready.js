@@ -34,12 +34,11 @@ $(document).ready(function(){
 	$(".thumbnails").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
 		console.log("ho cliccato");
+		window.scrollTo({top: 0, behavior: 'smooth'});
 		//un elemento contiene solo il suo oggetto del video.
 		setVideo(data);
 		//setto il campo recommender del video attuale.
 		videoNamespace.setCurrentPlayerRecommender($(this).parent().attr('class'));
-		//focus sul player. NON FUNZIONA!
-		$(player.getIframe()).focus();
 	})
 
 	//Save current settings if user is evil and leaves us.

@@ -21,7 +21,9 @@ function removeSameSong(data){
 	var index = data.items.length - 1;
 	var songOnPlayer = videoNamespace.getCurrentPlayerSong();
 	while(index >= 0){
-		if(data.items[index].snippet.title.includes(songOnPlayer)){
+		if(data.items[index].snippet.title.includes(songOnPlayer) ||
+			data.items[index].id.videoId === videoNamespace.getCurrentPlayerId())
+		{
 			data.items.splice(index,1);
 		}
 		index--;
