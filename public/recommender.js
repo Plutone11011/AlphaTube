@@ -58,7 +58,7 @@ function setListaIniziale(){
 				data = JSON.parse(data);
 				listaInizialeNamespace.add(data.items);
 				if(listaInizialeNamespace.done()){
-					createListOfThumbnails(listaInizialeNamespace.get(),"FirstList");
+					createFlexBoxOfThumbnails(listaInizialeNamespace.get(),"FirstList");
 				}
 			})
 		})		
