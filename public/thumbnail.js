@@ -3,17 +3,19 @@ function createListOfThumbnails(data,linkClass){
     var counterCol = 1 ;
     var thumbnailTemplate = "<img src='' alt=''>" ;
     var img ;
-    console.log(linkClass, data);
+    //console.log(linkClass, data);
     $(`#recommender${linkClass}`).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
     createGrid(data.items.length,linkClass);
     $.each(data.items, function(index, value){
-        $(`#row${counterRow}`).children(`div:nth-child(${counterCol})`).html(thumbnailTemplate);
-        img = $(`#row${counterRow}`).children(`div:nth-child(${counterCol})`).find("img") ;
+
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).html(thumbnailTemplate);
+        img = $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("img") ;
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data img-responsive");
-        $(`#row${counterRow}`).children(`div:nth-child(${counterCol})`).append("<span></span>");
-        $(`#row${counterRow}`).children(`div:nth-child(${counterCol})`).find("span").html(`Titolo: ${value.snippet.title}`);
+
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).append("<span></span>");
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("span").html(`Titolo: ${value.snippet.title}`);
         counterCol += 1 ;
         if (counterCol >= 5){
             counterCol = 1 ;
@@ -32,7 +34,7 @@ function createGrid(numberOfVideos, linkClass){
     if (numberOfVideos){
         for (var i = 0; i < Math.trunc(numberOfVideos/4)+1; i++){
             //numero le righe per poterci accedere successivamente più facilmente
-            row = `<div class='row' id='row${i}' >
+            row = `<div class='row' id='${linkClass}row${i}' >
             <div class='col-md-3'></div>
             <div class='col-md-3'></div>
             <div class='col-md-3'></div>
