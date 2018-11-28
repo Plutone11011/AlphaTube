@@ -14,10 +14,10 @@ function createListOfThumbnails(data,linkClass){
         
         
     });
-    $("Random Recent Relative GenreSimilarity ArtistiSimilarity AbsoluteLocalPopularity RelativeLocalPopularity").
-        append("<i id='icon_right'></i>");
-    $("Random Recent Relative GenreSimilarity ArtistiSimilarity AbsoluteLocalPopularity RelativeLocalPopularity").
-        append("<i id='icon_left'></i>");
+    $("thumbnails").append("<i id='icon_right'></i>");
+    $("thumbnails").append("<i id='icon_left'></i>");
+    add_icon('#icon_right', 'fa fa-chevron-right', '40px', 'white');
+    add_icon('#icon_left', 'fa fa-chevron-left', '40px', 'white');
 }
 
 function createFlexBoxOfThumbnails(data,linkClass){

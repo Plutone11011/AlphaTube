@@ -30,15 +30,9 @@ function removeSameSong(data){
 	}
 }
 
-<<<<<<< Updated upstream
-//Scambia visibilità, col-lg-8 è il content.
-function toggleVisibility(search, firstList){
-	if(firstList && localStorage.getItem('lastVideo') === null){
-=======
 //Scambia visibilità
 function toggleVisibility(search){
 	if(!(localStorage.getItem("lastVideo") && (localStorage.getItem("lastVideo") != 'undefined'))){
->>>>>>> Stashed changes
 		//Prima volta che visita
 		setListaIniziale();
 		//Nascondi TUTTO tranne la lista iniziale.
