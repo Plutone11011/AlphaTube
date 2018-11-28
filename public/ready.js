@@ -47,7 +47,7 @@ $(document).ready(function(){
 	
 	$(".thumbnails").on('click', '#icon_right, #icon_left', function() {
 		if($(this).attr('id') == 'icon_right') {
-			$('..thumbnails').animate({scrollLeft: 1000}, 800);
+			$('.thumbnails').animate({scrollLeft: 1000}, 800);
 			} else {
 			$('.thumbnails').animate({scrollLeft: -1000}, 800);
 		}

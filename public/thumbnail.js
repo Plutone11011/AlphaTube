@@ -14,10 +14,8 @@ function createListOfThumbnails(data,linkClass){
         
         
     });
-    $("thumbnails").append("<i id='icon_right'></i>");
-    $("thumbnails").append("<i id='icon_left'></i>");
-    add_icon('#icon_right', 'fa fa-chevron-right', '40px', 'white');
-    add_icon('#icon_left', 'fa fa-chevron-left', '40px', 'white');
+    $(`#${linkClass}`).append(`<i id='${linkClass}icon_right' class='glyphicon glyphicon-chevron-left'></i>`);
+    $(`#${linkClass}`).append(`<i id='${linkClass}icon_left' class='glyphicon glyphicon-chevron-right'></i>`);
 }
 
 function createFlexBoxOfThumbnails(data,linkClass){
