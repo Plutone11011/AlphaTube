@@ -6,16 +6,16 @@ function createListOfThumbnails(data,linkClass){
     $.each(data.items, function(index, value){
         $(thumbnailTemplate).appendTo(`#${linkClass}`);
         counter = index + 1;
-        img = $(`div#${linkClass} > img:nth-child(${counter})`) ;
+        img = $(`div#${linkClass} > img:nth-child(${counter})`);
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
-        img.addClass("contains-data img-responsive");
+        img.addClass("contains-data");
 
         
         
     });
-    $(`#${linkClass}`).append(`<i id='${linkClass}icon_right' class='glyphicon glyphicon-chevron-left'></i>`);
-    $(`#${linkClass}`).append(`<i id='${linkClass}icon_left' class='glyphicon glyphicon-chevron-right'></i>`);
+    $(`#${linkClass}`).parent().append(`<i id='${linkClass}icon_right' class='glyphicon glyphicon-chevron-left'></i>`);
+    $(`#${linkClass}`).parent().append(`<i id='${linkClass}icon_left' class='glyphicon glyphicon-chevron-right'></i>`);
 }
 
 function createFlexBoxOfThumbnails(data,linkClass){

@@ -17,15 +17,16 @@
     font-weight: bold;
   }
   
+  
   #Related, #Recent,
   #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
   #RelativeLocalPopularity{
-    display: inline-block;
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
   }
+  
 
   #icon_right {
     right: 20; 
