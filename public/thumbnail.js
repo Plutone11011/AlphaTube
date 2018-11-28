@@ -1,17 +1,23 @@
 function createListOfThumbnails(data,linkClass){
     var counter;
-    var thumbnailTemplate = "<span class="+linkClass+"><img src='' alt=''></span>" ;
-    $("#"+linkClass).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
+    var thumbnailTemplate = "<img src='' alt=''>" ;
+    var img ;
+    $(`#${linkClass}`).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
     $.each(data.items, function(index, value){
-        $(thumbnailTemplate).appendTo("#"+linkClass);
+        $(thumbnailTemplate).appendTo(`#${linkClass}`);
         counter = index + 1;
-        $('span.' + linkClass +':nth-child(' + counter.toString() + ') > img').attr('src',value.snippet.thumbnails.medium.url);
-        $('span.' + linkClass +':nth-child(' + counter.toString() + ') > img').data("video",value);
-        $('span.' + linkClass +':nth-child(' + counter.toString() + ') > img').addClass("contains-data");
-        //$('span.' + linkClass +':nth-child(' + counter.toString() + ') + .titles').append(value.snippet.title);
-        //counter = parseInt(counter);
+        img = $(`div#${linkClass} > img:nth-child(${counter})`) ;
+        img.attr('src',value.snippet.thumbnails.medium.url);
+        img.data("video",value);
+        img.addClass("contains-data img-responsive");
+
+        
         
     });
+    $("Random Recent Relative GenreSimilarity ArtistiSimilarity AbsoluteLocalPopularity RelativeLocalPopularity").
+        append("<i id='icon_right'></i>");
+    $("Random Recent Relative GenreSimilarity ArtistiSimilarity AbsoluteLocalPopularity RelativeLocalPopularity").
+        append("<i id='icon_left'></i>");
 }
 
 function createFlexBoxOfThumbnails(data,linkClass){
