@@ -8,14 +8,14 @@ function createListOfThumbnails(data,linkClass){
     createGrid(data.items.length,linkClass);
     $.each(data.items, function(index, value){
 
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).html(thumbnailTemplate);
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).children("figure").html(thumbnailTemplate);
         img = $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("img") ;
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data img-responsive");
 
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).append("<figcaption></figcaption>");
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("figcaption").html(`${value.snippet.title}`);
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).children("figure").append("<figcaption></figcaption>");
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("figcaption").html(value.snippet.title);
         counterCol += 1 ;
         if (counterCol >= 5){
             counterCol = 1 ;
@@ -35,10 +35,10 @@ function createGrid(numberOfVideos, linkClass){
         for (var i = 0; i < Math.trunc(numberOfVideos/4)+1; i++){
             //numero le righe per poterci accedere successivamente più facilmente
             row = `<div class='row' id='${linkClass}row${i}' >
-            <div class='col-md-3'></div>
-            <div class='col-md-3'></div>
-            <div class='col-md-3'></div>
-            <div class='col-md-3'></div></div>`;
+            <div class='col-md-3'><figure></figure></div>
+            <div class='col-md-3'><figure></figure></div>
+            <div class='col-md-3'><figure></figure></div>
+            <div class='col-md-3'><figure></figure></div></div>`;
              $(`#recommender${linkClass}`).append(row);
         }
         if ((numberOfVideos % 4) == 0){

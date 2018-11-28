@@ -25,23 +25,18 @@
     overflow-x: scroll;
     overflow-y: hidden;
   }
-
+  
   figcaption {
+    text-align: center;
     background-color: rgba(79, 44, 16, 0.6);
     height: 1.2em;
     width: 100%;
-    bottom: 0;
-    float: right;
-    text-align: center;
     color: white;
-    z-index: 1;
     font-family: 'Open Sans', sans;
   }
 
-  img {
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.4);
-    position: relative;
-    width: 100%;
+  figure img {
+    vertical-align: top;
   }
 
   .panel-body{
