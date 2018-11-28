@@ -14,8 +14,8 @@ function createListOfThumbnails(data,linkClass){
         img.data("video",value);
         img.addClass("contains-data img-responsive");
 
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).append("<span></span>");
-        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("span").html(`Titolo: ${value.snippet.title}`);
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).append("<figcaption></figcaption>");
+        $(`#${linkClass}row${counterRow}`).children(`div:nth-child(${counterCol})`).find("figcaption").html(`Titolo: ${value.snippet.title}`);
         counterCol += 1 ;
         if (counterCol >= 5){
             counterCol = 1 ;
