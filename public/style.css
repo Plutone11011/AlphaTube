@@ -30,7 +30,8 @@
     display: inline-block;
     white-space: nowrap;
     padding-top: 16px;
-    width: 352px;
+    width: 320px;
+    margin-left: 32px;
   }
 
   .titoli-thumbnail{
