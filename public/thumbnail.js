@@ -1,3 +1,4 @@
+/*
 function createListOfThumbnails(data,linkClass){
     var counter;
     var thumbnailTemplate = "<img src='' alt=''>" ;
@@ -18,7 +19,7 @@ function createListOfThumbnails(data,linkClass){
     $(`.recommender${linkClass}`).append("<span class='icon_left' style='font-size: 70px; color:white'><i class='fas fa-angle-left'></i></span>");
     $(`.recommender${linkClass}`).append("<span class='icon_right' style='font-size: 70px; color:white'><i class='fas fa-angle-right'></i></span>");
 }
-
+*/
 function createFlexBoxOfThumbnails(data,linkClass){
     //var  counterRow = 0;
     //var counterCol = 1 ;

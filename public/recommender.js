@@ -58,13 +58,13 @@ function setRelated(){
 	}).done((data)=>{
 		data = JSON.parse(data);
 		removeChannels(data);
-		createListOfThumbnails(data,"Related");
+		createFlexBoxOfThumbnails(data,"Related");
 	})
 }
 
 //Riempe il div dei video recentemente visualizzati.
 function setRecent(){
-	createListOfThumbnails(videoNamespace.getRecentVideos(), "Recent")
+	createFlexBoxOfThumbnails(videoNamespace.getRecentVideos(), "Recent")
 }
 
 //carica lista iniziale
@@ -115,7 +115,7 @@ function setRandom(){
 	}).done((data)=>{
 		data = JSON.parse(data);
 		removeChannels(data);
-		createListOfThumbnails(data,"Random");
+		createFlexBoxOfThumbnails(data,"Random");
 	})
 }
 
@@ -134,7 +134,7 @@ function setArtistSimilarity(){
 			data = JSON.parse(data);
 			removeSameSong(data);
 			removeChannels(data);
-			createListOfThumbnails(data,"ArtistSimilarity");
+			createFlexBoxOfThumbnails(data,"ArtistSimilarity");
 		})
 }
 
@@ -144,7 +144,7 @@ function setGenreSimilarity(){
 	function noThumbnailFound(){
 		$(".GenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
 		var emptyData = {items: []};
-		createListOfThumbnails(emptyData,"GenreSimilarity");
+		createFlexBoxOfThumbnails(emptyData,"GenreSimilarity");
 	}
 	
 	function getGenreResults(bindings){
@@ -154,7 +154,7 @@ function setGenreSimilarity(){
 			data = JSON.parse(data);
 			//andrebbe anche controllato se nella lista ci sono video dello stesso artista
 			//removeChannels(data); Forse serve?
-			createListOfThumbnails(data,"GenreSimilarity");
+			createFlexBoxOfThumbnails(data,"GenreSimilarity");
 		});
 	}
 
@@ -177,7 +177,7 @@ function setAbsoluteLocalPopularity(){
 			}).done((data)=>{
 				data = JSON.parse(data);
 				console.log(data);
-				createListOfThumbnails(data,"AbsoluteLocalPopularity");
+				createFlexBoxOfThumbnails(data,"AbsoluteLocalPopularity");
 			});
 		}
 		else{
@@ -195,7 +195,7 @@ function setRelativeLocalPopularity(){
 				q: (data.map(array => array.videoId)).join(',')
 			}).done((data)=>{
 				data = JSON.parse(data);
-				createListOfThumbnails(data,"RelativeLocalPopularity");
+				createFlexBoxOfThumbnails(data,"RelativeLocalPopularity");
 				//Do something with data1 prevalentReason
 			})
 		}else{

@@ -16,7 +16,7 @@
     font-style: oblique;
     font-weight: bold;
   }
-
+  /*
   #Related, #Recent,
   #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
@@ -25,7 +25,7 @@
     overflow-x: hidden;
   }
   
-
+  
   .horizontal-recommender{
     overflow-y: visible;
   }
@@ -46,8 +46,8 @@
       position: relative;
       z-index: 2; 
   }
-  .transition { /*-webkit prefisso per safari, -o per opera, -moz mozilla*/
-    -webkit-transform: scale(1.2); /*ingrandisce del 20% le immagini durante hovering*/ 
+  .transition { 
+    -webkit-transform: scale(1.2);  
     -moz-transform: scale(1.2);
     -o-transform: scale(1.2);
     transform: scale(1.2);
@@ -60,6 +60,7 @@
     transition: all .4s ease-in-out;
     cursor: pointer; 
   }
+  */
   .grid {
     overflow: hidden;
     padding: 0.5em 0 0 0.5em;
