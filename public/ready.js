@@ -32,7 +32,6 @@ $(document).ready(function(){
 	});
 	$(".thumbnails").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
-		console.log("ho cliccato");
 		window.scrollTo({top: 0, behavior: 'smooth'});
 		toggleVisibility(false,false,false);
 		setVideo(data);
