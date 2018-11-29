@@ -57,12 +57,16 @@ function setRelated(){
 		data = JSON.parse(data);
 		removeChannels(data);
 		createListOfThumbnails(data,"Related");
+		reasonsForRecommending.setRelated();
+		addReasons("Related");
 	})
 }
 
 //Riempe il div dei video recentemente visualizzati.
 function setRecent(){
-	createListOfThumbnails(videoNamespace.getRecentVideos(), "Recent")
+	createListOfThumbnails(videoNamespace.getRecentVideos(), "Recent");
+	reasonsForRecommending.setRecent();
+	addReasons("Recent");
 }
 
 //carica lista iniziale
@@ -114,6 +118,8 @@ function setRandom(){
 		data = JSON.parse(data);
 		removeChannels(data);
 		createListOfThumbnails(data,"Random");
+		reasonsForRecommending.setRandom();
+		addReasons("Random");
 	})
 }
 
@@ -133,6 +139,8 @@ function setArtistSimilarity(){
 			removeSameSong(data);
 			removeChannels(data);
 			createListOfThumbnails(data,"ArtistSimilarity");
+			reasonsForRecommending.setArtistSimilarity(videoNamespace.getCurrentChannelTitle());
+			addReasons("ArtistSimilarity");
 		})
 }
 
@@ -153,6 +161,8 @@ function setGenreSimilarity(){
 			//andrebbe anche controllato se nella lista ci sono video dello stesso artista
 			//removeChannels(data); Forse serve?
 			createListOfThumbnails(data,"GenreSimilarity");
+			reasonsForRecommending.setGenreSimilarity(bindings);
+			addReasons("GenreSimilarity");
 		});
 	}
 

@@ -148,6 +148,10 @@ var videoNamespace = (function(){
 		return recentVideos;
 	}
 
+	function getCurrentChannelTitle(){
+		return currentPlayerVideo.snippet.channelTitle ;
+	}
+
     function getCurrentPlayerVideo(){
         return currentPlayerVideo;
     }
@@ -165,6 +169,7 @@ var videoNamespace = (function(){
         getCurrentPlayerDescription: getCurrentPlayerDescription,
 		getCurrentPlayerVideoChannelId: getCurrentPlayerVideoChannelId,
 		getCurrentPlayerTitle: getCurrentPlayerTitle,
+		getCurrentChannelTitle: getCurrentChannelTitle,
 		updateWatchTime: updateWatchTime
 	}
 })();
