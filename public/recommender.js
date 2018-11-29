@@ -211,6 +211,37 @@ function setRelativeLocalPopularity(){
 	})
 }
 
+
+
+function setAbsoluteGlobalPopularity(){
+	
+	//ci sarebbe anche 1822,1848,1824,1830,1850,1851,1861 ma dà errore per CORS, anche aggiungendo jsonp non va, 
+	// 1849 dà 500 server error
+	var arrayOfSites = [1829,1828,1838,1839,1846,1847,1831,1827,1836] ;
+	var arrayOfResponses = [] ;
+
+	function request(url) {
+		// this is where we're hiding the asynchronicity,
+		// away from the main code of our generator
+		// `it.next(..)` is the generator's iterator-resume call
+		$.get(url, function(data){
+			iterator.next(data);
+		});
+	}
+	
+	function *AbsoluteGenerator() {
+		for(var i = 0; i < arrayOfSites.length; i++){
+			var res = yield request(`http://site${arrayOfSites[i]}.tw.cs.unibo.it/globpop`);
+			arrayOfResponses.push(res); 
+		}
+
+		console.log(arrayOfResponses);
+	}
+
+	var iterator = AbsoluteGenerator();
+	iterator.next();
+}
+
 //Crea local storage
 function saveLocalStorage(){
 	localStorage.setItem("lastVideo", JSON.stringify(videoNamespace.getCurrentPlayerVideo()));
@@ -239,4 +270,5 @@ function setVideo(data, startTime = 0){
     setRandom();
 	setAbsoluteLocalPopularity(); 
 	setRelativeLocalPopularity();
+	setAbsoluteGlobalPopularity();
 }
