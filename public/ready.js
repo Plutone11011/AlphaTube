@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	toggleVisibility(false,true);
+	toggleVisibility(false,true,false);
 
 	//Back and forward listener.
 	window.addEventListener('popstate', function(event){
@@ -14,7 +14,7 @@ $(document).ready(function(){
 	$('#search_bar').submit(function(e){
 		e.preventDefault();//prevents the form from being submitted to the server
         var query = $('#search_bar input').val();
-        toggleVisibility(true,false);
+        toggleVisibility(true,false,false);
         //being asynchronous, there's no guarantee the first get will be executed before the second
         $.get('/search',{
         	q: query
@@ -32,7 +32,7 @@ $(document).ready(function(){
 		let data = $(this).data("video");
 		console.log("ho cliccato");
 		window.scrollTo({top: 0, behavior: 'smooth'});
-		toggleVisibility(false,false);
+		toggleVisibility(false,false,false);
 		setVideo(data);
 		//setto il campo recommender del video attuale.
 		videoNamespace.setCurrentPlayerRecommender($(this).parents(".thumbnails").attr('id'));
@@ -58,6 +58,11 @@ $(document).ready(function(){
 			}, "slow");
 		}
 	});
+
+	$(".jumbotron").on('click','.btn',function(){
+		toggleVisibility(false,true,true);
+	})
+
 	//Save current settings if user is evil and leaves us.
 	$(window).on("unload", saveLocalStorage);
 });

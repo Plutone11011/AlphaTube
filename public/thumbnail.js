@@ -10,6 +10,7 @@ function createListOfThumbnails(data,linkClass){
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data");
+        $(`div#${linkClass}`).append(`<span>${value.snippet.title}</span>`)
 
         
         

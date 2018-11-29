@@ -31,10 +31,12 @@ function removeSameSong(data){
 }
 
 //Scambia visibilità
-function toggleVisibility(search, firstList){
-	if(firstList && localStorage.getItem('lastVideo') === null){
+function toggleVisibility(search, firstList, button){
+	if(firstList && (localStorage.getItem('lastVideo') === null) || button){
 		//Prima volta che visita
-		setListaIniziale();
+		if (!button){
+			setListaIniziale();
+		}
 		//Nascondi TUTTO tranne la lista iniziale.
 		$('.horizontal-recommender, .recommender-search, .player-content').toggle(false);
 		$('.recommender-lista-iniziale').toggle(true);
@@ -67,6 +69,7 @@ function setRecent(){
 
 //carica lista iniziale
 function setListaIniziale(){
+	console.log("yeeeee");
 	$.get('/firstList').done(function(data){
 		data = JSON.parse(data);
 		var splitData = splitArray(data.map(array => array.videoID),50);
