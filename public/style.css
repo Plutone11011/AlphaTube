@@ -40,6 +40,7 @@
     white-space: initial;
     max-width: 320px;
     background-color: lightgrey;
+    padding-left: 3px;
   }
 
   .horizontal-recommender{

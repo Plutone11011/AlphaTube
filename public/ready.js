@@ -50,12 +50,13 @@ $(document).ready(function(){
 	
 	$(".horizontal-recommender").on('click', '.icon_left, .icon_right', function() {
 		if($(this).attr('class') == 'icon_right') {
+
 			$(this).siblings(".thumbnails").animate({
-				scrollLeft: "+=1770"
+				scrollLeft: "+="+$(window).width()
 			}, "slow");
 			} else {
 			$(this).siblings(".thumbnails").animate({
-				scrollLeft: "-=1770"
+				scrollLeft: "-="+$(document).width()
 			}, "slow");
 		}
 	});
