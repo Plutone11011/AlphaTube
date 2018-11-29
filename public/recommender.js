@@ -32,17 +32,15 @@ function removeSameSong(data){
 
 //Scambia visibilità
 function toggleVisibility(search, firstList, button){
-	if(firstList && (localStorage.getItem('lastVideo') === null) || button){
+	if(firstList && ((localStorage.getItem('lastVideo') === null) || button)){
 		//Prima volta che visita
-		if (!button){
-			setListaIniziale();
-		}
+		setListaIniziale();
 		//Nascondi TUTTO tranne la lista iniziale.
 		$('.horizontal-recommender, .recommender-search, .player-content').toggle(false);
-		$('.recommender-lista-iniziale').toggle(true);
+		$('.recommenderListaIniziale').toggle(true);
 	}else if(search){
 		//Nascondi TUTTO tranne il recommender Search.
-		$('.horizontal-recommender, .recommender-lista-iniziale, .player-content').toggle(false);
+		$('.horizontal-recommender, .recommenderListaIniziale, .player-content').toggle(false);
 		$('.recommender-search').toggle(true);
 	}else{
 		//Nascondi lista iniziale e recommender Search, rimetti TUTTO il resto visibile.
@@ -141,6 +139,8 @@ function setArtistSimilarity(){
 			removeSameSong(data);
 			removeChannels(data);
 			createFlexBoxOfThumbnails(data,"ArtistSimilarity");
+			reasonsForRecommending.setArtistSimilarity(videoNamespace.getCurrentChannelTitle());
+			addReasons("ArtistSimilarity");
 		})
 }
 
@@ -178,18 +178,17 @@ function setGenreSimilarity(){
 
 
 function setAbsoluteLocalPopularity(){
-	$.get("/localPopularity").done((data)=>{
-		if (data.length){
+	$.get("/localPopularity").done((data1)=>{
+		if (data1.length){
 			$.get("/search",{
-				q: (data.map(a => Object.keys(a).toString())).join(',') 
-			}).done((data)=>{
-				data = JSON.parse(data);
-				console.log(data);
-				createFlexBoxOfThumbnails(data,"AbsoluteLocalPopularity");
+				q: (data1.map(a => Object.keys(a).toString())).join(',') 
+			}).done((data2)=>{
+				data2 = JSON.parse(data2);
+				createFlexBoxOfThumbnails(data2,"AbsoluteLocalPopularity");
+				var arrayOfwatchTime = data1.map(id => Object.values(id));
+				reasonsForRecommending.setAbsoluteLocalPopularity(arrayOfwatchTime);
+				addReasonsPopularity("AbsoluteLocalPopularity");
 			});
-		}
-		else{
-			//non è stato ancora visualizzato nulla
 		}
 	});
 }

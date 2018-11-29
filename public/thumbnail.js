@@ -46,6 +46,14 @@ function addReasons(linkClass){
     $(`#${linkClass} div > p`).css("color","black");
 }
 
+  
+function addReasonsPopularity(linkClass){
+    $.each(reasonsForRecommending.getReasons()[`${linkClass}`], function(index, value){
+        $(`#${linkClass} > ul > li:nth-child(${index+1})`).find("div").append(`<p>${value}</p>`)
+    });
+    $(`#${linkClass} div > p`).css("color","black");    
+}
+
 function emptyThumbnails(linkClass){
 	var emptyData = {items: []};
 	createFlexBoxOfThumbnails(emptyData,linkClass);

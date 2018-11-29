@@ -150,7 +150,11 @@ var videoNamespace = (function(){
 
     function getCurrentPlayerVideo(){
         return currentPlayerVideo;
-    }
+	}
+	
+	function getCurrentChannelTitle(){
+		return currentPlayerVideo.snippet.channelTitle ;
+	}
 
 	return{
 		addToRecent: addToRecent,
@@ -165,6 +169,7 @@ var videoNamespace = (function(){
         getCurrentPlayerDescription: getCurrentPlayerDescription,
 		getCurrentPlayerVideoChannelId: getCurrentPlayerVideoChannelId,
 		getCurrentPlayerTitle: getCurrentPlayerTitle,
+		getCurrentChannelTitle: getCurrentChannelTitle,
 		updateWatchTime: updateWatchTime
 	}
 })();
@@ -302,12 +307,21 @@ var reasonsForRecommending = (function(){
 		var strOfGenres = arrayOfGenres.join();
 		reasons["GenreSimilarity"] = `Consigliato perché affine ai seguenti generi musicali: ${strOfGenres}`;
 	}
-	/*
-	//il chiamante deve aggiornare solo il/i video id con quel watchTime
-	function setAbsoluteLocalPopularity(watchTime){
-		reasons["AbsoluteLocalPopularity"] = `Consigliato perché è stato visualizzato per ${watchTime} secondi`;
-	}
 
+	function setArtistSimilarity(channelTitle){
+		reasons["ArtistSimilarity"] = `Consigliato perché video dello stesso canale ${channelTitle}`;
+	}
+	
+	//array of watchTime
+	function setAbsoluteLocalPopularity(arrayOfwatchTime){
+		reasons["AbsoluteLocalPopularity"] = [];
+		console.log(arrayOfwatchTime);
+		for (var i = 0; i < arrayOfwatchTime.length; i++){
+			reasons["AbsoluteLocalPopularity"].push(`Consigliato perché è stato visualizzato per ${arrayOfwatchTime[i]} secondi`);	
+		}
+		console.log(reasons["AbsoluteLocalPopularity"]);
+	}
+	/*
 	function setRelativeLocalPopularity(){
 
 	}
@@ -322,7 +336,8 @@ var reasonsForRecommending = (function(){
 		setRecent: setRecent,
 		setArtistSimilarity: setArtistSimilarity,
 		setGenreSimilarity: setGenreSimilarity,
-		getReasons: getReasons
+		getReasons: getReasons,
+		setAbsoluteLocalPopularity: setAbsoluteLocalPopularity
 	}
 
 })();

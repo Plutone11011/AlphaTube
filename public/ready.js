@@ -40,6 +40,7 @@ $(document).ready(function(){
 		videoNamespace.setCurrentPlayerRecommender($(this).parents(".thumbnails").attr('id'));
 	})
 
+	/*
 	$('.thumbnails').on({
 		mouseenter: function() {
 			$(this).addClass('transition');
@@ -60,7 +61,7 @@ $(document).ready(function(){
 			}, "slow");
 		}
 	});
-
+	*/
 	$(".jumbotron").on('click','.btn',function(){
 		toggleVisibility(false,true,true);
 	})
