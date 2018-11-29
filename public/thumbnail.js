@@ -54,3 +54,7 @@ function addReasonsForSearch(linkClass){
     $(`#${linkClass} div > p`).css("color","black");
 }
 
+function addReasons(linkClass){
+    $(`#${linkClass} > .img-titolo`).append("<span class='reason'></span>");
+    $(`#${linkClass} > .img-titolo`).find("span.reason").html(reasonsForRecommending.getReasons()[`${linkClass}`]);
+}
