@@ -38,18 +38,24 @@ $(document).ready(function(){
 		videoNamespace.setCurrentPlayerRecommender($(this).parents(".thumbnails").attr('id'));
 	})
 
-	$('img').hover(function() {
-        $(this).addClass('transition');
-
-    }, function() {
-        $(this).removeClass('transition');
-    });
+	$('.thumbnails').on({
+		mouseenter: function() {
+			$(this).addClass('transition');
+		},
+		mouseleave: function() {
+			$(this).removeClass('transition');
+		}
+	},"img.contains-data");
 	
-	$(".thumbnails").on('click', '#icon_right, #icon_left', function() {
-		if($(this).attr('id') == 'icon_right') {
-			$('..thumbnails').animate({scrollLeft: 1000}, 800);
+	$(".horizontal-recommender").on('click', '.icon_left, .icon_right', function() {
+		if($(this).attr('class') == 'icon_right') {
+			$(this).siblings(".thumbnails").animate({
+				scrollLeft: "+=1600"
+			}, "slow");
 			} else {
-			$('.thumbnails').animate({scrollLeft: -1000}, 800);
+			$(this).siblings(".thumbnails").animate({
+				scrollLeft: "-=1600"
+			}, "slow");
 		}
 	});
 	//Save current settings if user is evil and leaves us.

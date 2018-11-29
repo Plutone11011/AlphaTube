@@ -16,28 +16,34 @@
     font-style: oblique;
     font-weight: bold;
   }
-  
+ 
   #Related, #Recent,
   #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
   #RelativeLocalPopularity{
-    display: inline-block;
     white-space: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-x: hidden;
   }
 
-  #icon_right {
-    right: 20; 
-    cursor: pointer;  
-    margin-top: -200px; 
-    position: fixed; 
+  .horizontal-recommender{
+    overflow-y: visible;
   }
-  #icon_left {
-      left: 20; 
-      cursor: pointer;  
-      margin-top: -200px; 
-      position: fixed; 
+
+  .icon_right {
+    float: right; 
+    cursor: pointer;  
+    margin-top: -135px;
+    padding-left: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .icon_left {
+      float: left; 
+      cursor: pointer;
+      margin-top: -135px;
+      padding-right: 20px; 
+      position: relative;
+      z-index: 2; 
   }
   .transition { /*-webkit prefisso per safari, -o per opera, -moz mozilla*/
     -webkit-transform: scale(1.2); /*ingrandisce del 20% le immagini durante hovering*/ 
@@ -45,12 +51,11 @@
     -o-transform: scale(1.2);
     transform: scale(1.2);
   }
-  img {
+  img.contains-data {
     -webkit-transition: all .4s ease-in-out;
     -moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -ms-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
     cursor: pointer; 
   }
   .grid {
