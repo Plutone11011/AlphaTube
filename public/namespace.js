@@ -321,7 +321,7 @@ var reasonsForRecommending = (function(){
 		reasons["RelativeLocalPopularity"] = [];
 		for (var i = 0; i < arrayOfPrevalentReason.length; i++){
 			reasons["RelativeLocalPopularity"].push(`Consigliato perché è stato visualizzato
-			dopo il video corrente grazie al recommender ${arrayOfPrevalentReason[i]} secondi`);	
+			dopo il video corrente grazie al recommender ${arrayOfPrevalentReason[i]}`);	
 		}
 	}
 	function getReasons(){
