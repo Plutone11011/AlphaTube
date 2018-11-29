@@ -1,5 +1,6 @@
   body{
     padding-top: 70px ; /*crea spazio tra navbar e container sottostante, perché navbar ha posizione fixed*/
+    overflow-x: hidden;
   }
 
   .navbar-default{
@@ -38,6 +39,7 @@
     float: left;
     white-space: initial;
     max-width: 320px;
+    background-color: lightgrey;
   }
 
   .horizontal-recommender{
@@ -45,13 +47,12 @@
   }
 
   .thumbnails{
-    margin-left: 40px;
   }
 
   .icon_right {
     float: right; 
     cursor: pointer;  
-    margin-top: -185px;
+    margin-top: -206px;
     padding-left: 20px;
     position: relative;
     z-index: 1;
@@ -59,7 +60,7 @@
   .icon_left {
     float: left;
     cursor: pointer;
-    margin-top: -185px;
+    margin-top: -206px;
     padding-right: 20px;
     margin-left: 40px;
     position: relative;
