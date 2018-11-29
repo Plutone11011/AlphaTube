@@ -10,13 +10,8 @@ function createListOfThumbnails(data,linkClass){
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data");
-        $(`div#${linkClass} > span:nth-child(${counter})`).append(`<span class="titoli-thumbnail">${value.snippet.title}<br></span>`)
-
-        
-        
+        $(`div#${linkClass} > span:nth-child(${counter})`).append(`<span class="titoli-thumbnail">${value.snippet.title}<br></span>`)     
     });
-    $(`.recommender${linkClass}`).append("<span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>");
-    $(`.recommender${linkClass}`).append("<span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>");
 }
 
 function createFlexBoxOfThumbnails(data,linkClass){

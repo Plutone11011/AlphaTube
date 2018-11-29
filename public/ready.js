@@ -42,12 +42,10 @@ $(document).ready(function(){
 
 	$('.thumbnails').on({
 		mouseenter: function() {
-			$(this).addClass('transition');
-			$(this).siblings('.titoli-thumbnail').addClass('move_down');
+			$(this).parent().addClass('transition');
 		},
 		mouseleave: function() {
-			$(this).removeClass('transition');
-			$(this).siblings('.titoli-thumbnail').removeClass('move_down');
+			$(this).parent().removeClass('transition');
 		}
 	},"img.contains-data");
 	

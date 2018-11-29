@@ -47,22 +47,24 @@
   }
 
   .thumbnails{
+    clear:both;
+    height: 323px;
   }
 
   .icon_right {
     float: right; 
     cursor: pointer;  
-    margin-top: -206px;
-    padding-left: 20px;
+    margin-bottom: -199px;
+    margin-top: 45px;
     position: relative;
     z-index: 1;
   }
   .icon_left {
     float: left;
     cursor: pointer;
-    margin-top: -206px;
-    padding-right: 20px;
-    margin-left: 40px;
+    margin-bottom: -199px;
+    margin-left: 30px;
+    margin-top: 45px;
     position: relative;
     z-index: 1;
   }
