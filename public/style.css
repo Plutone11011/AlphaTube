@@ -29,7 +29,8 @@
     position: relative;
     display: inline-block;
     white-space: nowrap;
-    width: 323px;
+    padding-top: 16px;
+    width: 352px;
   }
 
   .titoli-thumbnail{
@@ -40,6 +41,10 @@
 
   .horizontal-recommender{
     overflow-y: visible;
+  }
+
+  .thumbnails{
+    margin-left: 40px;
   }
 
   .icon_right {
@@ -55,8 +60,12 @@
     cursor: pointer;
     margin-top: -185px;
     padding-right: 20px;
+    margin-left: 40px;
     position: relative;
     z-index: 1;
+  }
+  .move_down{
+    padding-top: 18px;
   }
   .transition { /*-webkit prefisso per safari, -o per opera, -moz mozilla*/
     -webkit-transform: scale(1.2); /*ingrandisce del 20% le immagini durante hovering*/ 

@@ -41,9 +41,11 @@ $(document).ready(function(){
 	$('.thumbnails').on({
 		mouseenter: function() {
 			$(this).addClass('transition');
+			$(this).siblings('.titoli-thumbnail').addClass('move_down');
 		},
 		mouseleave: function() {
 			$(this).removeClass('transition');
+			$(this).siblings('.titoli-thumbnail').removeClass('move_down');
 		}
 	},"img.contains-data");
 	
@@ -60,7 +62,7 @@ $(document).ready(function(){
 	});
 
 	$(".jumbotron").on('click','.btn',function(){
-		toggleVisibility(false,false,true);
+		toggleVisibility(false,true,true);
 	})
 
 	//Save current settings if user is evil and leaves us.
