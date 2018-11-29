@@ -136,7 +136,7 @@
     .icon_left, .icon_right{
       display: none;
     }
-    body, #Related, #Recent,
+    #Related, #Recent,
     #Random, #GenreSimilarity,
     #ArtistSimilarity, #AbsoluteLocalPopularity, 
     #RelativeLocalPopularity{
