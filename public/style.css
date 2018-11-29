@@ -124,7 +124,7 @@
     }
   }
 
-  @media (max-width: 600) {
+  @media screen and (max-width: 600px) {
     .icon_left, .icon_right{
       display: none;
     }
