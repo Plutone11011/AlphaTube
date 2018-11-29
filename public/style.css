@@ -16,7 +16,7 @@
     font-style: oblique;
     font-weight: bold;
   }
- 
+
   #Related, #Recent,
   #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
@@ -24,6 +24,7 @@
     white-space: nowrap;
     overflow-x: hidden;
   }
+  
 
   .horizontal-recommender{
     overflow-y: visible;

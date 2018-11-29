@@ -6,7 +6,7 @@ function createListOfThumbnails(data,linkClass){
     $.each(data.items, function(index, value){
         $(thumbnailTemplate).appendTo(`#${linkClass}`);
         counter = index + 1;
-        img = $(`div#${linkClass} > img:nth-child(${counter})`) ;
+        img = $(`div#${linkClass} > img:nth-child(${counter})`);
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data");
@@ -16,8 +16,6 @@ function createListOfThumbnails(data,linkClass){
     });
     $(`.recommender${linkClass}`).append("<span class='icon_left' style='font-size: 70px; color:white'><i class='fas fa-angle-left'></i></span>");
     $(`.recommender${linkClass}`).append("<span class='icon_right' style='font-size: 70px; color:white'><i class='fas fa-angle-right'></i></span>");
-    //add_icon('#icon_right', 'fa fa-chevron-right', '40px', 'white');
-    //add_icon('#icon_left', 'fa fa-chevron-left', '40px', 'white');
 }
 
 function createFlexBoxOfThumbnails(data,linkClass){
