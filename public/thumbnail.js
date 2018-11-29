@@ -3,15 +3,20 @@ function createListOfThumbnails(data,linkClass){
     var thumbnailTemplate = "<span class='img-titolo'><img src='' alt=''></span>" ;
     var img ;
     $(`#${linkClass}`).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
-    $.each(data.items, function(index, value){
-        $(thumbnailTemplate).appendTo(`#${linkClass}`);
-        counter = index + 1;
-        img = $(`div#${linkClass} > span:nth-child(${counter})`).find('img');
-        img.attr('src',value.snippet.thumbnails.medium.url);
-        img.data("video",value);
-        img.addClass("contains-data");
-        $(`div#${linkClass} > span:nth-child(${counter})`).append(`<span class="titoli-thumbnail">${value.snippet.title}<br></span>`)     
-    });
+    if(data.items.length){
+    	$(`.recommender${linkClass}`).toggle(true);
+    	$.each(data.items, function(index, value){
+        	$(thumbnailTemplate).appendTo(`#${linkClass}`);
+        	counter = index + 1;
+        	img = $(`div#${linkClass} > span:nth-child(${counter})`).find('img');
+        	img.attr('src',value.snippet.thumbnails.medium.url);
+        	img.data("video",value);
+        	img.addClass("contains-data");
+        	$(`div#${linkClass} > span:nth-child(${counter})`).append(`<span class="titoli-thumbnail">${value.snippet.title}<br></span>`)     
+    	});
+    }else{
+    	$(`.recommender${linkClass}`).toggle(false);
+	}
 }
 
 function createFlexBoxOfThumbnails(data,linkClass){

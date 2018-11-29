@@ -51,6 +51,10 @@
     height: 323px;
   }
 
+  .page-header {
+    margin: 10px 0 10px;
+  }
+
   .icon_right {
     float: right; 
     cursor: pointer;  

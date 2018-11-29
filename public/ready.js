@@ -51,11 +51,11 @@ $(document).ready(function(){
 	$(".horizontal-recommender").on('click', '.icon_left, .icon_right', function() {
 		if($(this).attr('class') == 'icon_right') {
 			$(this).siblings(".thumbnails").animate({
-				scrollLeft: "+=1600"
+				scrollLeft: "+=1770"
 			}, "slow");
 			} else {
 			$(this).siblings(".thumbnails").animate({
-				scrollLeft: "-=1600"
+				scrollLeft: "-=1770"
 			}, "slow");
 		}
 	});
