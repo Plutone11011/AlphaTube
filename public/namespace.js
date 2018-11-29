@@ -269,3 +269,65 @@ var listaInizialeNamespace = (function(){
 		done: done
 	}
 })();
+
+var reasonsForRecommending = (function(){
+
+	var reasons = {} ;
+
+	function setSearch(input){
+		reasons["Search"] = `Consigliato perché hai cercato '${input}'`;
+	}
+
+	function setRelated(){
+		reasons["Related"] = `Consigliato perché collegato all'id del video che stai visualizzando`;
+	}
+
+	function setRandom(){
+		reasons["Random"] = "Consigliato perché generato da un algoritmo di scelta casuale dei video" ;
+	}
+
+	function setRecent(){
+		reasons["Recent"] = "Consigliato perché è un video che hai già visualizzato in passato" ;
+	}
+
+	function setGenreSimilarity(bindings){
+		var arrayOfGenres = [] ;
+		for (var i = 0; i < bindings.length; i++){
+			arrayOfGenres.push(bindings[i]["lab"]["value"]);
+		}
+		var strOfGenres = arrayOfGenres.join();
+		reasons["GenreSimilarity"] = `Consigliato perché affine ai seguenti generi musicali: ${strOfGenres}`;
+	}
+
+	function setArtistSimilarity(channelTitle){
+		reasons["ArtistSimilarity"] = `Consigliato perché video dello stesso canale ${channelTitle}`;
+	}
+	
+	//array of watchTime
+	function setAbsoluteLocalPopularity(arrayOfwatchTime){
+		reasons["AbsoluteLocalPopularity"] = [];
+		console.log(arrayOfwatchTime);
+		for (var i = 0; i < arrayOfwatchTime.length; i++){
+			reasons["AbsoluteLocalPopularity"].push(`Consigliato perché è stato visualizzato per ${arrayOfwatchTime[i]} secondi`);	
+		}
+		console.log(reasons["AbsoluteLocalPopularity"]);
+	}
+	/*
+	function setRelativeLocalPopularity(){
+	}
+	*/
+	function getReasons(){
+		return reasons ;
+	}
+	return{
+		setSearch: setSearch,
+		setRelated: setRelated,
+		setRandom: setRandom,
+		setRecent: setRecent,
+		setArtistSimilarity: setArtistSimilarity,
+		setGenreSimilarity: setGenreSimilarity,
+		getReasons: getReasons,
+		setAbsoluteLocalPopularity: setAbsoluteLocalPopularity
+	}
+
+})();

@@ -47,3 +47,10 @@ function emptyThumbnails(grid, linkClass){
 	createListOfThumbnails(emptyData,linkClass);
 	}
 }
+
+function addReasonsForSearch(linkClass){
+    $(`#${linkClass} div`).append("<p></p>");
+    $(`#${linkClass} div > p`).html(reasonsForRecommending.getReasons()[`${linkClass}`]);
+    $(`#${linkClass} div > p`).css("color","black");
+}
+
