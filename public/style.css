@@ -25,6 +25,18 @@
     overflow-x: hidden;
   }
   
+  .img-titolo{
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    width: 323px;
+  }
+
+  .titoli-thumbnail{
+    float: left;
+    white-space: initial;
+    max-width: 320px;
+  }
 
   .horizontal-recommender{
     overflow-y: visible;
@@ -33,18 +45,18 @@
   .icon_right {
     float: right; 
     cursor: pointer;  
-    margin-top: -135px;
+    margin-top: -185px;
     padding-left: 20px;
     position: relative;
-    z-index: 2;
+    z-index: 1;
   }
   .icon_left {
-      float: left; 
-      cursor: pointer;
-      margin-top: -135px;
-      padding-right: 20px; 
-      position: relative;
-      z-index: 2; 
+    float: left;
+    cursor: pointer;
+    margin-top: -185px;
+    padding-right: 20px;
+    position: relative;
+    z-index: 1;
   }
   .transition { /*-webkit prefisso per safari, -o per opera, -moz mozilla*/
     -webkit-transform: scale(1.2); /*ingrandisce del 20% le immagini durante hovering*/ 

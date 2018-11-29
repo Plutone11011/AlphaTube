@@ -32,11 +32,9 @@ function removeSameSong(data){
 
 //Scambia visibilità
 function toggleVisibility(search, firstList, button){
-	if(firstList && (localStorage.getItem('lastVideo') === null) || button){
+	if(firstList && (localStorage.getItem('lastVideo') === null || button)){
 		//Prima volta che visita
-		if (!button){
-			setListaIniziale();
-		}
+		setListaIniziale();
 		//Nascondi TUTTO tranne la lista iniziale.
 		$('.horizontal-recommender, .recommender-search, .player-content').toggle(false);
 		$('.recommender-lista-iniziale').toggle(true);
