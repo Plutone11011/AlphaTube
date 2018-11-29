@@ -161,6 +161,8 @@ function setGenreSimilarity(){
 			//andrebbe anche controllato se nella lista ci sono video dello stesso artista
 			//removeChannels(data); Forse serve?
 			createFlexBoxOfThumbnails(data,"GenreSimilarity");
+			reasonsForRecommending.setGenreSimilarity(bindings);
+			addReasons("GenreSimilarity");
 		});
 	}
 

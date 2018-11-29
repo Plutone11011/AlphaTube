@@ -294,9 +294,12 @@ var reasonsForRecommending = (function(){
 		//da fare
 	}
 
-	//passa array di generi
-	function setGenreSimilarity(genre){
-		var strOfGenres = genre.join();
+	function setGenreSimilarity(bindings){
+		var arrayOfGenres = [] ;
+		for (var i = 0; i < bindings.length; i++){
+			arrayOfGenres.push(bindings[i]["lab"]["value"]);
+		}
+		var strOfGenres = arrayOfGenres.join();
 		reasons["GenreSimilarity"] = `Consigliato perché affine ai seguenti generi musicali: ${strOfGenres}`;
 	}
 	/*
