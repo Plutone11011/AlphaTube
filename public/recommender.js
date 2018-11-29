@@ -71,7 +71,6 @@ function setRecent(){
 
 //carica lista iniziale
 function setListaIniziale(){
-	console.log("yeeeee");
 	$.get('/firstList').done(function(data){
 		data = JSON.parse(data);
 		var splitData = splitArray(data.map(array => array.videoID),50);
@@ -185,9 +184,7 @@ function setAbsoluteLocalPopularity(){
 			}).done((data2)=>{
 				data2 = JSON.parse(data2);
 				createListOfThumbnails(data2,"AbsoluteLocalPopularity");
-				//creo l'array di watchTime
-				var arrayOfwatchTime = data1.map(id => Object.values(id));
-				reasonsForRecommending.setAbsoluteLocalPopularity(arrayOfwatchTime);
+				reasonsForRecommending.setAbsoluteLocalPopularity(data1.map(id => Object.values(id)));
 				addReasonsPopularity("AbsoluteLocalPopularity");
 			});
 		}
@@ -197,14 +194,15 @@ function setAbsoluteLocalPopularity(){
 function setRelativeLocalPopularity(){
 	$.get("/relativePopularity",{
 		id: videoNamespace.getCurrentPlayerId()
-	}).done((data)=>{
-		if(data.length){
+	}).done((data1)=>{
+		if(data1.length){
 			$.get("/search",{
-				q: (data.map(array => array.videoId)).join(',')
-			}).done((data)=>{
-				data = JSON.parse(data);
-				createListOfThumbnails(data,"RelativeLocalPopularity");
-				//Do something with data1 prevalentReason
+				q: (data1.map(array => array.videoId)).join(',')
+			}).done((data2)=>{
+				data2 = JSON.parse(data2);
+				createListOfThumbnails(data2,"RelativeLocalPopularity");
+				reasonsForRecommending.setRelativeLocalPopularity(data1.map(id => id["prevalentReason"]));
+				addReasonsPopularity("RelativeLocalPopularity");
 			})
 		}else{
 			console.log('Nessuna relazione');

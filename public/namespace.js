@@ -305,22 +305,25 @@ var reasonsForRecommending = (function(){
 	}
 
 	function setArtistSimilarity(channelTitle){
-		reasons["ArtistSimilarity"] = `Consigliato perché video dello stesso canale ${channelTitle}`;
+		reasons["ArtistSimilarity"] = `Consigliato perché video dello stesso canale: ${channelTitle}`;
 	}
 	
 	//array of watchTime
 	function setAbsoluteLocalPopularity(arrayOfwatchTime){
 		reasons["AbsoluteLocalPopularity"] = [];
-		console.log(arrayOfwatchTime);
 		for (var i = 0; i < arrayOfwatchTime.length; i++){
-			reasons["AbsoluteLocalPopularity"].push(`Consigliato perché è stato visualizzato per ${arrayOfwatchTime[i]} secondi`);	
+			reasons["AbsoluteLocalPopularity"].push(`Consigliato perché è stato visualizzato
+			 per ${arrayOfwatchTime[i]} secondi`);	
 		}
-		console.log(reasons["AbsoluteLocalPopularity"]);
 	}
-	/*
-	function setRelativeLocalPopularity(){
+
+	function setRelativeLocalPopularity(arrayOfPrevalentReason){
+		reasons["RelativeLocalPopularity"] = [];
+		for (var i = 0; i < arrayOfPrevalentReason.length; i++){
+			reasons["RelativeLocalPopularity"].push(`Consigliato perché è stato visualizzato
+			dopo il video corrente grazie al recommender ${arrayOfPrevalentReason[i]}`);	
+		}
 	}
-	*/
 	function getReasons(){
 		return reasons ;
 	}
@@ -332,7 +335,8 @@ var reasonsForRecommending = (function(){
 		setArtistSimilarity: setArtistSimilarity,
 		setGenreSimilarity: setGenreSimilarity,
 		getReasons: getReasons,
-		setAbsoluteLocalPopularity: setAbsoluteLocalPopularity
+		setAbsoluteLocalPopularity: setAbsoluteLocalPopularity,
+		setRelativeLocalPopularity: setRelativeLocalPopularity
 	}
 
 })();
