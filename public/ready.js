@@ -60,7 +60,7 @@ $(document).ready(function(){
 	});
 
 	$(".jumbotron").on('click','.btn',function(){
-		toggleVisibility(false,false,true);
+		toggleVisibility(false,true,true);
 	})
 
 	//Save current settings if user is evil and leaves us.
