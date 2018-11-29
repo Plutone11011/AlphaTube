@@ -10,7 +10,7 @@ function createListOfThumbnails(data,linkClass){
         img.attr('src',value.snippet.thumbnails.medium.url);
         img.data("video",value);
         img.addClass("contains-data");
-        $(`div#${linkClass} > span:nth-child(${counter})`).append(`<span class="titoli-thumbnail">${value.snippet.title}</span>`)
+        $(`div#${linkClass} > span:nth-child(${counter})`).append(`<span class="titoli-thumbnail">${value.snippet.title}<br></span>`)
 
         
         
@@ -54,7 +54,17 @@ function addReasonsForSearch(linkClass){
     $(`#${linkClass} div > p`).css("color","black");
 }
 
+//per relative, random, recent, similarity (genre e artist)
 function addReasons(linkClass){
-    $(`#${linkClass} > .img-titolo`).append("<span class='reason'></span>");
-    $(`#${linkClass} > .img-titolo`).find("span.reason").html(reasonsForRecommending.getReasons()[`${linkClass}`]);
+    $(`#${linkClass} .titoli-thumbnail`).append("<span class='reason'></span>");
+    $(`#${linkClass} .titoli-thumbnail`).find(".reason").html(reasonsForRecommending.getReasons()[`${linkClass}`]);
+    $(`#${linkClass} .reason`).css("color","blue");
+}
+//per popularity
+function addReasonsPopularity(linkClass){
+    $.each(reasonsForRecommending.getReasons()[`${linkClass}`], function(index, value){
+        $(`#${linkClass} > .img-titolo:nth-child(${index+1}) > .titoli-thumbnail`).append("<span class='reason'></span>");
+        $(`#${linkClass} > .img-titolo:nth-child(${index+1}) > .titoli-thumbnail`).find(".reason").html(value);
+    });
+    $(`#${linkClass} .reason`).css("color","blue");
 }

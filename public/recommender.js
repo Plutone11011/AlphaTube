@@ -178,18 +178,18 @@ function setGenreSimilarity(){
 
 
 function setAbsoluteLocalPopularity(){
-	$.get("/localPopularity").done((data)=>{
-		if (data.length){
+	$.get("/localPopularity").done((data1)=>{
+		if (data1.length){
 			$.get("/search",{
-				q: (data.map(a => Object.keys(a).toString())).join(',') 
-			}).done((data)=>{
-				data = JSON.parse(data);
-				console.log(data);
-				createListOfThumbnails(data,"AbsoluteLocalPopularity");
+				q: (data1.map(a => Object.keys(a).toString())).join(',') 
+			}).done((data2)=>{
+				data2 = JSON.parse(data2);
+				createListOfThumbnails(data2,"AbsoluteLocalPopularity");
+				//creo l'array di watchTime
+				var arrayOfwatchTime = data1.map(id => Object.values(id));
+				reasonsForRecommending.setAbsoluteLocalPopularity(arrayOfwatchTime);
+				addReasonsPopularity("AbsoluteLocalPopularity");
 			});
-		}
-		else{
-			//non è stato ancora visualizzato nulla
 		}
 	});
 }
