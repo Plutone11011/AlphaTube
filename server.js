@@ -5,6 +5,7 @@ const request = require('request'); //http client
 const getArtistTitle = require('get-artist-title');//checks youtube titles and tries to parse them, does a terrible job.
 const fs = require('fs');//Filesystem, handles rw files
 const helmet = require('helmet');//Protects from http headers vulnerabilities
+const cors = require('cors');
 var app = express();
 //gesture req.cookies
 app.use(cookieParser("wearenumberone"));
@@ -16,6 +17,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 // to parse application/x-www-form-urlencoded, which is default mime type
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(cors());
 
 app.get("/",function(req,res,next){
 	//cookies

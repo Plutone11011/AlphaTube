@@ -20,6 +20,7 @@
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cookies": "^0.7.3",
+    "cors": "^2.8.5",
     "es6-shim": "^0.35.4",
     "express": "^4.16.4",
     "get-artist-title": "^1.1.1",
