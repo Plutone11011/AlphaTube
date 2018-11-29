@@ -269,3 +269,57 @@ var listaInizialeNamespace = (function(){
 		done: done
 	}
 })();
+
+var reasonsForRecommending = (function(){
+
+	var reasons = {} ;
+
+	function setSearch(input){
+		reasons["Search"] = `Consigliato perché hai cercato '${input}'`;
+	}
+
+	function setRelated(){
+		reasons["Related"] = `Consigliato perché collegato all'id del video che stai visualizzando`;
+	}
+
+	function setRandom(){
+		reasons["Random"] = "Consigliato perché generato da un algoritmo di scelta casuale dei video" ;
+	}
+
+	function setRecent(){
+		reasons["Recent"] = "Consigliato perché è un video che hai già visualizzato in passato" ;
+	}
+
+	function setArtistSimilarity(artist){
+		//da fare
+	}
+
+	//passa array di generi
+	function setGenreSimilarity(genre){
+		var strOfGenres = genre.join();
+		reasons["GenreSimilarity"] = `Consigliato perché affine ai seguenti generi musicali: ${strOfGenres}`;
+	}
+	/*
+	//il chiamante deve aggiornare solo il/i video id con quel watchTime
+	function setAbsoluteLocalPopularity(watchTime){
+		reasons["AbsoluteLocalPopularity"] = `Consigliato perché è stato visualizzato per ${watchTime} secondi`;
+	}
+
+	function setRelativeLocalPopularity(){
+
+	}
+	*/
+	function getReasons(){
+		return reasons ;
+	}
+	return{
+		setSearch: setSearch,
+		setRelated: setRelated,
+		setRandom: setRandom,
+		setRecent: setRecent,
+		setArtistSimilarity: setArtistSimilarity,
+		setGenreSimilarity: setGenreSimilarity,
+		getReasons: getReasons
+	}
+
+})();

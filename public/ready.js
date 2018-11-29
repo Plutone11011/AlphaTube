@@ -25,7 +25,9 @@ $(document).ready(function(){
 			}else{
 				removeChannels(data);
 				createFlexBoxOfThumbnails(data,"Search");
-				}
+				reasonsForRecommending.setSearch(query);
+				addReasons("Search");
+			}
 		});
 	});
 	$(".thumbnails").on("click", ".contains-data", function() {

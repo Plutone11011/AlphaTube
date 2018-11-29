@@ -23,6 +23,7 @@ function createListOfThumbnails(data,linkClass){
 function createFlexBoxOfThumbnails(data,linkClass){
     //var  counterRow = 0;
     //var counterCol = 1 ;
+
     var thumbnailTemplate = "<li><div><img src='' alt=''></div></li>" ;
     var img, counter ;
     //console.log(linkClass, data);
@@ -39,12 +40,12 @@ function createFlexBoxOfThumbnails(data,linkClass){
     });
 }
 
-function emptyThumbnails(grid, linkClass){
-	if(grid){
+function addReasons(linkClass){
+    $(`#${linkClass} div`).append("<p></p>");
+    $(`#${linkClass} div > p`).html(reasonsForRecommending.getReasons()[`${linkClass}`]);
+}
+
+function emptyThumbnails(linkClass){
 	var emptyData = {items: []};
 	createFlexBoxOfThumbnails(emptyData,linkClass);
-	}else{
-	var emptyData = {items: []};
-	createListOfThumbnails(emptyData,linkClass);
-	}
 }

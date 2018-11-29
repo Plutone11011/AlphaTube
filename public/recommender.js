@@ -59,12 +59,16 @@ function setRelated(){
 		data = JSON.parse(data);
 		removeChannels(data);
 		createFlexBoxOfThumbnails(data,"Related");
+		reasonsForRecommending.setRelated();
+		addReasons("Related");
 	})
 }
 
 //Riempe il div dei video recentemente visualizzati.
 function setRecent(){
-	createFlexBoxOfThumbnails(videoNamespace.getRecentVideos(), "Recent")
+	createFlexBoxOfThumbnails(videoNamespace.getRecentVideos(), "Recent");
+	reasonsForRecommending.setRecent();
+	addReasons("Recent");
 }
 
 //carica lista iniziale
@@ -116,6 +120,8 @@ function setRandom(){
 		data = JSON.parse(data);
 		removeChannels(data);
 		createFlexBoxOfThumbnails(data,"Random");
+		reasonsForRecommending.setRandom();
+		addReasons("Random");
 	})
 }
 
@@ -200,7 +206,7 @@ function setRelativeLocalPopularity(){
 			})
 		}else{
 			console.log('Nessuna relazione');
-			emptyThumbnails(false,"RelativeLocalPopularity");
+			emptyThumbnails("RelativeLocalPopularity");
 		}
 	})
 }
