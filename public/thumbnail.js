@@ -51,14 +51,12 @@ function emptyThumbnails(grid, linkClass){
 function addReasonsForSearch(linkClass){
     $(`#${linkClass} div`).append("<p></p>");
     $(`#${linkClass} div > p`).html(reasonsForRecommending.getReasons()[`${linkClass}`]);
-    $(`#${linkClass} div > p`).css("color","black");
 }
 
 //per relative, random, recent, similarity (genre e artist)
 function addReasons(linkClass){
     $(`#${linkClass} .titoli-thumbnail`).append("<span class='reason'></span>");
     $(`#${linkClass} .titoli-thumbnail`).find(".reason").html(reasonsForRecommending.getReasons()[`${linkClass}`]);
-    $(`#${linkClass} .reason`).css("color","blue");
 }
 //per popularity
 function addReasonsPopularity(linkClass){

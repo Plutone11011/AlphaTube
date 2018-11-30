@@ -1,26 +1,31 @@
   body{
     padding-top: 70px ; /*crea spazio tra navbar e container sottostante, perché navbar ha posizione fixed*/
     overflow-x: hidden;
-    background: black;
+    background: rgb(234,235,230); /*azzurrino chiaro*/
   }
   h2{
-    color: white;
+    color: black;
   }
   small{
     color: lightgrey;
   }
 
+  .reason,   div > p{
+    color: rgb(53,53,53);
+    font-weight: normal;
+  }
+
   .navbar-default{
-    background-color: darkgrey;
+    background-color: rgb(0,61,89); /*Petrolio*/
   }
 
   .navbar-default .navbar-brand{
-    color: #122B40;
+    color: rgb(255,242,198); /*Panna*/
     font-weight: bolder;
   }
 
   .navbar-default .navbar-nav > li > a{
-    color: darkred;
+    color: rgb(255,242,198);
     font-style: oblique;
     font-weight: bold;
   }
@@ -47,8 +52,9 @@
     white-space: initial;
     max-width: 320px;
     padding-left: 3px;
-    background: black;
-    color: white;
+    background: rgb(234,235,230);
+    color: rgb(0,119,176); /*Petrolio chiaro*/
+    font-weight: bold;
   }
 
   .horizontal-recommender{
