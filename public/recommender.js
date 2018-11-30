@@ -224,8 +224,26 @@ function setAbsoluteGlobalPopularity(){
 		// this is where we're hiding the asynchronicity,
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
-		$.get(url, function(data){
-			iterator.next(data);
+		$.ajax({
+			url: url,
+			success: function(data){
+				iterator.next(data);
+			},
+			error: function(err){
+				console.log(err);
+			}
+		});
+	}
+	function getMostPopulars(arrayOfResponses){
+		var arrayOfIds = [] ;
+		var arrayOftimesWatched = [] ;
+		$.each(arrayOfResponses,function(index,value){
+			//devo costruire un array di id, prendendo gli id 
+			//corrispondenti ai timesWatched più alti nell'array recommended
+			//per ogni elemento dell'array delle risposte ovvero per ogni risposta di un API
+			if (value["recommended"]){
+				arrayOfIds.push(Math.max(value["recommended"].map(rec => rec["timesWatched"])));
+			}
 		});
 	}
 	
@@ -234,7 +252,8 @@ function setAbsoluteGlobalPopularity(){
 			var res = yield request(`http://site${arrayOfSites[i]}.tw.cs.unibo.it/globpop`);
 			arrayOfResponses.push(res); 
 		}
-
+		res = yield request(`http://site1825.tw.cs.unibo.it/TW/globpop`);
+		arrayOfResponses.push(res);
 		console.log(arrayOfResponses);
 	}
 
