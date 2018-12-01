@@ -283,13 +283,28 @@ function setRelativeGlobalPopularity(){
 		});
 	}
 
+	function removeDuplicateId(arrayOfIdRelated){
+		var index = arrayOfIdRelated.length - 1;
+		while(index >= 0){
+			for (var i = index - 1; i >= 0; i--) {
+				if (arrayOfIdRelated[index]["videoId"] === arrayOfIdRelated[i]["videoId"]) {
+					arrayOfIdRelated.splice(index,1);
+					break;
+				}
+			}
+			index--;
+		}
+	}
+
 	function getMostWatched(arrayOfResponses){
 		var arrayOfIdRelated = [];
+		//Per ogni sito
 		$.each(arrayOfResponses, function(index1, site){
-			console.log(site);
+			//Se raccomanda qualcosa
 			if(site["recommended"]){
+				//Per ogni video raccomandato
 				$.each(site["recommended"], function(index2, recommendedVideo){
-					console.log("da sito ",recommendedVideo);
+					//Alcuni usano videoID, FOR FUCK SAKE.
 					if(recommendedVideo["videoID"] || recommendedVideo["videoId"]){
 						if(recommendedVideo["videoId"]){
 							arrayOfIdRelated.push({
@@ -306,15 +321,27 @@ function setRelativeGlobalPopularity(){
 								"site": site["site"]
 							});
 						}
-						console.log('half?', arrayOfIdRelated);
 					}
 				})
 			}
 		})
-		console.log(arrayOfIdRelated);
+		//Ordino in base a timesWatched
+		arrayOfIdRelated.sort((a,b) => b.timesWatched - a.timesWatched);
+		//Rimuovo Id duplicati dal fondo, quindi i quelli con timesWatched minore.
+		removeDuplicateId(arrayOfIdRelated);
+		if(arrayOfIdRelated.length > 30){
+			arrayOfIdRelated = arrayOfIdRelated.slice(0,30);
+		}
+		console.log('30 piu watched ',arrayOfIdRelated);
+		$.get("/search",{
+			q: arrayOfIdRelated.map(id => id.videoId).join(',')
+		}).done(function(data){
+			data = JSON.parse(data);
+			console.log(data);
+		})
 	}
 
-	function *AbsoluteGenerator() {
+	function *RelativeGenerator() {
 		for(var i = 0; i < arrayOfSites.length; i++){
 			var res = yield request(`http://site${arrayOfSites[i]}.tw.cs.unibo.it/globpop?id=${videoNamespace.getCurrentPlayerId()}`);
 			arrayOfResponses.push(res); 
@@ -323,7 +350,7 @@ function setRelativeGlobalPopularity(){
 		getMostWatched(arrayOfResponses);
 	}
 
-	var iterator = AbsoluteGenerator();
+	var iterator = RelativeGenerator();
 	iterator.next();
 }
 //Crea local storage
