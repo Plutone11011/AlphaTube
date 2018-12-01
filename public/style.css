@@ -29,6 +29,10 @@
     font-weight: bolder;
   }
 
+  .form-group{
+    color: rgb(255,242,198);
+  }
+
   .navbar-default .navbar-nav > li > a{
     color: rgb(255,242,198);
     font-style: oblique;

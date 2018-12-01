@@ -13,6 +13,7 @@ $(document).ready(function(){
 	//possible to search by title, artist, id, youtube title
 	$('#search_bar').submit(function(e){
 		e.preventDefault();//prevents the form from being submitted to the server
+        $('.navbar-collapse').collapse('hide');
         var query = $('#search_bar input').val();
         toggleVisibility(true,false,false);
         //being asynchronous, there's no guarantee the first get will be executed before the second
@@ -33,6 +34,9 @@ $(document).ready(function(){
 	$(".thumbnails").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
 		window.scrollTo({top: 0, behavior: 'smooth'});
+		$('thumbnails').animate({
+			scrollLeft: "+=999999999999999"
+		}, "fast");
 		toggleVisibility(false,false,false);
 		setVideo(data);
 		//setto il campo recommender del video attuale.
