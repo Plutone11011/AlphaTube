@@ -151,6 +151,13 @@
     .icon_left, .icon_right{
       display: none;
     }
+    .navbar-form{
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .navbar-nav{
+      display: none;
+    }
     #Related, #Recent,
     #Random, #GenreSimilarity,
     #ArtistSimilarity, #AbsoluteLocalPopularity, 
