@@ -37,7 +37,7 @@ $(document).ready(function(){
 		window.scrollTo({top: 0, behavior: 'smooth'});
 		//Riposta a sinistra i recommender
 		$('.thumbnails').animate({
-			scrollLeft: "+=999999999999999"
+			scrollLeft: "-=999999999999999"
 		}, "fast");
 		toggleVisibility(false,false,false);
 		setVideo(data);
@@ -60,7 +60,7 @@ $(document).ready(function(){
 			$(this).siblings(".thumbnails").animate({
 				scrollLeft: "+="+$(window).width()
 			}, "slow");
-			} else {
+		} else {
 			$(this).siblings(".thumbnails").animate({
 				scrollLeft: "-="+$(document).width()
 			}, "slow");
