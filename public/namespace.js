@@ -324,6 +324,16 @@ var reasonsForRecommending = (function(){
 			dopo il video corrente grazie al recommender ${arrayOfPrevalentReason[i]}`);	
 		}
 	}
+
+	function setAbsoluteGlobalPopularity(arrayofTimeWatched, arrayOfSites){
+		reasons["AbsoluteGlobalPopularity"] = [];
+		for (var i = 0; i < arrayofTimeWatched.length; i++){
+			reasons["AbsoluteGlobalPopularity"].push(`Consigliato perché visualizzato ${arrayofTimeWatched[i]}
+			volte dal sito ${arrayOfSites}`);
+		}
+
+	}
+
 	function getReasons(){
 		return reasons ;
 	}
@@ -336,7 +346,8 @@ var reasonsForRecommending = (function(){
 		setGenreSimilarity: setGenreSimilarity,
 		getReasons: getReasons,
 		setAbsoluteLocalPopularity: setAbsoluteLocalPopularity,
-		setRelativeLocalPopularity: setRelativeLocalPopularity
+		setRelativeLocalPopularity: setRelativeLocalPopularity,
+		setAbsoluteGlobalPopularity: setAbsoluteGlobalPopularity
 	}
 
 })();

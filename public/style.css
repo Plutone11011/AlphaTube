@@ -38,7 +38,7 @@
   #Related, #Recent,
   #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
-  #RelativeLocalPopularity{
+  #RelativeLocalPopularity, #AbsoluteGlobalPopularity{
     white-space: nowrap;
     overflow-x: hidden;
   }

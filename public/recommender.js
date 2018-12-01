@@ -234,27 +234,69 @@ function setAbsoluteGlobalPopularity(){
 			}
 		});
 	}
+
+	function Max(maxtimeWatched){
+		//ignora completamente i valori che non sono numeri
+		if (typeof maxtimeWatched[0] === "number" ){
+			var max = maxtimeWatched[0];
+		}
+		for (var i = 1; i < maxtimeWatched.length; i++){
+			if (typeof maxtimeWatched[i] === "number"  && max < maxtimeWatched[i]){
+				max = maxtimeWatched[i];
+			}
+		}
+		return max ;
+	}
+
 	function getMostPopulars(arrayOfResponses){
 		var arrayOfIds = [] ;
-		var arrayOftimesWatched = [] ;
+		var arrayOftimeWatched  ;
+		var indexOfIdWithMaxTime ;
+		var siti = [] ;
 		$.each(arrayOfResponses,function(index,value){
-			//devo costruire un array di id, prendendo gli id 
-			//corrispondenti ai timesWatched più alti nell'array recommended
-			//per ogni elemento dell'array delle risposte ovvero per ogni risposta di un API
-			if (value["recommended"]){
-				arrayOfIds.push(Math.max(value["recommended"].map(rec => rec["timesWatched"])));
-			}
+				if (value["site"]){
+					siti.push(value["site"]);
+				}
+				//corto circuito, non andrà mai a leggere length of undefined
+				//servono entrambe perché alcuni non mettono recommended, altri lo mettono ma può essere vuoto
+				if (value["recommended"] && value["recommended"].length){
+
+					arrayOftimeWatched = value["recommended"].map(rec => rec["timesWatched"]);
+					var max = Max(arrayOftimeWatched);
+
+					indexOfIdWithMaxTime = value["recommended"].findIndex(function(element){
+						return element["timesWatched"] === max ;
+					});
+					if (value["recommended"][indexOfIdWithMaxTime]["videoId"]){
+						arrayOfIds.push(value["recommended"][indexOfIdWithMaxTime]["videoId"]);
+					}
+					else{
+						arrayOfIds.push(value["recommended"][indexOfIdWithMaxTime]["videoID"]);
+					}
+				}
 		});
-	}
+		//console.log(arrayOftimeWatched);
+		//console.log(arrayOfIds.join());
+		$.get("/search",{
+			q: arrayOfIds.join()
+		}).done((data)=>{
+			data = JSON.parse(data);
+			//console.log(data);
+			createListOfThumbnails(data,"AbsoluteGlobalPopularity");
+			reasonsForRecommending.setAbsoluteGlobalPopularity(arrayOftimeWatched,siti);
+			addReasonsPopularity("AbsoluteGlobalPopularity");
+		});
+}
 	
 	function *AbsoluteGenerator() {
 		for(var i = 0; i < arrayOfSites.length; i++){
 			var res = yield request(`http://site${arrayOfSites[i]}.tw.cs.unibo.it/globpop`);
 			arrayOfResponses.push(res); 
 		}
-		res = yield request(`http://site1825.tw.cs.unibo.it/TW/globpop`);
-		arrayOfResponses.push(res);
-		console.log(arrayOfResponses);
+		//console.log(arrayOfResponses);
+		getMostPopulars(arrayOfResponses);
+		//res = yield request(`http://site1825.tw.cs.unibo.it/TW/globpop`);
+		//arrayOfResponses.push(res);
 	}
 
 	var iterator = AbsoluteGenerator();
