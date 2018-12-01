@@ -4,7 +4,6 @@ function createListOfThumbnails(data,linkClass){
     var img ;
     $(`#${linkClass}`).empty(); //all'inizio svuoto l'html del div per aggiungere i nuovi thumbnail
     if(data.items.length){
-    	$(`#recommender${linkClass}`).toggle(true);
     	$.each(data.items, function(index, value){
         	$(thumbnailTemplate).appendTo(`#${linkClass}`);
         	counter = index + 1;

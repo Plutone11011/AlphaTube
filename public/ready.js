@@ -15,6 +15,7 @@ $(document).ready(function(){
 		e.preventDefault();//prevents the form from being submitted to the server
         $('.navbar-collapse').collapse('hide');
         var query = $('#search_bar input').val();
+        player.pauseVideo();
         toggleVisibility(true,false,false);
         //being asynchronous, there's no guarantee the first get will be executed before the second
         $.get('/search',{
@@ -66,6 +67,7 @@ $(document).ready(function(){
 	});
 
 	$(".jumbotron").on('click','.btn',function(){
+		player.pauseVideo();
 		toggleVisibility(false,true,true);
 	})
 
