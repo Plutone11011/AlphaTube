@@ -35,7 +35,8 @@ $(document).ready(function(){
 	$(".thumbnails").on("click", ".contains-data", function() {
 		let data = $(this).data("video");
 		window.scrollTo({top: 0, behavior: 'smooth'});
-		$('thumbnails').animate({
+		//Riposta a sinistra i recommender
+		$('.thumbnails').animate({
 			scrollLeft: "+=999999999999999"
 		}, "fast");
 		toggleVisibility(false,false,false);
