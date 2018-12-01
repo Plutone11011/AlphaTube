@@ -72,5 +72,5 @@ $(document).ready(function(){
 	})
 
 	//Save current settings if user is evil and leaves us.
-	//$(window).on("unload", saveLocalStorage);
+	$(window).on("unload", saveLocalStorage);
 });
