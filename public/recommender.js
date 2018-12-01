@@ -282,6 +282,8 @@ function setAbsoluteGlobalPopularity(){
 		}).done((data)=>{
 			data = JSON.parse(data);
 			//console.log(data);
+			console.log('arrayOfTimeWatched ', arrayOftimeWatched);
+			console.log('siti ',siti);
 			createListOfThumbnails(data,"AbsoluteGlobalPopularity");
 			reasonsForRecommending.setAbsoluteGlobalPopularity(arrayOftimeWatched,siti);
 			addReasonsPopularity("AbsoluteGlobalPopularity");
@@ -327,6 +329,10 @@ function setRelativeGlobalPopularity(){
 
 	function removeDuplicateId(arrayOfIdRelated){
 		var index = arrayOfIdRelated.length - 1;
+		/*Per ogni video, confrante il suo id con tutti gli altri.
+		Parte dal fondo, se trova un id uguale toglie dal fondo,
+		quindi quello con meno timesWatched essendo ordinati.
+		*/
 		while(index >= 0){
 			for (var i = index - 1; i >= 0; i--) {
 				if (arrayOfIdRelated[index]["videoId"] === arrayOfIdRelated[i]["videoId"]) {
@@ -374,12 +380,22 @@ function setRelativeGlobalPopularity(){
 		if(arrayOfIdRelated.length > 30){
 			arrayOfIdRelated = arrayOfIdRelated.slice(0,30);
 		}
+		var arrayOfPrevalentReason = [], arrayOfSites = [], arrayOfTimeWatched = [];
+		arrayOfPrevalentReason = arrayOfIdRelated.map(reason => reason.prevalentReason);
+		arrayOfSites = arrayOfIdRelated.map(site => site.site);
+		arrayOfTimeWatched = arrayOfIdRelated.map(timeWatched => timeWatched.timesWatched);
 		console.log('30 piu watched ',arrayOfIdRelated);
+		console.log('prevalentReasons ', arrayOfPrevalentReason);
+		console.log('sites ', arrayOfSites);
+		console.log('timeWatched', arrayOfTimeWatched);
 		$.get("/search",{
 			q: arrayOfIdRelated.map(id => id.videoId).join(',')
 		}).done(function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			console.log('youtube stuff', data);
+			createListOfThumbnails(data, "RelativeGlobalPopularity");
+			reasonsForRecommending.setRelativeGlobalPopularity(arrayOfPrevalentReason,arrayOfSites,arrayOfTimeWatched);
+			addReasonsPopularity("RelativeGlobalPopularity");
 		})
 	}
 

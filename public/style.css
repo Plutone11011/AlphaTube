@@ -35,10 +35,10 @@
     font-weight: bold;
   }
 
-  #Related, #Recent,
-  #Random, #GenreSimilarity,
+  #Related, #Recent, #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
-  #RelativeLocalPopularity, #AbsoluteGlobalPopularity{
+  #RelativeLocalPopularity, #AbsoluteGlobalPopularity,
+  #RelativeGlobalPopularity{
     white-space: nowrap;
     overflow-x: hidden;
   }
