@@ -15,6 +15,11 @@
     font-weight: normal;
   }
 
+  .panel-color{
+    background-color: rgb(0,61,89);
+    color: rgb(255,242,198);
+  }
+
   .navbar-default{
     background-color: rgb(0,61,89); /*Petrolio*/
   }
@@ -118,8 +123,8 @@
   }
   
   .grid li > div{
-    background: #808080;
-    color: #fff;
+    background: rgb(234,235,230);
+    color: rgb(0,119,176);
     text-align: center;
     margin: 0;
     height: max-content;
@@ -188,7 +193,7 @@
       .grid li {
         padding: 0;
       display: block;
-      background: #808080;
+      background: rgb(234,235,230);
         float: none;
         width: auto;
       }

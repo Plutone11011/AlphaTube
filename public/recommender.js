@@ -261,6 +261,71 @@ function setAbsoluteGlobalPopularity(){
 	iterator.next();
 }
 
+function setRelativeGlobalPopularity(){
+	//ci sarebbe anche 1822,1829,1848,1824,1830,1850,1851,1861 ma dà errore per CORS, anche aggiungendo jsonp non va, 
+	// 1849 dà 500 server error
+	var arrayOfSites = [1828,1838,1839,1846,1847,1831,1827,1836,1823] ;
+	var arrayOfResponses = [] ;
+
+	function request(url) {
+		// this is where we're hiding the asynchronicity,
+		// away from the main code of our generator
+		// `it.next(..)` is the generator's iterator-resume call
+		$.ajax({
+			url: url,
+			success: function(data){
+				iterator.next(data);
+			},
+			error: function(err){
+				console.log(err);
+				iterator.next(data);
+			}
+		});
+	}
+
+	function getMostWatched(arrayOfResponses){
+		var arrayOfIdRelated = [];
+		$.each(arrayOfResponses, function(index1, site){
+			console.log(site);
+			if(site["recommended"]){
+				$.each(site["recommended"], function(index2, recommendedVideo){
+					console.log("da sito ",recommendedVideo);
+					if(recommendedVideo["videoID"] || recommendedVideo["videoId"]){
+						if(recommendedVideo["videoId"]){
+							arrayOfIdRelated.push({
+								"videoId": recommendedVideo["videoId"],
+								"timesWatched": recommendedVideo["timesWatched"],
+								"prevalentReason": recommendedVideo["prevalentReason"],
+								"site": site["site"]
+							});
+						}else{
+							arrayOfIdRelated.push({
+								"videoId": recommendedVideo["videoID"],
+								"timesWatched": recommendedVideo["timesWatched"],
+								"prevalentReason": recommendedVideo["prevalentReason"],
+								"site": site["site"]
+							});
+						}
+						console.log('half?', arrayOfIdRelated);
+					}
+				})
+			}
+		})
+		console.log(arrayOfIdRelated);
+	}
+
+	function *AbsoluteGenerator() {
+		for(var i = 0; i < arrayOfSites.length; i++){
+			var res = yield request(`http://site${arrayOfSites[i]}.tw.cs.unibo.it/globpop?id=${videoNamespace.getCurrentPlayerId()}`);
+			arrayOfResponses.push(res); 
+		}
+		console.log('RelativeGlobalPopularity',arrayOfResponses);
+		getMostWatched(arrayOfResponses);
+	}
+
+	var iterator = AbsoluteGenerator();
+	iterator.next();
+}
 //Crea local storage
 function saveLocalStorage(){
 	localStorage.setItem("lastVideo", JSON.stringify(videoNamespace.getCurrentPlayerVideo()));
@@ -290,4 +355,5 @@ function setVideo(data, startTime = 0){
 	setAbsoluteLocalPopularity(); 
 	setRelativeLocalPopularity();
 	setAbsoluteGlobalPopularity();
+	setRelativeGlobalPopularity();
 }

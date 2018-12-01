@@ -64,5 +64,4 @@ function addReasonsPopularity(linkClass){
         $(`#${linkClass} > .img-titolo:nth-child(${index+1}) > .titoli-thumbnail`).append("<span class='reason'></span>");
         $(`#${linkClass} > .img-titolo:nth-child(${index+1}) > .titoli-thumbnail`).find(".reason").html(value);
     });
-    $(`#${linkClass} .reason`).css("color","blue");
 }
