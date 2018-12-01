@@ -329,7 +329,7 @@ var reasonsForRecommending = (function(){
 		reasons["AbsoluteGlobalPopularity"] = [];
 		for (var i = 0; i < arrayofTimeWatched.length; i++){
 			reasons["AbsoluteGlobalPopularity"].push(`Consigliato perché visualizzato ${arrayofTimeWatched[i]}
-			volte dal sito ${arrayOfSites}`);
+			volte dal sito ${arrayOfSites[i]}`);
 		}
 
 	}
