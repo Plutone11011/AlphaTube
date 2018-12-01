@@ -154,7 +154,8 @@
     #Related, #Recent,
     #Random, #GenreSimilarity,
     #ArtistSimilarity, #AbsoluteLocalPopularity, 
-    #RelativeLocalPopularity{
+    #RelativeLocalPopularity, #AbsoluteGlobalPopularity,
+    #RelativeGlobalPopularity{
       overflow-x: scroll;
     }
     .img-titolo{
