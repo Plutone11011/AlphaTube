@@ -147,7 +147,7 @@
     }
   }
   /*dispositivi mobili*/
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 767px) {
     .icon_left, .icon_right{
       display: none;
     }
