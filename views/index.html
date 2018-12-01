@@ -40,8 +40,15 @@
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav"><!--allinea orizzontalmente link su navbar -->
           <li><a href="#content">Contenuti</a></li><!--conviene fare un menù a tendina per ogni area contenuto e recommender -->
-          <li><a href="#Random">Random</a></li>
-          <li><a href="#Related">Related</a></li>
+          <li><a href="#recommenderRandom">Random</a></li>
+          <li><a href="#recommenderRelated">Related</a></li>
+          <li><a href="#recommenderRecent">Recent</a></li>
+          <li><a href="#recommenderGenreSimilarity">Genre</a></li>
+          <li><a href="#recommenderArtistSimilarity">Artist</a></li>
+          <li><a href="#recommenderAbsoluteLocalPopularity">Local popularity</a></li>
+          <li><a href="#recommenderRelativeLocalPopularity">Local relative popularity</a></li>
+          <li><a href="#recommenderAbsoluteGlobalPopularity">Global popularity</a></li>
+          <li><a href="#recommenderRelativeGlobalPopularity">Global relative popularity</a></li>
         </ul>
         <form id="search_bar" class="navbar-form navbar-right" autocomplete="off"><!--allinea a destra il form -->
           <div class="form-group">
@@ -179,7 +186,7 @@
         </div>  
       </div>
     </div>
-    <div class="grid-recommender recommender-search">
+    <div class="grid-recommender" id="recommender-search">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Search<small> Check out correlated videos</small></h2>
       </div>
@@ -188,7 +195,7 @@
       </ul>
       </div>
     </div>
-    <div class="horizontal-recommender recommenderRandom">
+    <div class="horizontal-recommender" id="recommenderRandom">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Random<small> Check out random videos</small></h2>
       </div>
@@ -197,7 +204,7 @@
       <div id="Random" class="thumbnails">
       </div>
     </div>
-    <div class="horizontal-recommender recommenderRelated">
+    <div class="horizontal-recommender" id="recommenderRelated">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Related<small> Check out related videos</small></h2>
       </div>
@@ -206,7 +213,7 @@
       <div id="Related" class="thumbnails">
       </div>
     </div>
-    <div class="horizontal-recommender recommenderRecent">
+    <div class="horizontal-recommender" id="recommenderRecent">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Recent<small> Check out recent videos</small></h2>
       </div>
@@ -215,7 +222,7 @@
       <div id="Recent" class="thumbnails">
       </div>
     </div>
-    <div class="horizontal-recommender recommenderGenreSimilarity">
+    <div class="horizontal-recommender" id="recommenderGenreSimilarity">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Similarity<small> Check out similar (by genre) videos</small></h2>
       </div>
@@ -224,7 +231,7 @@
       <div id="GenreSimilarity" class="thumbnails">
       </div>
     </div>
-    <div class="horizontal-recommender recommenderArtistSimilarity">
+    <div class="horizontal-recommender" id="recommenderArtistSimilarity">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Similarity<small> Check out similar (by artist) videos</small></h2>
       </div>
@@ -233,7 +240,7 @@
       <div id="ArtistSimilarity" class="thumbnails">  
       </div>
     </div>
-    <div class="grid-recommender recommender-lista-iniziale">
+    <div class="grid-recommender" id="recommender-lista-iniziale">
       <div class="page-header"> <!-- a section divider-->
         <h2>Lista Iniziale</h2>
       </div>
@@ -242,7 +249,7 @@
         </ul>
       </div>
     </div>
-    <div class="horizontal-recommender recommenderAbsoluteLocalPopularity">
+    <div class="horizontal-recommender" id="recommenderAbsoluteLocalPopularity">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Local Popularity<small> Check out our most viewed videos</small></h2>
       </div>
@@ -251,7 +258,7 @@
       <div id="AbsoluteLocalPopularity" class="thumbnails">
       </div>
     </div>
-    <div class="horizontal-recommender recommenderRelativeLocalPopularity">
+    <div class="horizontal-recommender" id="recommenderRelativeLocalPopularity">
       <div class="page-header"> <!-- a section divider-->
         <h2>Recommender Local Popularity<small> Check out our related videos</small></h2>
       </div>

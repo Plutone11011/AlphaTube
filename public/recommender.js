@@ -36,12 +36,12 @@ function toggleVisibility(search, firstList, button){
 		//Prima volta che visita
 		setListaIniziale();
 		//Nascondi TUTTO tranne la lista iniziale.
-		$('.horizontal-recommender, .recommender-search, .player-content').toggle(false);
-		$('.recommender-lista-iniziale').toggle(true);
+		$('.horizontal-recommender, #recommender-search, .player-content').toggle(false);
+		$('#recommender-lista-iniziale').toggle(true);
 	}else if(search){
 		//Nascondi TUTTO tranne il recommender Search.
-		$('.horizontal-recommender, .recommender-lista-iniziale, .player-content').toggle(false);
-		$('.recommender-search').toggle(true);
+		$('.horizontal-recommender, #recommender-lista-iniziale, .player-content').toggle(false);
+		$('#recommender-search').toggle(true);
 	}else{
 		//Nascondi lista iniziale e recommender Search, rimetti TUTTO il resto visibile.
 		$('.grid-recommender').toggle(false);
@@ -231,6 +231,7 @@ function setAbsoluteGlobalPopularity(){
 			},
 			error: function(err){
 				console.log(err);
+				iterator.next(data);
 			}
 		});
 	}
@@ -252,7 +253,8 @@ function setAbsoluteGlobalPopularity(){
 		var arrayOfIds = [] ;
 		var arrayOftimeWatched  ;
 		var indexOfIdWithMaxTime ;
-		var siti = [] ;
+		var siti = [] ; //da passare a reasonsForRecommending
+		var arrayOfMaxtimeWatched = [] ; //da passare a reasonsForRecommending
 		$.each(arrayOfResponses,function(index,value){
 				if (value["site"]){
 					siti.push(value["site"]);
@@ -263,6 +265,7 @@ function setAbsoluteGlobalPopularity(){
 
 					arrayOftimeWatched = value["recommended"].map(rec => rec["timesWatched"]);
 					var max = Max(arrayOftimeWatched);
+					arrayOfMaxtimeWatched.push(max);
 
 					indexOfIdWithMaxTime = value["recommended"].findIndex(function(element){
 						return element["timesWatched"] === max ;
@@ -281,14 +284,11 @@ function setAbsoluteGlobalPopularity(){
 			q: arrayOfIds.join()
 		}).done((data)=>{
 			data = JSON.parse(data);
-			//console.log(data);
-			console.log('arrayOfTimeWatched ', arrayOftimeWatched);
-			console.log('siti ',siti);
 			createListOfThumbnails(data,"AbsoluteGlobalPopularity");
-			reasonsForRecommending.setAbsoluteGlobalPopularity(arrayOftimeWatched,siti);
+			reasonsForRecommending.setAbsoluteGlobalPopularity(arrayOfMaxtimeWatched,siti);
 			addReasonsPopularity("AbsoluteGlobalPopularity");
 		});
-}
+	}
 	
 	function *AbsoluteGenerator() {
 		for(var i = 0; i < arrayOfSites.length; i++){
