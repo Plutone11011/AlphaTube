@@ -214,24 +214,23 @@ function setRelativeLocalPopularity(){
 
 
 function setAbsoluteGlobalPopularity(){
-	
-	//ci sarebbe anche 1822,1848,1824,1830,1850,1851,1861 ma dà errore per CORS, anche aggiungendo jsonp non va, 
-	// 1849 dà 500 server error
-	var arrayOfSites = [1829,1828,1838,1839,1846,1847,1831,1827,1836] ;
+	// I siti 1828,1838,1839,1846,1847,1831,1827,1823 non presentano errore CORS.
+	var arrayOfSites = [1829,1828,1838,1839,1846,1822,1847,1831,1827,1848,1824,1830,1836,1850,1849,1851,1861,1823] ;
 	var arrayOfResponses = [] ;
+	var proxyCORS = "https://cors-anywhere.herokuapp.com/";
 
 	function request(url) {
 		// this is where we're hiding the asynchronicity,
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: url,
+			url: proxyCORS + url,
 			success: function(data){
 				iterator.next(data);
 			},
 			error: function(err){
 				console.log(err);
-				iterator.next(data);
+				iterator.next();
 			}
 		});
 	}
@@ -256,6 +255,7 @@ function setAbsoluteGlobalPopularity(){
 		var siti = [] ; //da passare a reasonsForRecommending
 		var arrayOfMaxtimeWatched = [] ; //da passare a reasonsForRecommending
 		$.each(arrayOfResponses,function(index,value){
+			if(value){
 				if (value["site"]){
 					siti.push(value["site"]);
 				}
@@ -277,6 +277,7 @@ function setAbsoluteGlobalPopularity(){
 						arrayOfIds.push(value["recommended"][indexOfIdWithMaxTime]["videoID"]);
 					}
 				}
+			}
 		});
 		//console.log(arrayOftimeWatched);
 		//console.log(arrayOfIds.join());
@@ -306,23 +307,23 @@ function setAbsoluteGlobalPopularity(){
 }
 
 function setRelativeGlobalPopularity(){
-	//ci sarebbe anche 1822,1829,1848,1824,1830,1850,1851,1861 ma dà errore per CORS, anche aggiungendo jsonp non va, 
-	// 1849 dà 500 server error
-	var arrayOfSites = [1828,1838,1839,1846,1847,1831,1827,1836,1823] ;
+	// I siti 1828,1838,1839,1846,1847,1831,1827,1823 non presentano errore CORS.
+	var arrayOfSites = [1829,1828,1838,1839,1846,1822,1847,1831,1827,1848,1824,1830,1836,1850,1849,1851,1861,1823] ;
 	var arrayOfResponses = [] ;
+	var proxyCORS = "https://cors-anywhere.herokuapp.com/";
 
 	function request(url) {
 		// this is where we're hiding the asynchronicity,
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: url,
+			url: proxyCORS + url,
 			success: function(data){
 				iterator.next(data);
 			},
 			error: function(err){
 				console.log(err);
-				iterator.next(data);
+				iterator.next();
 			}
 		});
 	}
@@ -348,29 +349,31 @@ function setRelativeGlobalPopularity(){
 		var arrayOfIdRelated = [];
 		//Per ogni sito
 		$.each(arrayOfResponses, function(index1, site){
-			//Se raccomanda qualcosa
-			if(site["recommended"]){
-				//Per ogni video raccomandato
-				$.each(site["recommended"], function(index2, recommendedVideo){
-					//Alcuni usano videoID, FOR FUCK SAKE.
-					if(recommendedVideo["videoID"] || recommendedVideo["videoId"]){
-						if(recommendedVideo["videoId"]){
-							arrayOfIdRelated.push({
-								"videoId": recommendedVideo["videoId"],
-								"timesWatched": recommendedVideo["timesWatched"],
-								"prevalentReason": recommendedVideo["prevalentReason"],
-								"site": site["site"]
-							});
-						}else{
-							arrayOfIdRelated.push({
-								"videoId": recommendedVideo["videoID"],
-								"timesWatched": recommendedVideo["timesWatched"],
-								"prevalentReason": recommendedVideo["prevalentReason"],
-								"site": site["site"]
-							});
+			if(site){
+				//Se raccomanda qualcosa
+				if(site["recommended"]){
+					//Per ogni video raccomandato
+					$.each(site["recommended"], function(index2, recommendedVideo){
+						//Alcuni usano videoID, FOR FUCK SAKE.
+						if(recommendedVideo["videoID"] || recommendedVideo["videoId"]){
+							if(recommendedVideo["videoId"]){
+								arrayOfIdRelated.push({
+									"videoId": recommendedVideo["videoId"],
+									"timesWatched": recommendedVideo["timesWatched"],
+									"prevalentReason": recommendedVideo["prevalentReason"],
+									"site": site["site"]
+								});
+							}else{
+								arrayOfIdRelated.push({
+									"videoId": recommendedVideo["videoID"],
+									"timesWatched": recommendedVideo["timesWatched"],
+									"prevalentReason": recommendedVideo["prevalentReason"],
+									"site": site["site"]
+								});
+							}
 						}
-					}
-				})
+					})
+				}
 			}
 		})
 		//Ordino in base a timesWatched
