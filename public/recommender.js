@@ -231,7 +231,7 @@ function setAbsoluteGlobalPopularity(){
 			},
 			error: function(err){
 				console.log(err);
-				iterator.next(data);
+				iterator.next();
 			}
 		});
 	}
@@ -322,7 +322,7 @@ function setRelativeGlobalPopularity(){
 			},
 			error: function(err){
 				console.log(err);
-				iterator.next(data);
+				iterator.next();
 			}
 		});
 	}
