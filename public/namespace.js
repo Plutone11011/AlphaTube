@@ -101,6 +101,7 @@ var videoNamespace = (function(){
 		$.get('/artist_title',{
         	video: getCurrentPlayerVideo()
     	}).done((data)=>{
+    		console.log('artist data: ', data);
     		if(data[0] != null){
 				currentPlayerArtist = data[0];
 				currentPlayerSong = data[1];
