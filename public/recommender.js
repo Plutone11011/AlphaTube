@@ -224,7 +224,7 @@ function setAbsoluteGlobalPopularity(){
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: proxyCORS + url,
+			url: url, //Usare proxyCORS + url per evitare errori CORS
 			success: function(data){
 				iterator.next(data);
 			},
@@ -317,7 +317,7 @@ function setRelativeGlobalPopularity(){
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: proxyCORS + url,
+			url: url, //Usare proxyCORS + url per evitare errori CORS
 			success: function(data){
 				iterator.next(data);
 			},
@@ -442,6 +442,6 @@ function setVideo(data, startTime = 0){
     setRandom();
 	setAbsoluteLocalPopularity(); 
 	setRelativeLocalPopularity();
-	//setAbsoluteGlobalPopularity();
-	//setRelativeGlobalPopularity();
+	setAbsoluteGlobalPopularity();
+	setRelativeGlobalPopularity();
 }
