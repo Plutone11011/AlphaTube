@@ -269,6 +269,7 @@ app.get("/related",(req,res,next)=>{
 	});
 });
 
+//Non usato ora che abbiamo cambiato artistSimilarity.
 app.get("/channel",(req,res,next)=>{
 	request({
 		url: "https://www.googleapis.com/youtube/v3/search",
@@ -322,9 +323,11 @@ app.get("/random",(req,res,next)=>{
 //parsa titolo youtube e ritorna artista e titolo brano
 app.get("/artist_title",(req,res,next)=>{
 	try{
-		var [artist, title] = getArtistTitle(req.query.title);
+		// avolte getArtistTitle spara errori...
+		var [artist, title] = getArtistTitle(req.query.video.snippet.title);
 		res.send([artist,title]);
 	}catch(error){
+		console.log('Artist not found, error')
 		res.send([null,null]);
 	}
 });

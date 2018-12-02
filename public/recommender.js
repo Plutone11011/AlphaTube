@@ -131,14 +131,14 @@ function sparqlQueryforMusicGenre(res){
 
 //Video dello stesso channel o ricerca per artista?
 function setArtistSimilarity(){
-	$.get('/channel',{
-		id: videoNamespace.getCurrentPlayerVideoChannelId()
+	$.get('/search',{
+		q: videoNamespace.getCurrentPlayerArtist()
 		}).done((data)=>{
 			data = JSON.parse(data);
 			removeSameSong(data);
 			removeChannels(data);
 			createListOfThumbnails(data,"ArtistSimilarity");
-			reasonsForRecommending.setArtistSimilarity(videoNamespace.getCurrentChannelTitle());
+			reasonsForRecommending.setArtistSimilarity(videoNamespace.getCurrentPlayerArtist());
 			addReasons("ArtistSimilarity");
 		})
 }
@@ -442,6 +442,6 @@ function setVideo(data, startTime = 0){
     setRandom();
 	setAbsoluteLocalPopularity(); 
 	setRelativeLocalPopularity();
-	setAbsoluteGlobalPopularity();
-	setRelativeGlobalPopularity();
+	//setAbsoluteGlobalPopularity();
+	//setRelativeGlobalPopularity();
 }

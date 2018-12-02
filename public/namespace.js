@@ -97,15 +97,32 @@ var videoNamespace = (function(){
 
     //Setta l'artista e la canzone del player.
 	function setCurrentPlayerArtist_Song(){
+		//A volte dice null, altre dice empty, who knows.
 		$.get('/artist_title',{
-        	title: getCurrentPlayerTitle()
+        	video: getCurrentPlayerVideo()
     	}).done((data)=>{
-			currentPlayerArtist = data[0];
-			currentPlayerSong = data[1];
+    		if(data[0] != null){
+				currentPlayerArtist = data[0];
+				currentPlayerSong = data[1];
+				setContentBrano();
+				setArtistSimilarity();
+            	setGenreSimilarity();
+            }else{
+            	//nel caso ritorni NULL, l'artista è il channelTitle.
+            	currentPlayerArtist = currentPlayerVideo.snippet.channelTitle;
+            	//nel caso ritorni NULL, la canzone è il nome del video.
+            	currentPlayerSong = currentPlayerVideo.snippet.title;
+				setContentBrano();
+				setArtistSimilarity();
+            	setGenreSimilarity();
+            }
+		}).fail((data)=>{
+			//Risposta empty o errore, assegno default.
+			currentPlayerArtist = currentPlayerVideo.snippet.channelTitle;
+            currentPlayerSong = currentPlayerVideo.snippet.title;
 			setContentBrano();
 			setArtistSimilarity();
             setGenreSimilarity();
-            
 		})
 	}
 
@@ -304,8 +321,8 @@ var reasonsForRecommending = (function(){
 		reasons["GenreSimilarity"] = `Consigliato perché affine ai seguenti generi musicali: ${strOfGenres}`;
 	}
 
-	function setArtistSimilarity(channelTitle){
-		reasons["ArtistSimilarity"] = `Consigliato perché video dello stesso canale: ${channelTitle}`;
+	function setArtistSimilarity(artist){
+		reasons["ArtistSimilarity"] = `Consigliato perché video dello stesso artista: ${artist}`;
 	}
 	
 	//array of watchTime
