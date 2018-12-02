@@ -217,14 +217,15 @@ function setAbsoluteGlobalPopularity(){
 	// I siti 1828,1838,1839,1846,1847,1831,1827,1823 non presentano errore CORS.
 	var arrayOfSites = [1829,1828,1838,1839,1846,1822,1847,1831,1827,1848,1824,1830,1836,1850,1849,1851,1861,1823] ;
 	var arrayOfResponses = [] ;
-	var proxyCORS = "https://cors-anywhere.herokuapp.com/";
+	var proxyCORS = "https://cors-anywhere.herokuapp.com/"; //dopo troppe richieste comincia a rifiutare errore 429
+	var proxyCORS2 = "https://crossorigin.me/" //spesso offline
 
 	function request(url) {
 		// this is where we're hiding the asynchronicity,
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: url, //Usare proxyCORS + url per evitare errori CORS
+			url: proxyCORS + url, //Usare proxyCORS + url per evitare errori CORS
 			success: function(data){
 				iterator.next(data);
 			},
@@ -310,14 +311,15 @@ function setRelativeGlobalPopularity(){
 	// I siti 1828,1838,1839,1846,1847,1831,1827,1823 non presentano errore CORS.
 	var arrayOfSites = [1829,1828,1838,1839,1846,1822,1847,1831,1827,1848,1824,1830,1836,1850,1849,1851,1861,1823] ;
 	var arrayOfResponses = [] ;
-	var proxyCORS = "https://cors-anywhere.herokuapp.com/";
+	var proxyCORS = "https://cors-anywhere.herokuapp.com/"; //dopo troppe richieste comincia a rifiutare errore 429
+	var proxyCORS2 = "https://crossorigin.me/" //spesso offline
 
 	function request(url) {
 		// this is where we're hiding the asynchronicity,
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: url, //Usare proxyCORS + url per evitare errori CORS
+			url: proxyCORS + url, //Usare proxyCORS + url per evitare errori CORS
 			success: function(data){
 				iterator.next(data);
 			},
@@ -387,15 +389,10 @@ function setRelativeGlobalPopularity(){
 		arrayOfPrevalentReason = arrayOfIdRelated.map(reason => reason.prevalentReason);
 		arrayOfSites = arrayOfIdRelated.map(site => site.site);
 		arrayOfTimeWatched = arrayOfIdRelated.map(timeWatched => timeWatched.timesWatched);
-		console.log('30 piu watched ',arrayOfIdRelated);
-		console.log('prevalentReasons ', arrayOfPrevalentReason);
-		console.log('sites ', arrayOfSites);
-		console.log('timeWatched', arrayOfTimeWatched);
 		$.get("/search",{
 			q: arrayOfIdRelated.map(id => id.videoId).join(',')
 		}).done(function(data){
 			data = JSON.parse(data);
-			console.log('youtube stuff', data);
 			createListOfThumbnails(data, "RelativeGlobalPopularity");
 			reasonsForRecommending.setRelativeGlobalPopularity(arrayOfPrevalentReason,arrayOfSites,arrayOfTimeWatched);
 			addReasonsPopularity("RelativeGlobalPopularity");
@@ -407,7 +404,6 @@ function setRelativeGlobalPopularity(){
 			var res = yield request(`http://site${arrayOfSites[i]}.tw.cs.unibo.it/globpop?id=${videoNamespace.getCurrentPlayerId()}`);
 			arrayOfResponses.push(res); 
 		}
-		console.log('RelativeGlobalPopularity',arrayOfResponses);
 		getMostWatched(arrayOfResponses);
 	}
 
