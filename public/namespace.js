@@ -350,11 +350,11 @@ var reasonsForRecommending = (function(){
 
 	}
 
-	function setRelativeGlobalPopularity(arrayOfPrevalentReason, arrayOfSites, arrayofTimeWatched){
+	function setRelativeGlobalPopularity(arrayOfPrevalentReason, arrayOfSites){
 		reasons["RelativeGlobalPopularity"] = [];
 		for(var i = 0; i < arrayOfPrevalentReason.length; i++){
-			reasons["RelativeGlobalPopularity"].push(`Consigliato da ${arrayOfSites[i]} perché è stato visualizzato
-			${arrayofTimeWatched[i]} volte dopo il video corrente grazie al recommender ${arrayOfPrevalentReason[i]}`)
+			reasons["RelativeGlobalPopularity"].push(`Consigliato da ${arrayOfSites[i]} perché è stato visualizzato 
+				dopo il video corrente grazie al recommender ${arrayOfPrevalentReason[i]}`)
 		}
 	}
 

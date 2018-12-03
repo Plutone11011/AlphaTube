@@ -493,7 +493,7 @@ function setRelativeGlobalPopularity(){
 		}).done(function(data){
 			data = JSON.parse(data);
 			createListOfThumbnails(data, "RelativeGlobalPopularity");
-			reasonsForRecommending.setRelativeGlobalPopularity(arrayOfPrevalentReason,arrayOfSites,arrayOfTimeWatched);
+			reasonsForRecommending.setRelativeGlobalPopularity(arrayOfPrevalentReason,arrayOfSites);
 			addReasonsPopularity("RelativeGlobalPopularity");
 		})
 	}
