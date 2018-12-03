@@ -1,29 +1,239 @@
   body{
     padding-top: 70px ; /*crea spazio tra navbar e container sottostante, perché navbar ha posizione fixed*/
+    overflow-x: hidden;
+    background: rgb(234,235,230); /*azzurrino chiaro*/
+  }
+  h2{
+    color: black;
+  }
+  small{
+    color: lightgrey;
+  }
+
+  .reason,   div > p{
+    color: rgb(53,53,53);
+    font-weight: normal;
+  }
+
+  .panel-color{
+    background-color: rgb(0,61,89);
+    color: rgb(255,242,198);
   }
 
   .navbar-default{
-    background-color: darkgrey;
+    background-color: rgb(0,61,89); /*Petrolio*/
   }
 
   .navbar-default .navbar-brand{
-    color: #122B40;
+    color: rgb(255,242,198); /*Panna*/
     font-weight: bolder;
   }
 
+  .form-group{
+    color: rgb(255,242,198);
+  }
+
   .navbar-default .navbar-nav > li > a{
-    color: darkred;
+    color: rgb(255,242,198);
     font-style: oblique;
     font-weight: bold;
   }
 
-  #recommenderSearch, #recommenderRandom{
+  #Related, #Recent, #Random, #GenreSimilarity,
+  #ArtistSimilarity, #AbsoluteLocalPopularity, 
+  #RelativeLocalPopularity, #AbsoluteGlobalPopularity,
+  #RelativeGlobalPopularity, #FVitali{
     white-space: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+  
+  .img-titolo{
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    padding-top: 16px;
+    width: 320px;
+    margin-left: 32px;
   }
 
+  .titoli-thumbnail{
+    float: left;
+    white-space: initial;
+    max-width: 320px;
+    padding-left: 3px;
+    background: rgb(234,235,230);
+    color: rgb(0,119,176); /*Petrolio chiaro*/
+    font-weight: bold;
+  }
+
+  .horizontal-recommender{
+    overflow-y: visible;
+  }
+
+  .thumbnails{
+    clear:both;
+    height: 323px;
+  }
+
+  .page-header {
+    margin: 10px 0 10px;
+  }
+
+  .icon_right {
+    float: right; 
+    cursor: pointer;  
+    margin-bottom: -199px;
+    margin-top: 45px;
+    position: relative;
+    z-index: 1;
+  }
+  .icon_left {
+    float: left;
+    cursor: pointer;
+    margin-bottom: -199px;
+    margin-left: 30px;
+    margin-top: 45px;
+    position: relative;
+    z-index: 1;
+  }
+  .transition { /*-webkit prefisso per safari, -o per opera, -moz mozilla*/
+    -webkit-transform: scale(1.2); /*ingrandisce del 20% le immagini durante hovering*/ 
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  img.contains-data {
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -ms-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    cursor: pointer; 
+  }
+  .grid {
+    overflow: hidden;
+    padding: 0.5em 0 0 0.5em;
+    max-width: 100%;
+    margin: 0 auto 20px auto;
+    list-style: none;
+  }
+  
+  .grid li {
+    padding: 0 0.5em 0.5em 0;
+  }
+  
+  .grid li img {
+    display: block;
+  }
+  
+  .grid li > div{
+    background: rgb(234,235,230);
+    color: rgb(0,119,176);
+    text-align: center;
+    margin: 0;
+    height: max-content;
+  }
+  
+  @media all and (min-width: 500px) {
+    .grid li {
+      float: left;
+      width: 33.3333333%;
+    }
+  }
+  
+  @media all and (min-width: 60em) {
+    .grid li {
+      width: 25%;
+    }
+  }
+  /*dispositivi mobili*/
+  @media screen and (max-width: 767px) {
+    .icon_left, .icon_right{
+      display: none;
+    }
+    .navbar-form{
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .navbar-nav{
+      display: none;
+    }
+    #Related, #Recent,
+    #Random, #GenreSimilarity,
+    #ArtistSimilarity, #AbsoluteLocalPopularity, 
+    #RelativeLocalPopularity, #AbsoluteGlobalPopularity,
+    #RelativeGlobalPopularity, #FVitali{
+      overflow-x: scroll;
+    }
+    .img-titolo{
+      padding-top: 0px;
+      margin-left: 0px;
+    }
+  }
+  
+  /* for flexbox */
+  
+  @supports(display: flex) {
+    @media all and (min-width: 500px) {
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .grid li {
+        display: flex;
+        flex-direction: column;
+      }
+      /* the original pattern and therefore our fallback styles uses padding on the li and then puts the background color on the inner element. We can't therefor make it stretch just by way of the default alignment of the flex item. By setting the li to a flex column we can then make the inner grow to the height of the external container.  */
+      .grid li > * {
+        flex: 1;
+      }
+    }
+  }
+  
+  /* for grid */
+  
+  @supports(display: grid) {
+  
+   
+    @media all and (min-width: 500px) {
+      .grid {
+        display: grid;
+      grid-gap: 15px;
+      padding-right: 10px;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid li {
+        padding: 0;
+      display: block;
+      background: rgb(234,235,230);
+        float: none;
+        width: auto;
+      }
+    }
+    @media all and (min-width: 60em) {
+      .grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .grid li {
+        width: auto;
+      }
+    }
+  }
+  li{
+    max-width: 320px;
+  }
   .panel-body{
     max-height:300px;
     overflow-y:scroll;
+  }
+
+  .contains-data {
+    cursor: pointer;
+  }
+
+  iframe {
+    height: 300px;
+    width: 300px;
+    resize: both;
+    overflow: auto;
   }

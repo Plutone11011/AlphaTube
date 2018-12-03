@@ -9,16 +9,21 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/solid.css" integrity="sha384-rdyFrfAIC05c5ph7BKz3l5NG5yEottvO/DQ0dCrwD8gzeQDjYBHNr1ucUpQuljos" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/fontawesome.css" integrity="sha384-u5J7JghGz0qUrmEsWzBQkfvc8nK3fUT7DCaQzNQ+q4oEXhGSx+P2OqjWsfIRB8QT" crossorigin="anonymous">
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+  <!-- jQuery cookie library -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <!--<script type="text/javascript" src="iframe.js"></script>-->
+  <script type="text/javascript" src="namespace.js"></script>
   <script type="text/javascript" src="thumbnail.js"></script>
   <script type="text/javascript" src="content.js"></script>
-  <script type="text/javascript" src="search.js"></script>
+  <script type="text/javascript" src="recommender.js"></script>
+  <script type="text/javascript" src="ready.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-default navbar-fixed-top">
@@ -34,10 +39,16 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav"><!--allinea orizzontalmente link su navbar -->
-          <li><a href="#menù">Menù</a></li>
           <li><a href="#content">Contenuti</a></li><!--conviene fare un menù a tendina per ogni area contenuto e recommender -->
-          <li><a href="#info">Info</a></li>
-          <li><a href="#recommender">Recommenders</a></li>
+          <li><a href="#recommenderRandom">Random</a></li>
+          <li><a href="#recommenderRelated">Related</a></li>
+          <li><a href="#recommenderRecent">Recent</a></li>
+          <li><a href="#recommenderGenreSimilarity">Genre</a></li>
+          <li><a href="#recommenderArtistSimilarity">Artist</a></li>
+          <li><a href="#recommenderAbsoluteLocalPopularity">Local popularity</a></li>
+          <li><a href="#recommenderRelativeLocalPopularity">Local relative popularity</a></li>
+          <li><a href="#recommenderAbsoluteGlobalPopularity">Global popularity</a></li>
+          <li><a href="#recommenderRelativeGlobalPopularity">Global relative popularity</a></li>
         </ul>
         <form id="search_bar" class="navbar-form navbar-right" autocomplete="off"><!--allinea a destra il form -->
           <div class="form-group">
@@ -50,28 +61,42 @@
     </div>
   </nav>
   
-  <div class="container-fluid">
+  <div class="jumbotron">
+    <div class="container text-center">
+      <h1>AlphaTube</h1>
+      <p>By Lazy Town (Federico Biagi e Lorenzo Borelli)</p>
+      <button type="button" class="btn btn-primary">Lista iniziale</button>
+    </div>
+  </div>
+
+  <div class="player-content">
     <div class="row">
       <div class="col-lg-4">  
         <div class="embed-responsive embed-responsive-16by9">
-          <iframe id="player" type="text/html" width="640" height="360"
-          src="http://www.youtube.com/embed/PfYnvDL0Qcw?enablejsapi=1&origin=http://localhost:1823"
-          frameborder="0"></iframe>
+          <div id="player"></div>
         </div>
         <script>
             // 2. This code loads the IFrame Player API code asynchronously.
             var tag = document.createElement('script');
 
             tag.src = "https://www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName('script')[2];
+            var firstScriptTag = document.getElementsByTagName('script')[0];
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
             // 3. This function creates an <iframe> (and YouTube player)
             //    after the API code downloads.
             var player;
-            window.onYouTubeIframeAPIReady = function() {
+            function onYouTubeIframeAPIReady(){
               console.log('youtube api ready');
-              player = new YT.Player('player', {    
+              player = new YT.Player('player', {
+                height: '390',
+                width: '640', 
+                playerVars: {
+                  'hl': 'en',
+                  'iv_load_policy': 3,
+                  'modestbranding': 1,
+                  'rel': 0
+                },
                 events: {
                   'onReady': onPlayerReady,
                   'onStateChange': onPlayerStateChange
@@ -81,15 +106,48 @@
 
             // 4. The API will call this function when the video player is ready.
             function onPlayerReady(event) {
-              event.target.playVideo();
+              if(localStorage.getItem("recentVideos")){
+                //console.log(localStorage.getItem("recentVideos"))
+                videoNamespace.setRecentVideos(JSON.parse(localStorage.getItem("recentVideos")));
+              }
+              if(localStorage.getItem("lastVideo") && (localStorage.getItem("lastVideo") != 'undefined')){
+                //console.log(JSON.parse(localStorage.getItem("lastVideo")))
+                setVideo(JSON.parse(localStorage.getItem("lastVideo")),localStorage.getItem("lastCurrentTime"));
+              }
             }
+              /*
+              if(Cookies.get('recentVideos') != 'undefined'){
+                if(Cookies.get('recentVideos')){
+                  videoNamespace.setRecentVideos(JSON.parse(Cookies.get('recentVideos')));
+                }
+              }
+              if(Cookies.get('lastVideo') != 'undefined'){
+                if(Cookies.get('lastVideo')){
+                  setVideo(JSON.parse(Cookies.get('lastVideo')), Cookies.get('lastCurrentTime'));
+                } 
+              }           
+            }
+            */
 
             // 5. The API calls this function when the player's state changes.
             //    The function indicates that when playing a video (state=1),
             //    the player should play for six seconds and then stop.
             function onPlayerStateChange(event) {
               if (event.data == YT.PlayerState.PLAYING) {
-                setTimeout(stopVideo, 6000);
+                timerNamespace.startTimer();
+              }
+              if (event.data == YT.PlayerState.PAUSED) {
+                timerNamespace.stopTimer();
+                //var watchTime = timerNamespace.getWatchTime();
+                //setLocalPopularity(watchTime);
+              }              
+              if (event.data == YT.PlayerState.BUFFERING) {
+              }
+              if (event.data == YT.PlayerState.ENDED) {
+                timerNamespace.stopTimer();
+                //var watchTime = timerNamespace.getWatchTime();
+                //setLocalPopularity(watchTime);
+                //timerNamespace.resetTimer();
               }
             }
             function stopVideo() {
@@ -97,10 +155,10 @@
             }
           </script>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-8" id="content">
           <div class="col-lg-4">
-            <div class="panel panel-info">
-              <div class="panel-heading">
+            <div class="panel panel-primary">
+              <div class="panel-heading panel-color">
                 <span class="glyphicon glyphicon-comment"></span> COMMENTI 
               </div>
               <div class="panel-body" id="commenti">
@@ -108,18 +166,18 @@
             </div>
           </div>
           <div class="col-lg-4">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <span class="fa fa-wikipedia-w"></span> WIKIPEDIA
+            <div class="panel panel-primary">
+              <div class="panel-heading panel-color">
+                <span class="glyphicon glyphicon-info-sign"></span> WIKIPEDIA
               </div>
               <div class="panel-body" id="wikipedia">
               </div>
             </div>
           </div>
           <div class="col-lg-4">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <span class="glyphicon glyphicon-info-sign"></span> DESCRIZIONE
+            <div class="panel panel-primary">
+              <div class="panel-heading panel-color">
+                <span class="glyphicon glyphicon-folder-open"></span> DESCRIZIONE
               </div>
               <div class="panel-body" id="descrizione">
               </div>
@@ -127,79 +185,113 @@
           </div>
         </div>  
       </div>
-    </div>  
-
-
-    <div class="page-header"> <!-- a section divider-->
-      <h2>Recommender Search<small> Check out correlated videos</small></h2>
     </div>
-    <div class="container-fluid">
-      <div id="recommenderSearch">
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
-        <a href="" class="thumbnailSearch"><img src="" alt=""></a>
+    <div class="grid-recommender" id="recommender-search">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Search<small> Check out correlated videos</small></h2>
+      </div>
+      <div id="Search" class="thumbnails">
+        <ul class="grid">
+      </ul>
       </div>
     </div>
-    <div class="page-header"> <!-- a section divider-->
-      <h2>Recommender Random<small> Check out random videos</small></h2>
+    <div class="horizontal-recommender" id="recommenderRandom">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Random<small> Check out random videos</small></h2>
+      </div>
+       <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="Random" class="thumbnails">
+      </div>
     </div>
-    <div class="container-fluid">
-      <div id="recommenderRandom">
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
-        <a href="" class="thumbnailRandom"><img src="" alt=""></a>
+    <div class="horizontal-recommender" id="recommenderRelated">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Related<small> Check out related videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="Related" class="thumbnails">
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderRecent">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Recent<small> Check out recent videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="Recent" class="thumbnails">
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderGenreSimilarity">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Similarity<small> Check out similar (by genre) videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="GenreSimilarity" class="thumbnails">
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderArtistSimilarity">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Similarity<small> Check out similar (by artist) videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="ArtistSimilarity" class="thumbnails">  
+      </div>
+    </div>
+    <div class="grid-recommender" id="recommender-lista-iniziale">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Lista Iniziale</h2>
+      </div>
+      <div id="FirstList" class="thumbnails">
+        <ul class="grid">
+        </ul>
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderAbsoluteLocalPopularity">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Local Popularity<small> Check out our most viewed videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="AbsoluteLocalPopularity" class="thumbnails">
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderRelativeLocalPopularity">
+      <div class="page-header"> <!-- a section divider-->
+        <h2>Recommender Local Popularity<small> Check out our related videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="RelativeLocalPopularity" class="thumbnails">
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderAbsoluteGlobalPopularity">
+      <div class="page-header"> <!-- a section divider-->
+         <h2>Recommender Global Popularity<small> Check out the most globally viewed videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="AbsoluteGlobalPopularity" class="thumbnails">
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderRelativeGlobalPopularity">
+      <div class="page-header"> <!-- a section divider-->
+         <h2>Recommender Global Popularity<small> Check out the most globally related videos</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="RelativeGlobalPopularity" class="thumbnails">
+      </div>
+    </div>
+    <div class="horizontal-recommender" id="recommenderFVitali">
+      <div class="page-header"> <!-- a section divider-->
+         <h2>Recommender FVitali<small> Check out video recommended by FVitali</small></h2>
+      </div>
+      <span class='icon_left' style='font-size: 89px; color:white'><i class='fas fa-angle-left'></i></span>
+      <span class='icon_right' style='font-size: 89px; color:white'><i class='fas fa-angle-right'></i></span>
+      <div id="FVitali" class="thumbnails">
       </div>
     </div>
   </body>
