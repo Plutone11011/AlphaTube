@@ -146,7 +146,6 @@ function setGenreSimilarity(){
 	var youtubeResults = {kind: "youtube#searchListResponse", items: []} ;
 	var genres = [] ; //array di generi per le motivazioni dei thumbnail
 	var flag = false ; //condizione per chiamare i thumbnail
-
 	var artist = videoNamespace.getCurrentPlayerArtist();
 	var title = videoNamespace.getCurrentPlayerSong();
 	console.log(artist,title);
@@ -324,7 +323,7 @@ function setAbsoluteGlobalPopularity(){
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: proxyCORS + url, //Usare proxyCORS + url per evitare errori CORS
+			url: url, //Usare proxyCORS + url per evitare errori CORS
 			success: function(data){
 				iterator.next(data);
 			},
@@ -419,7 +418,7 @@ function setRelativeGlobalPopularity(){
 		// away from the main code of our generator
 		// `it.next(..)` is the generator's iterator-resume call
 		$.ajax({
-			url: proxyCORS + url, //Usare proxyCORS + url per evitare errori CORS
+			url: url, //Usare proxyCORS + url per evitare errori CORS
 			success: function(data){
 				iterator.next(data);
 			},
