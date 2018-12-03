@@ -357,6 +357,9 @@ var reasonsForRecommending = (function(){
 				dopo il video corrente grazie al recommender ${arrayOfPrevalentReason[i]}`)
 		}
 	}
+	function setFVitali(){
+		reasons["FVitali"] = "Consigliato dall'api FVitali" ;
+	}
 
 	function getReasons(){
 		return reasons ;
@@ -372,7 +375,8 @@ var reasonsForRecommending = (function(){
 		setAbsoluteLocalPopularity: setAbsoluteLocalPopularity,
 		setRelativeLocalPopularity: setRelativeLocalPopularity,
 		setAbsoluteGlobalPopularity: setAbsoluteGlobalPopularity,
-		setRelativeGlobalPopularity: setRelativeGlobalPopularity
+		setRelativeGlobalPopularity: setRelativeGlobalPopularity,
+		setFVitali: setFVitali
 	}
 
 })();

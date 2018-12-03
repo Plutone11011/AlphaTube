@@ -406,6 +406,22 @@ function setAbsoluteGlobalPopularity(){
 	iterator.next();
 }
 
+function setVitali(){
+	$.get("http://site1825.tw.cs.unibo.it/TW/globpop").done((data)=>{
+		console.log(data);
+		$.get("/search",{
+			q: (data["recommended"].map(fv => fv.videoID)).join(',')
+		}).done((data)=>{
+			data = JSON.parse(data);
+			createListOfThumbnails(data,"FVitali");
+			reasonsForRecommending.setFVitali();
+			addReasons("FVitali");
+		}).fail(()=>{
+
+		})
+	});
+}
+
 function setRelativeGlobalPopularity(){
 	// I siti 1828,1838,1839,1846,1847,1831,1827,1823 non presentano errore CORS.
 	var arrayOfSites = [1829,1828,1838,1839,1846,1822,1847,1831,1827,1848,1824,1830,1836,1850,1849,1851,1861,1823] ;
@@ -534,7 +550,8 @@ function setVideo(data, startTime = 0){
 	setRelated();
 	setDescription();
 	setRecent();
-    setRandom();
+	setRandom();
+	setVitali();
 	setAbsoluteLocalPopularity(); 
 	setRelativeLocalPopularity();
 	setAbsoluteGlobalPopularity();

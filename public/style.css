@@ -42,7 +42,7 @@
   #Related, #Recent, #Random, #GenreSimilarity,
   #ArtistSimilarity, #AbsoluteLocalPopularity, 
   #RelativeLocalPopularity, #AbsoluteGlobalPopularity,
-  #RelativeGlobalPopularity{
+  #RelativeGlobalPopularity, #FVitali{
     white-space: nowrap;
     overflow-x: hidden;
   }
