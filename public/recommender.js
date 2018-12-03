@@ -198,8 +198,8 @@ function setGenreSimilarity(){
 	if (title && artist){	
 
 		var res1 = title.replace(/\s/g,"_");
-        var res2 = title.replace(/\s/g,"_") + "_(song)" ;
-		var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
+        var res2 = title.replace(/\s/g,"_") + "_(song)" ; //Query per genere si ferma qua.
+		var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)"; //Con questa avrebbe successo.
 		
 		
 
