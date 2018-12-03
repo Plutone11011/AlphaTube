@@ -99,7 +99,7 @@ var videoNamespace = (function(){
 	function setCurrentPlayerArtist_Song(){
 		//A volte dice null, altre dice empty, who knows.
 		$.get('/artist_title',{
-        	video: getCurrentPlayerVideo()
+        	title: getCurrentPlayerTitle()
     	}).done((data)=>{
     		console.log('artist data: ', data);
     		if(data[0] != null){

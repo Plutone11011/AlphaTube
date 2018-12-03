@@ -324,7 +324,7 @@ app.get("/random",(req,res,next)=>{
 app.get("/artist_title",(req,res,next)=>{
 	try{
 		// avolte getArtistTitle spara errori...
-		var [artist, title] = getArtistTitle(req.query.video.snippet.title);
+		var [artist, title] = getArtistTitle(req.query.title);
 		res.send([artist,title]);
 	}catch(error){
 		console.log('Artist not found, error')
