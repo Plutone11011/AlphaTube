@@ -151,7 +151,7 @@ function setGenreSimilarity(){
 	console.log(artist,title);
 
 	function sparqlQueryforMusicGenre(res){
-		let resource = `dbr:${res}`;
+		let resource = `<http://dbpedia.org/resource/${res}>`;
 		//label_res possono essere album, canzoni, band...
 		return (`SELECT ?label_genre ?label_res WHERE { ${resource} dbo:genre ?genre.
 		?res dbo:genre ?genre ;
@@ -173,7 +173,7 @@ function setGenreSimilarity(){
 		var query = sparqlQueryforMusicGenre(DBPediaresource);
 		//console.log(query);
 		var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
-		console.log(query);
+		console.log(queryUrl);
 		return queryUrl ;
 	}
 
