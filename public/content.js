@@ -35,17 +35,16 @@ function fillWikiArea(song,artist){
 function sparqlQueryforArtistTitle(res, artist){
     let resource = `<http://dbpedia.org/resource/${res}>`;
     //returns sparql query to get artist and song abstract from dbpedia ontology
-    return (`PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> SELECT distinct ?abstract ?artist WHERE {${resource}
+    return (`SELECT distinct ?abstract ?artist WHERE {${resource}
      dbo:abstract ?abstract . {${resource} dbo:artist ?a.} UNION {${resource} dbo:musicalArtist ?a.} 
      UNION {${resource} dbo:musicalBand ?a.} ?a dbo:abstract ?artist. ?a rdfs:label ?lab 
      FILTER (langMatches(lang(?abstract),'en') && langMatches(lang(?artist),'en'))
      FILTER contains(?lab,'${artist}')}`);
 }
 
-//costruisce get query per dbpedia con sparql query differenti
-function buildQuery(DBPediaresource, artist, sparqlQuery){
-    var query = sparqlQuery(DBPediaresource, artist);
+//costruisce get query per dbpedia
+function buildQuery(DBPediaresource, artist){
+    var query = sparqlQueryforArtistTitle(DBPediaresource, artist);
     //console.log(query);
     var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
     return queryUrl ;
@@ -59,67 +58,48 @@ function getResultsFromQuery(dbpediaData){
 }
 
 function noContentFound(){
-    artist_abstract = "No content found for this artist" ;
-    song_abstract = "No content found for this song" ;
+    var artist_abstract = "No content found for this artist" ;
+    var song_abstract = "No content found for this song" ;
     fillWikiArea(song_abstract,artist_abstract);
-}
-
-//funzione che esegue la query a dbpedia (sia proveniente dal recommender che per l'area content)
-function queriesToDBPedia(isRecommender,title,artist,sparqlQuery,RecommenderOrContent,noContent){
-
-    var res1 = title.replace(/\s/g,"_");
-    var res2 = title.replace(/\s/g,"_") + "_(song)" ;
-    var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
-
-    //controlla se queriesToDBPedia è stato chiamato nel recommender o nel content
-    //chiamando quindi il metodo con argomenti diversi
-    function checkCallingFunction(data){
-        if (isRecommender){
-            RecommenderOrContent(data["results"]["bindings"]);
-        }
-        else{
-            RecommenderOrContent(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
-        }
-    }
-
-    $.get(buildQuery(res1,artist,sparqlQuery)).done((data)=>{
-        if (data["results"]["bindings"].length){
-            checkCallingFunction(data);
-        }
-        else {
-            $.get(buildQuery(res2,artist,sparqlQuery)).done((data)=>{
-                if (data["results"]["bindings"].length){
-                    checkCallingFunction(data);
-                }
-                else {
-                    $.get(buildQuery(res3,artist,sparqlQuery)).done((data)=>{
-                        if (data["results"]["bindings"].length){
-                            checkCallingFunction(data);
-                        }
-                        else {
-                            noContent();
-                        }
-                    }).fail(()=>{
-                        noContent();
-                    });
-                }
-            }).fail(()=>{
-                noContent();
-            });
-        }
-    }).fail(()=>{
-        noContent();
-    });
-
 }
 
 function setContentBrano(){    
     var artist = videoNamespace.getCurrentPlayerArtist();
-	var title = videoNamespace.getCurrentPlayerSong();
-    console.log(artist);
-    console.log(title);
-    if (title){
-    	queriesToDBPedia(false,title,artist,sparqlQueryforArtistTitle,fillWikiArea,noContentFound);
+    var title = videoNamespace.getCurrentPlayerSong();
+    if (title && artist){
+        var res1 = title.replace(/\s/g,"_");
+        var res2 = title.replace(/\s/g,"_") + "_(song)" ;
+        var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
+
+        $.get(buildQuery(res1,artist)).done((data)=>{
+            if (data["results"]["bindings"].length){
+                //in getResults ritorna una coppia song,artist
+                fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+            }
+            else {
+                $.get(buildQuery(res2,artist)).done((data)=>{
+                    if (data["results"]["bindings"].length){
+                        fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+                    }
+                    else {
+                        $.get(buildQuery(res3,artist)).done((data)=>{
+                            if (data["results"]["bindings"].length){
+                                fillWikiArea(getResultsFromQuery(data)[0],getResultsFromQuery(data)[1]);
+                            }
+                            else {
+                                noContentFound();
+                            }
+                        }).fail(()=>{
+                            noContentFound();
+                        });
+                    }
+                }).fail(()=>{
+                    noContentFound();
+                });
+            }
+        }).fail(()=>{
+            noContentFound();
+        });
     }
     else {
         noContentFound();

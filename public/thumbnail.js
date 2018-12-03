@@ -39,11 +39,11 @@ function createFlexBoxOfThumbnails(data,linkClass){
 
 function emptyThumbnails(grid, linkClass){
 	if(grid){
-	var emptyData = {items: []};
-	createFlexBoxOfThumbnails(emptyData,linkClass);
+	    var emptyData = {items: []};
+	    createFlexBoxOfThumbnails(emptyData,linkClass);
 	}else{
-	var emptyData = {items: []};
-	createListOfThumbnails(emptyData,linkClass);
+	    var emptyData = {items: []};
+	    createListOfThumbnails(emptyData,linkClass);
 	}
 }
 
@@ -52,12 +52,12 @@ function addReasonsForSearch(linkClass){
     $(`#${linkClass} div > p`).html(reasonsForRecommending.getReasons()[`${linkClass}`]);
 }
 
-//per relative, random, recent, similarity (genre e artist)
+//per relative, random, recent e artist similarity
 function addReasons(linkClass){
     $(`#${linkClass} .titoli-thumbnail`).append("<span class='reason'></span>");
     $(`#${linkClass} .titoli-thumbnail`).find(".reason").html(reasonsForRecommending.getReasons()[`${linkClass}`]);
 }
-//per popularity
+//per popularity e genre similarity
 function addReasonsPopularity(linkClass){
     $.each(reasonsForRecommending.getReasons()[`${linkClass}`], function(index, value){
         $(`#${linkClass} > .img-titolo:nth-child(${index+1}) > .titoli-thumbnail`).append("<span class='reason'></span>");
