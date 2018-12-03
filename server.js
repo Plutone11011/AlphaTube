@@ -111,6 +111,7 @@ var objPopularity = (function(){
 //punto di partenza
 setTimeout(objPopularity.savePopularity, 30000);
 
+/*
 function setGenre(req,res,next){
 	var queryString = '' ;
 	for (var i = 0; i < req.query.genre.length; i++){
@@ -123,7 +124,7 @@ function setGenre(req,res,next){
 	res.locals.q = queryString ;
 	next();
 }
-
+*/
 function setLocalPopularity(req,res,next){
 	var arrayOfIdwatchTime = [] ; //array of objects
 	for (var id in objPopularity.getObj()){
@@ -175,14 +176,14 @@ function setRelatedToId(req,res,next){
 	next();
 }
 
-function searchVideo(res,query){
+function searchVideo(res,query,maxRes){
 	request(
 		{
 			url: "https://www.googleapis.com/youtube/v3/search",
 			qs:{
 				key: "AIzaSyBPTl9bT1XI_EBkzQsEOEep1oJQFVDyvV4",
 				part: "snippet",
-				maxResults: 30,
+				maxResults: maxRes,
 				q: query,
 				type: "video",
 				videoEmbeddable: true,
@@ -225,7 +226,7 @@ app.get("/search", function(req,res,next){
 });
 
 app.get("/search", function(req,res,next){
-	searchVideo(res,req.query.q);
+	searchVideo(res,req.query.q,30);
 });
 
 app.get("/comments",(req,res,next)=>{
@@ -332,8 +333,8 @@ app.get("/artist_title",(req,res,next)=>{
 	}
 });
 
-app.get("/similarity_genre",setGenre,(req,res,next)=>{
-	searchVideo(res,res.locals.q);
+app.get("/similarity_genre",(req,res,next)=>{
+	searchVideo(res,req.query.q,1); //voglio un risultato per ogni risorsa legata a un genere
 });
 
 app.get("/firstList", (req,res,next)=>{

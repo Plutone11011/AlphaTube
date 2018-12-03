@@ -122,12 +122,6 @@ function setRandom(){
 	})
 }
 
-function sparqlQueryforMusicGenre(res){
-	let resource = `<http://dbpedia.org/resource/${res}>`;
-	return (`PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-	SELECT ?lab WHERE { ${resource} 
-	dbo:genre ?genre. ?genre rdfs:label ?lab FILTER langMatches(lang(?lab),'en') }`) ;
-}
 
 //Video dello stesso channel o ricerca per artista?
 function setArtistSimilarity(){
@@ -145,30 +139,135 @@ function setArtistSimilarity(){
 
 
 function setGenreSimilarity(){
-	
+
+	//costruisco un json di risposta di /search appendendo, ad ogni passo
+	//delle iterazioni sui generi, un video ad items
+	//il resto delle proprietà di youtube#searchListResponse non ci interessa
+	var youtubeResults = {kind: "youtube#searchListResponse", items: []} ;
+	var genres = [] ; //array di generi per le motivazioni dei thumbnail
+	var flag = false ; //condizione per chiamare i thumbnail
+
+	var artist = videoNamespace.getCurrentPlayerArtist();
+	var title = videoNamespace.getCurrentPlayerSong();
+	console.log(artist,title);
+
+	function sparqlQueryforMusicGenre(res){
+		let resource = `dbr:${res}`;
+		//label_res possono essere album, canzoni, band...
+		return (`SELECT ?label_genre ?label_res WHERE { ${resource} dbo:genre ?genre.
+		?res dbo:genre ?genre ;
+		 rdfs:label ?label_res .
+		 ?genre rdfs:label ?label_genre. 
+		 FILTER (langMatches(lang(?label_res),'en') && langMatches(lang(?label_genre),'en'))}`) ;
+	}
+
 	function noThumbnailFound(){
 		$(".GenreSimilarity > img").attr("alt","Non è stato possibile trovare video simili per genere");
 		var emptyData = {items: []};
 		createListOfThumbnails(emptyData,"GenreSimilarity");
 	}
 	
-	function getGenreResults(bindings){
+	//DBPediaresource può essere un URI che rappresenta una canzone o un genere musicale
+	//a seconda che venga passato insieme a sparqlQueryforMusicGenre
+	//o a sparqlQueryRelatedToGenre
+	function buildQueryForGenre(DBPediaresource){
+		var query = sparqlQueryforMusicGenre(DBPediaresource);
+		//console.log(query);
+		var queryUrl = "http://dbpedia.org/sparql?query=" + encodeURIComponent(query) + "&format=json";
+		console.log(query);
+		return queryUrl ;
+	}
+
+	function getGenreResults(relatedToGenre,genre){
 		$.get("/similarity_genre",{
-			genre: bindings
+			q: relatedToGenre
 		}).done((data)=>{
 			data = JSON.parse(data);
-			//andrebbe anche controllato se nella lista ci sono video dello stesso artista
-			//removeChannels(data); Forse serve?
-			createListOfThumbnails(data,"GenreSimilarity");
-			reasonsForRecommending.setGenreSimilarity(bindings);
-			addReasons("GenreSimilarity");
+			genres.push(genre);
+			youtubeResults["items"].push(data.items[0]);
+			if (genres.length >= 30 || flag){
+				console.log(genres);
+				createListOfThumbnails(youtubeResults,"GenreSimilarity");
+				reasonsForRecommending.setGenreSimilarity(genres);
+				addReasonsPopularity("GenreSimilarity");
+				//o abbiamo raggiunto 30 consigliati o ce n'erano di meno
+			}
 		});
 	}
 
-	artist = videoNamespace.getCurrentPlayerArtist();
-	title = videoNamespace.getCurrentPlayerSong();
-	if (title){	
-		queriesToDBPedia(true,title,artist,sparqlQueryforMusicGenre,getGenreResults,noThumbnailFound);
+	if (title && artist){	
+
+		var res1 = title.replace(/\s/g,"_");
+        var res2 = title.replace(/\s/g,"_") + "_(song)" ;
+		var res3 = title.replace(/\s/g,"_") + "_(" + artist.replace(/\s/g,"_") + "_song)";
+		
+		
+
+		$.get(buildQueryForGenre(res1)).done((data)=>{
+            if (data["results"]["bindings"].length){
+				var l = data["results"]["bindings"].length ;
+				//per ogni genere ottenuto
+				for (var i = 0; i < data["results"]["bindings"].length; i++){
+					if (i === 30){
+						//elaboriamo al massimo 30 risultati correlati
+						break;
+					}
+					let randomIndex = Math.floor(Math.random()*(l-1)); //numero random tra 0 e l-1
+					getGenreResults(data["results"]["bindings"][randomIndex]["label_res"]["value"],data["results"]["bindings"][randomIndex]["label_genre"]["value"]);
+					//se siamo all'ultima iterazione, set flag a true perché ci sono meno di 30 elementi correlati
+					if (i === l-1){
+						flag = true ;
+					}
+				}
+            }
+            else {
+                $.get(buildQueryForGenre(res2)).done((data)=>{
+                    if (data["results"]["bindings"].length){
+						var l = data["results"]["bindings"].length ;
+						//per ogni genere ottenuto
+						for (var i = 0; i < data["results"]["bindings"].length; i++){
+							if (i === 30){
+								//elaboriamo al massimo 30 risultati correlati
+								break;
+							}
+							let randomIndex = Math.floor(Math.random()*(l-1)); //numero random tra 0 e l-1
+							getGenreResults(data["results"]["bindings"][randomIndex]["label_res"]["value"],data["results"]["bindings"][randomIndex]["label_genre"]["value"]);
+							if (i === l-1){
+								flag = true ;
+							}
+						}
+                    }
+                    else {
+                        $.get(buildQueryForGenre(res3)).done((data)=>{
+                            if (data["results"]["bindings"].length){
+								var l = data["results"]["bindings"].length ;
+								//per ogni genere ottenuto
+								for (var i = 0; i < data["results"]["bindings"].length; i++){
+									if (i === 30){
+										//elaboriamo al massimo 30 risultati correlati
+										break;
+									}
+									let randomIndex = Math.floor(Math.random()*(l-1)); //numero random tra 0 e l-1
+									getGenreResults(data["results"]["bindings"][randomIndex]["label_res"]["value"],data["results"]["bindings"][randomIndex]["label_genre"]["value"]);
+									if (i === l-1){
+										flag = true ;
+									}
+								}
+                            }
+                            else {
+                                noThumbnailFound();
+                            }
+                        }).fail(()=>{
+                            noThumbnailFound();
+                        });
+                    }
+                }).fail(()=>{
+                    noThumbnailFound();
+                });
+            }
+        }).fail(()=>{
+            noThumbnailFound();
+        });
 	}
 	else{
 		noThumbnailFound();
@@ -236,6 +335,7 @@ function setAbsoluteGlobalPopularity(){
 		});
 	}
 
+	//Math.max ritorna sistematicamente NaN perché non sono tutti numeri
 	function Max(maxtimeWatched){
 		//ignora completamente i valori che non sono numeri
 		if (typeof maxtimeWatched[0] === "number" ){

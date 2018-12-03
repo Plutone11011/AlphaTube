@@ -313,13 +313,11 @@ var reasonsForRecommending = (function(){
 		reasons["Recent"] = "Consigliato perché è un video che hai già visualizzato in passato" ;
 	}
 
-	function setGenreSimilarity(bindings){
-		var arrayOfGenres = [] ;
-		for (var i = 0; i < bindings.length; i++){
-			arrayOfGenres.push(bindings[i]["lab"]["value"]);
+	function setGenreSimilarity(genres){
+		reasons["GenreSimilarity"] = [];
+		for (var i = 0; i < genres.length; i++){
+			reasons["GenreSimilarity"].push(`Consigliato perché affine al seguente genere musicale: ${genres[i]}`) ;
 		}
-		var strOfGenres = arrayOfGenres.join();
-		reasons["GenreSimilarity"] = `Consigliato perché affine ai seguenti generi musicali: ${strOfGenres}`;
 	}
 
 	function setArtistSimilarity(artist){
