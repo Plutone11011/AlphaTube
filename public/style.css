@@ -162,7 +162,7 @@
     #Random, #GenreSimilarity,
     #ArtistSimilarity, #AbsoluteLocalPopularity, 
     #RelativeLocalPopularity, #AbsoluteGlobalPopularity,
-    #RelativeGlobalPopularity{
+    #RelativeGlobalPopularity, #FVitali{
       overflow-x: scroll;
     }
     .img-titolo{
