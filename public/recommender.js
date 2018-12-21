@@ -313,7 +313,8 @@ function setRelativeLocalPopularity(){
 
 function setAbsoluteGlobalPopularity(){
 	// I siti 1828,1838,1839,1846,1847,1831,1827,1823 non presentano errore CORS.
-	var arrayOfSites = [1829,1828,1838,1839,1846,1822,1847,1831,1827,1848,1824,1830,1836,1850,1849,1851,1861,1823] ;
+	var arrayOfSites = [1828,1838,1839,1846,1847,1831,1827,1823];
+	//var arrayOfSites = [1829,1828,1838,1839,1846,1822,1847,1831,1827,1848,1824,1830,1836,1850,1849,1851,1861,1823] ;
 	var arrayOfResponses = [] ;
 	var proxyCORS = "https://cors-anywhere.herokuapp.com/"; //dopo troppe richieste comincia a rifiutare errore 429
 	var proxyCORS2 = "https://crossorigin.me/" //spesso offline
@@ -334,19 +335,6 @@ function setAbsoluteGlobalPopularity(){
 		});
 	}
 
-	//Math.max ritorna sistematicamente NaN perché non sono tutti numeri
-	function Max(maxtimeWatched){
-		//ignora completamente i valori che non sono numeri
-		if (typeof maxtimeWatched[0] === "number" ){
-			var max = maxtimeWatched[0];
-		}
-		for (var i = 1; i < maxtimeWatched.length; i++){
-			if (typeof maxtimeWatched[i] === "number"  && max < maxtimeWatched[i]){
-				max = maxtimeWatched[i];
-			}
-		}
-		return max ;
-	}
 
 	function getMostPopulars(arrayOfResponses){
 		var arrayOfIds = [] ;
@@ -362,9 +350,9 @@ function setAbsoluteGlobalPopularity(){
 				//corto circuito, non andrà mai a leggere length of undefined
 				//servono entrambe perché alcuni non mettono recommended, altri lo mettono ma può essere vuoto
 				if (value["recommended"] && value["recommended"].length){
-
 					arrayOftimeWatched = value["recommended"].map(rec => rec["timesWatched"]);
-					var max = Max(arrayOftimeWatched);
+
+					var max = Math.max( ...arrayOftimeWatched );
 					arrayOfMaxtimeWatched.push(max);
 
 					indexOfIdWithMaxTime = value["recommended"].findIndex(function(element){
