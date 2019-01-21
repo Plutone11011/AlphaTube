@@ -7,6 +7,7 @@ $(document).ready(function(){
 			historyNamespace.setHistory(true);
 			window.scrollTo({top: 0, behavior: 'smooth'});
 			setVideo(event.state);
+			toggleVisibility(false,false,false);
 		} //return event.preventDefault(); //sembra non fare nulla...
 	})
 
